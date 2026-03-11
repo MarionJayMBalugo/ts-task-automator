@@ -1,0 +1,80 @@
+{
+  "name": "ts-automation-app",
+  "version": "1.0.0",
+  "description": "Internal automation tool for TS Automation",
+  "main": "main.js",
+  "author": "marion jay m balugo",
+  "license": "ISC",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "asar": {
+          "unpackDir": "resources"
+        }
+      },
+      "rebuildConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ts_automation_app"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "plugins": [
+        {
+          "name": "@electron-forge/plugin-auto-unpack-natives",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/plugin-fuses",
+          "config": {
+            "version": "1.8.0",
+            "fuses": {
+              "RunAsNode": false,
+              "EnableCookieEncryption": true,
+              "EnableNodeOptionsEnvironmentVariable": false,
+              "EnableNodeCliInspectArguments": false,
+              "EnableEmbeddedAsarIntegrityValidation": true,
+              "OnlyLoadAppFromAsar": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.11.1",
+    "@electron-forge/maker-deb": "^7.11.1",
+    "@electron-forge/maker-rpm": "^7.11.1",
+    "@electron-forge/maker-squirrel": "^7.11.1",
+    "@electron-forge/maker-zip": "^7.11.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
+    "@electron-forge/plugin-fuses": "^7.11.1",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^40.8.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
+  }
+}

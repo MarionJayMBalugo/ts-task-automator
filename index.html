@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>TMS Automation Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary-blue: #1a73e8;
+            --primary-hover: #1765cc;
+            --text-main: #202124;
+        }
+        body { background: var(--bg-color); font-family: 'Segoe UI', Tahoma, sans-serif; color: var(--text-main); padding: 30px; }
+        .container { max-width: 800px; margin: auto; }
+        .card { background: var(--card-bg); border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 20px; }
+        h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .button-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
+        .btn { 
+            background: var(--primary-blue); color: white; border: none; 
+            padding: 10px 20px; border-radius: 4px; cursor: pointer; 
+            font-weight: 500; transition: background 0.2s;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #5f6368; }
+        .btn-secondary:hover { background: #4e5256; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TMS Automation</h1>
+
+        <div class="card">
+            <h2>Laravel & System Commands</h2>
+            <div class="button-group">
+                <button class="btn" onclick="trigger('import-db.bat')">Run Migrations</button>
+                <button class="btn" onclick="trigger('seed.bat')">Run DB Seed</button>
+                <button class="btn btn-secondary" onclick="trigger('clear-cache.bat')">Clear Cache</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Database Backups</h2>
+            <div class="button-group">
+                <button class="btn" style="background:#188038" onclick="trigger('backup-prod.bat')">Backup Production</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function trigger(fileName) {
+            // This calls the bridge defined in preload.js
+            window.electronAPI.runBatch(fileName);
+        }
+    </script>
+</body>
+</html>
