@@ -1,12 +1,9 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('versions', {
-  node: () => process.versions.node,
-  chrome: () => process.versions.chrome,
-  electron: () => process.versions.electron
-})
-
-// Add this bridge to handle script execution
 contextBridge.exposeInMainWorld('electronAPI', {
-  runBatch: (scriptName) => ipcRenderer.send('execute-batch', scriptName)
-})
+  runBatch: (fileName) => ipcRenderer.send('execute-batch', fileName),
+  selectFolder: () => ipcRenderer.invoke('select-folder'),
+  getConfigPath: () => ipcRenderer.invoke('get-config-path'),
+  copyScripts: () => ipcRenderer.invoke('copy-scripts'),
+  resetConfig: () => ipcRenderer.invoke('reset-config')
+});

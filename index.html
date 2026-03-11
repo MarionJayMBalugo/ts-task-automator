@@ -3,55 +3,154 @@
 <head>
     <meta charset="UTF-8" />
     <title>TMS Automation Dashboard</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    
     <style>
         :root {
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --primary-blue: #1a73e8;
-            --primary-hover: #1765cc;
-            --text-main: #202124;
+            --tms-blue: #0d6efd;
+            --tms-bg: #f4f7f9;
         }
-        body { background: var(--bg-color); font-family: 'Segoe UI', Tahoma, sans-serif; color: var(--text-main); padding: 30px; }
-        .container { max-width: 800px; margin: auto; }
-        .card { background: var(--card-bg); border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 20px; }
-        h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .button-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
-        .btn { 
-            background: var(--primary-blue); color: white; border: none; 
-            padding: 10px 20px; border-radius: 4px; cursor: pointer; 
-            font-weight: 500; transition: background 0.2s;
+        body { background-color: var(--tms-bg); font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        /* Typography */
+        .header-section { padding: 2rem 0 1rem; }
+        .header-title { color: #1a1c1e; font-size: 1.5rem; letter-spacing: -0.5px; margin: 0; }
+        
+        /* Cards */
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 1.5rem; }
+        .card-header { background: transparent; border-bottom: 1px solid #edf2f7; padding: 1.25rem; fw-bold; }
+        
+        /* Button Styling */
+        .btn-action { 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            padding: 1rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-radius: 8px;
         }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-secondary { background: #5f6368; }
-        .btn-secondary:hover { background: #4e5256; }
+        .btn-action i { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        /* Config Bar */
+        .path-display { 
+            font-size: 0.8rem; background: #ffffff; border: 1px solid #dee2e6;
+            padding: 0.75rem; border-radius: 8px; color: #495057; font-family: 'Consolas', monospace;
+        }
+        
+        .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #6c757d; margin-bottom: 1rem; display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>TMS Automation</h1>
 
-        <div class="card">
-            <h2>Laravel & System Commands</h2>
-            <div class="button-group">
-                <button class="btn" onclick="trigger('import-db.bat')">Run Migrations</button>
-                <button class="btn" onclick="trigger('seed.bat')">Run DB Seed</button>
-                <button class="btn btn-secondary" onclick="trigger('clear-cache.bat')">Clear Cache</button>
+<div class="container py-4">
+    <div class="header-section d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+            <img src="./assets/icon.ico" alt="Logo" style="width: 40px; height: 40px; margin-right: 15px;">
+            <div>
+                <h1 class="header-title">TMS Automation <span class="text-primary">Dashboard</span></h1>
+                <span class="badge bg-light text-dark border mt-1">v1.0.0 | Offline Mode</span>
             </div>
         </div>
-
-        <div class="card">
-            <h2>Database Backups</h2>
-            <div class="button-group">
-                <button class="btn" style="background:#188038" onclick="trigger('backup-prod.bat')">Backup Production</button>
-            </div>
+        <div class="text-end">
+            <button class="btn btn-sm btn-outline-primary" onclick="changeFolder()">⚙️ Settings</button>
         </div>
     </div>
 
-    <script>
-        function trigger(fileName) {
-            // This calls the bridge defined in preload.js
-            window.electronAPI.runBatch(fileName);
-        }
-    </script>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <span class="section-label">Active Script Path</span>
+                            <div id="path-info" class="path-display text-truncate">Checking...</div>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <button class="btn btn-warning btn-sm text-white px-3 fw-bold" onclick="generateLocalScripts()">Export All Scripts</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <span class="section-label">Database Management</span>
+            <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+                <div class="col">
+                    <button class="btn btn-primary w-100 btn-action" onclick="trigger('create-database.bat')">
+                        Create DBs
+                    </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary w-100 btn-action" onclick="trigger('export-db-batch.bat')">
+                        Export DBs
+                    </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary w-100 btn-action" onclick="trigger('import-db.bat')">
+                        Import DBs
+                    </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-outline-primary w-100 btn-action" onclick="trigger('clear-cache.bat')">
+                        Clear Cache
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <span class="section-label">System & Environment</span>
+            <div class="row row-cols-2 row-cols-md-4 g-3">
+                <div class="col">
+                    <button class="btn btn-dark w-100 btn-action" onclick="trigger('sys-env-setup.bat')">
+                        Setup ENV
+                    </button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-dark w-100 btn-action" onclick="trigger('docker-restart.bat')">
+                        Restart Docker
+                    </button>
+                </div>
+                <div class="col">
+                    <div class="border rounded d-flex align-items-center justify-content-center text-muted small" style="height: 100%; border-style: dashed !important;">
+                        + Add Tool
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./assets/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    async function updatePathDisplay() {
+        const path = await window.electronAPI.getConfigPath();
+        const display = document.getElementById('path-info');
+        display.innerText = path ? path : "Default: /resources/";
+    }
+
+    async function changeFolder() {
+        const newPath = await window.electronAPI.selectFolder();
+        if (newPath) updatePathDisplay();
+    }
+
+    async function generateLocalScripts() {
+        const result = await window.electronAPI.copyScripts();
+        alert(result);
+    }
+
+    function trigger(fileName) {
+        window.electronAPI.runBatch(fileName);
+    }
+
+    updatePathDisplay();
+</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 {
   "name": "ts-automation-app",
   "version": "1.0.0",
-  "description": "Internal automation tool for TS Automation",
+  "description": "Internal automation tool for Technical Specialists",
   "main": "main.js",
   "author": "marion jay m balugo",
   "license": "ISC",
@@ -14,8 +14,12 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "icon": "./assets/icon",
         "asar": {
           "unpackDir": "resources"
+        },
+        "win32metadata": {
+          "requested-execution-level": "requireAdministrator"
         }
       },
       "rebuildConfig": {},
@@ -23,7 +27,8 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "ts_automation_app"
+            "name": "ts_automation_app",
+            "setupIcon": "./assets/icon.ico"
           }
         },
         {
