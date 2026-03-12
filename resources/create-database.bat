@@ -1,83 +1,36 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: =============================================================================
-:: 1. PATH SETUP
-:: =============================================================================
-set "ROOT_DIR=%~dp0"
-set "CONFIG_DIR=!ROOT_DIR!config\"
-set "ENV_FILE=!CONFIG_DIR!.env"
-
-cd /d "!ROOT_DIR!"
-
-:: =============================================================================
-:: 2. PARSE .ENV FROM \config\.env
-:: =============================================================================
-if not exist "!ENV_FILE!" (
-    echo [ERROR] Configuration file NOT found at: "!ENV_FILE!"
-    echo [ERROR] Please ensure the 'config' folder contains a '.env' file.
-    pause
-    exit /b 1
-)
-
-echo [INFO] Loading configuration from config\.env...
-
-for /f "usebackq tokens=1,2 delims==" %%A in ("!ENV_FILE!") do (
-    set "key=%%A"
-    set "val=%%B"
-    
-    :: Strip leading/trailing spaces
-    for /f "tokens=*" %%K in ("!key!") do set "key=%%K"
-    for /f "tokens=*" %%V in ("!val!") do set "val=%%V"
-    
-    :: Remove quotes/apostrophes
-    set "val=!val:'=!"
-    set "val=!val:"=!"
-    
-    if /I "!key!"=="DB_PASSWORD"      set "PW=!val!"
-    if /I "!key!"=="DB_USERNAME"      set "DB_USER=!val!"
-    if /I "!key!"=="TARGET_DATABASES"  set "TARGET_DATABASES=!val!"
-    if /I "!key!"=="USE_DOCKER"        set "USE_DOCKER=!val!"
-    if /I "!key!"=="DOCKER_CONTAINER"  set "DOCKER_CONT=!val!"
-    if /I "!key!"=="DB_HOST"           set "DB_HOST=!val!"
-)
+:: Call the global loader
+call "%~dp0_medyo_init_db_ra.bat"
+if !ERRORLEVEL! NEQ 0 exit /b !ERRORLEVEL!
 
 :: =============================================================================
 :: 3. VALIDATION & PRE-FLIGHT CHECKS
 :: =============================================================================
 if "!TARGET_DATABASES!"=="" (
-    echo [ERROR] TARGET_DATABASES is empty in .env.
+    echo %ERROR% TARGET_DATABASES is empty in .env.
     pause
     exit /b 1
 )
 
-:: Check if the required tool (Docker or MySQL) is actually installed
-if /I "!USE_DOCKER!"=="true" (
-    where docker >nul 2>nul
-    if !ERRORLEVEL! NEQ 0 (
-        echo [ERROR] Docker is not installed or not in System PATH.
-        pause
-        exit /b 1
-    )
-) else (
-    where mysql >nul 2>nul
-    if !ERRORLEVEL! NEQ 0 (
-        echo [ERROR] MySQL Client is not installed or not in System PATH.
-        pause
-        exit /b 1
-    )
-)
+:: Set Defaults if .env is missing these specific keys
+if "!DB_CHARSET!"==""      set "DB_CHARSET=utf8mb4"
+if "!DB_COLLATION!"==""    set "DB_COLLATION=utf8mb4_unicode_ci"
 
 :: =============================================================================
 :: 4. EXECUTION LOGIC
 :: =============================================================================
 echo.
-echo --- Starting Database Creation Task ---
-:: FIXED: Added ^ before the | to escape it so CMD treats it as text, not a pipe
-echo [STATUS] Mode: !USE_DOCKER! (Docker) ^| Host: !DB_HOST!
+echo %CYAN%--- Starting Database Creation Task ---%RESET%
+echo %CYAN%[STATUS]%RESET% Mode: !USE_DOCKER! ^| Host: !DB_HOST!
+echo %CYAN%[CONFIG]%RESET% Charset: !DB_CHARSET! ^| Collation: !DB_COLLATION!
+
+:: Escape check for custom rules echo
+if not "!DB_CUSTOM_RULES!"=="" (
+    echo %CYAN%[RULES]%RESET% Active: "!DB_CUSTOM_RULES!"
+)
 echo.
-
-
 
 :: Replace commas with spaces
 set "CLEAN_LIST=!TARGET_DATABASES:,= !"
@@ -86,9 +39,10 @@ for %%D in (!CLEAN_LIST!) do (
     set "CURRENT_DB=%%D"
     
     if not "!CURRENT_DB!"=="" (
-        set "SQL=CREATE DATABASE IF NOT EXISTS `!CURRENT_DB!` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+        :: Build the Dynamic SQL String
+        set "SQL=CREATE DATABASE IF NOT EXISTS `!CURRENT_DB!` CHARACTER SET !DB_CHARSET! COLLATE !DB_COLLATION! !DB_CUSTOM_RULES!;"
         
-        echo [PROCESS] Creating: !CURRENT_DB! ...
+        echo %YELLOW%[PROCESS]%RESET% Creating: !CURRENT_DB! ...
 
         if /I "!USE_DOCKER!"=="true" (
             :: MODE: DOCKER
@@ -100,18 +54,15 @@ for %%D in (!CLEAN_LIST!) do (
         )
 
         if !ERRORLEVEL! EQU 0 (
-            echo [SUCCESS] !CURRENT_DB! is ready.
+            echo %SUCCESS% !CURRENT_DB! is ready.
         ) else (
-            echo [FAILURE] Error creating !CURRENT_DB!. Code: !ERRORLEVEL!
+            echo %ERROR% Failed to create !CURRENT_DB!. Code: !ERRORLEVEL!
         )
     )
 )
 
 :: =============================================================================
-:: 5. CLEANUP
+:: 5. TEARDOWN
 :: =============================================================================
-echo.
-echo --- Task Completed ---
-set "PW="
-set "MYSQL_PWD="
-pause
+:: Using your cleanup script for security and pause
+call "%~dp0_cleanup_db.bat"

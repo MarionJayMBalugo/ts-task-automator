@@ -1,100 +1,91 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: =============================================================================
-:: 1. PATH SETUP (DYNAMIC)
-:: =============================================================================
-set "ROOT_DIR=%~dp0"
-set "CONFIG_DIR=!ROOT_DIR!config\"
-set "ENV_FILE=!CONFIG_DIR!.env"
+:: 1. Initialize (Global Setup + DB Health Checks + Theme)
+call "%~dp0_medyo_init_db_ra.bat"
+if !ERRORLEVEL! NEQ 0 exit /b !ERRORLEVEL!
 
-:: Ensure we start in the script's directory
-cd /d "!ROOT_DIR!"
-
-:: =============================================================================
-:: 2. LOAD CONFIGURATION FROM .ENV
-:: =============================================================================
-if not exist "!ENV_FILE!" (
-    echo [ERROR] Configuration file NOT found at: "!ENV_FILE!"
-    pause
-    exit /b 1
+:: 2. Set Default Dump Options fallback
+if "!DUMP_OPTS!"=="" (
+    set "DUMP_OPTS=--single-transaction --routines --triggers --events --max_allowed_packet=1G --net_buffer_length=16M"
 )
-
-echo [INFO] Loading Export Configuration...
-
-for /f "usebackq tokens=1,2 delims==" %%A in ("!ENV_FILE!") do (
-    set "key=%%A"
-    set "val=%%B"
-    for /f "tokens=*" %%K in ("!key!") do set "key=%%K"
-    for /f "tokens=*" %%V in ("!val!") do set "val=%%V"
-    set "val=!val:'=!"
-    set "val=!val:"=!"
-    
-    if /I "!key!"=="MARIA_BIN_PATH"   set "MARIA_BIN=!val!"
-    if /I "!key!"=="EXPORT_DEST_DIR"  set "EXPORT_DIR=!val!"
-    if /I "!key!"=="DB_USERNAME"      set "DB_USER=!val!"
-    if /I "!key!"=="DB_PASSWORD"      set "DB_PASS=!val!"
-    if /I "!key!"=="DB_NAME_MAIN"     set "DB_MAIN=!val!"
-    if /I "!key!"=="DB_NAME_DW"       set "DB_DW=!val!"
-)
-
-:: Optimized Flags
-set "DUMP_OPTS=--single-transaction --routines --triggers --events --max_allowed_packet=1G --net_buffer_length=16M"
 
 :: =============================================================================
 :: 3. INITIALIZATION
 :: =============================================================================
-echo --- Starting Cutover Export ---
-if not exist "!EXPORT_DIR!" mkdir "!EXPORT_DIR!"
+echo %CYAN%--- Starting Cutover Export ---%RESET%
+echo %CYAN%[STATUS]%RESET% Mode: !USE_DOCKER! ^| Host: !DB_HOST!
 
-:: Move to MariaDB Bin folder
-cd /d "!MARIA_BIN!"
-if !ERRORLEVEL! NEQ 0 (
-    echo [ERROR] Could not find MariaDB Bin at !MARIA_BIN!
-    pause
-    exit /b 1
+:: Ensure Export Directory exists
+if not exist "!EXPORT_DIR!" (
+    echo %YELLOW%[INFO]%RESET% Creating export directory: !EXPORT_DIR!
+    mkdir "!EXPORT_DIR!" 2>nul
+)
+
+:: Pre-check for local MariaDB path if NOT using Docker
+if /I "!USE_DOCKER!"=="false" (
+    if not exist "!MARIA_BIN!\mysqldump.exe" (
+        echo %ERROR% mysqldump.exe not found in !MARIA_BIN!
+        pause
+        exit /b 1
+    )
 )
 
 :: =============================================================================
 :: 4. EXECUTION: MAIN DATABASE
 :: =============================================================================
-echo [1/3] Dumping Main Database: !DB_MAIN!...
-mysqldump.exe --user=!DB_USER! --password="!DB_PASS!" !DB_MAIN! !DUMP_OPTS! -r "!EXPORT_DIR!\!DB_MAIN!.sql"
+echo.
+echo %CYAN%[1/2] Dumping Main Database: !DB_MAIN!...%RESET%
 
-echo [VERIFY] Last 10 lines of !DB_MAIN!:
-powershell -Command "Get-Content -Path '!EXPORT_DIR!\!DB_MAIN!.sql' -Tail 10"
+if /I "!USE_DOCKER!"=="true" (
+    :: MODE: DOCKER 
+    :: We use --result-file inside container-compatible syntax or stream to host
+    docker exec -e MYSQL_PWD=!PW! !DOCKER_CONT! mysqldump -u !DB_USER! !DUMP_OPTS! !DB_MAIN! > "!EXPORT_DIR!\!DB_MAIN!.sql"
+) else (
+    :: MODE: SYSTEM-WIDE MYSQL
+    cd /d "!MARIA_BIN!"
+    mysqldump.exe --user=!DB_USER! --password="!PW!" !DB_MAIN! !DUMP_OPTS! -r "!EXPORT_DIR!\!DB_MAIN!.sql"
+)
+
+if !ERRORLEVEL! EQU 0 (
+    echo %SUCCESS% !DB_MAIN! dumped successfully.
+    :: Verification
+    powershell -Command "if(Test-Path '!EXPORT_DIR!\!DB_MAIN!.sql'){ Get-Content -Path '!EXPORT_DIR!\!DB_MAIN!.sql' -Tail 10 } else { Write-Host 'File not found' -ForegroundColor Red }"
+) else (
+    echo %ERROR% Failed to dump !DB_MAIN!.
+)
 
 :: =============================================================================
 :: 5. EXECUTION: DW CHANGELOG
 :: =============================================================================
-echo [2/3] Dumping DW Changelog: !DB_DW%...
-mysqldump.exe --user=!DB_USER! --password="!DB_PASS!" !DB_DW! changelog !DUMP_OPTS! -r "!EXPORT_DIR!\!DB_DW!_changelog.sql"
+echo.
+echo %CYAN%[2/2] Dumping DW Changelog: !DB_DW!...%RESET%
 
-echo [VERIFY] Last 10 lines of !DB_DW!_changelog:
-powershell -Command "Get-Content -Path '!EXPORT_DIR!\!DB_DW!_changelog.sql' -Tail 10"
-
-:: =============================================================================
-:: 6. COMPRESSION
-:: =============================================================================
-echo [3/3] Compressing Folder...
-:: Create timestamp (YYYYMMDD)
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set "dt=%%I"
-set "STAMP=!dt:~0,8!"
-set "ZIP_NAME=!EXPORT_DIR!\EXPORT_BACKUP_!STAMP!.zip"
-
-:: Use PowerShell's native Compress-Archive
-powershell -Command "Compress-Archive -Path '!EXPORT_DIR!\*.sql' -DestinationPath '!ZIP_NAME!' -Update"
-
-if !ERRORLEVEL! EQU 0 (
-    echo.
-    echo ===========================================================
-    echo SUCCESS: Export and Compression Complete.
-    echo Location: !ZIP_NAME!
-    echo ===========================================================
+if /I "!USE_DOCKER!"=="true" (
+    docker exec -e MYSQL_PWD=!PW! !DOCKER_CONT! mysqldump -u !DB_USER! !DUMP_OPTS! !DB_DW! changelog > "!EXPORT_DIR!\!DB_DW!_changelog.sql"
 ) else (
-    echo.
-    echo [ERROR] Compression failed. Check if files are in use.
+    :: We are already in MARIA_BIN from step 4
+    mysqldump.exe --user=!DB_USER! --password="!PW!" !DB_DW! changelog !DUMP_OPTS! -r "!EXPORT_DIR!\!DB_DW!_changelog.sql"
 )
 
-set "DB_PASS="
-pause
+if !ERRORLEVEL! EQU 0 (
+    echo %SUCCESS% !DB_DW! changelog dumped successfully.
+    powershell -Command "if(Test-Path '!EXPORT_DIR!\!DB_DW!_changelog.sql'){ Get-Content -Path '!EXPORT_DIR!\!DB_DW!_changelog.sql' -Tail 10 } else { Write-Host 'File not found' -ForegroundColor Red }"
+) else (
+    echo %ERROR% Failed to dump !DB_DW! changelog.
+)
+
+:: =============================================================================
+:: 6. FINALIZE
+:: =============================================================================
+echo.
+echo %GREEN%===========================================================%RESET%
+echo %GREEN% SUCCESS: Export Tasks Finished.%RESET%
+echo %GREEN% Files are located in: !EXPORT_DIR!%RESET%
+echo %GREEN%===========================================================%RESET%
+
+:: Return to root directory before cleanup
+cd /d "!ROOT_DIR!"
+
+:: Call global cleanup (Handles PW wipe and pause)
+call "%~dp0_cleanup.bat"
