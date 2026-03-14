@@ -22,15 +22,6 @@ if not exist "!EXPORT_DIR!" (
     mkdir "!EXPORT_DIR!" 2>nul
 )
 
-:: Pre-check for local MariaDB path if NOT using Docker
-if /I "!USE_DOCKER!"=="false" (
-    if not exist "!MARIA_BIN!\mysqldump.exe" (
-        echo %ERROR% mysqldump.exe not found in !MARIA_BIN!
-        pause
-        exit /b 1
-    )
-)
-
 :: =============================================================================
 :: 4. EXECUTION: MAIN DATABASE
 :: =============================================================================
@@ -38,18 +29,22 @@ echo.
 echo %CYAN%[1/2] Dumping Main Database: !DB_MAIN!...%RESET%
 
 if /I "!USE_DOCKER!"=="true" (
-    :: MODE: DOCKER 
-    :: We use --result-file inside container-compatible syntax or stream to host
     docker exec -e MYSQL_PWD=!PW! !DOCKER_CONT! mysqldump -u !DB_USER! !DUMP_OPTS! !DB_MAIN! > "!EXPORT_DIR!\!DB_MAIN!.sql"
-) else (
-    :: MODE: SYSTEM-WIDE MYSQL
+)
+
+:: Separate IF block prevents the "missing drive" error from triggering
+if /I "!USE_DOCKER!"=="false" (
+    if not exist "!MARIA_BIN!\mysqldump.exe" (
+        echo %ERROR% mysqldump.exe not found in !MARIA_BIN!
+        pause
+        exit /b 1
+    )
     cd /d "!MARIA_BIN!"
     mysqldump.exe --user=!DB_USER! --password="!PW!" !DB_MAIN! !DUMP_OPTS! -r "!EXPORT_DIR!\!DB_MAIN!.sql"
 )
 
 if !ERRORLEVEL! EQU 0 (
     echo %SUCCESS% !DB_MAIN! dumped successfully.
-    :: Verification
     powershell -Command "if(Test-Path '!EXPORT_DIR!\!DB_MAIN!.sql'){ Get-Content -Path '!EXPORT_DIR!\!DB_MAIN!.sql' -Tail 10 } else { Write-Host 'File not found' -ForegroundColor Red }"
 ) else (
     echo %ERROR% Failed to dump !DB_MAIN!.
@@ -63,8 +58,10 @@ echo %CYAN%[2/2] Dumping DW Changelog: !DB_DW!...%RESET%
 
 if /I "!USE_DOCKER!"=="true" (
     docker exec -e MYSQL_PWD=!PW! !DOCKER_CONT! mysqldump -u !DB_USER! !DUMP_OPTS! !DB_DW! changelog > "!EXPORT_DIR!\!DB_DW!_changelog.sql"
-) else (
-    :: We are already in MARIA_BIN from step 4
+)
+
+if /I "!USE_DOCKER!"=="false" (
+    cd /d "!MARIA_BIN!"
     mysqldump.exe --user=!DB_USER! --password="!PW!" !DB_DW! changelog !DUMP_OPTS! -r "!EXPORT_DIR!\!DB_DW!_changelog.sql"
 )
 
@@ -85,7 +82,7 @@ echo %GREEN% Files are located in: !EXPORT_DIR!%RESET%
 echo %GREEN%===========================================================%RESET%
 
 :: Return to root directory before cleanup
-cd /d "!ROOT_DIR!"
+cd /d "%ROOT_DIR%"
 
 :: Call global cleanup (Handles PW wipe and pause)
-call "%~dp0_cleanup.bat"
+call "%~dp0_cleanup_db.bat"

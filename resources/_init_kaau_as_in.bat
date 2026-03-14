@@ -1,7 +1,12 @@
 @echo off
-:: No setlocal here! We want variables to leak back to the task script.
+:: 0. HARD RESET (Kill any ghost variables from previous runs)
+set "PW="
+set "DB_USER="
+set "MARIA_BIN="
+set "EXPORT_DIR="
+set "ROOT_DIR="
 
-:: 1. GLOBAL PATHS (Using % so it works even if delayed expansion is off)
+:: 1. GLOBAL PATHS
 set "ROOT_DIR=%~dp0"
 set "CONFIG_DIR=%ROOT_DIR%config\"
 set "ENV_FILE=%CONFIG_DIR%.env"
@@ -16,7 +21,7 @@ if not exist "%ENV_FILE%" (
     exit /b 1
 )
 
-:: Use tokens=1* to ensure the entire value (including extra = signs) is captured
+:: Use tokens=1* to ensure the entire value is captured
 for /f "usebackq tokens=1* delims==" %%A in ("%ENV_FILE%") do (
     set "key=%%A"
     set "val=%%B"
@@ -48,7 +53,9 @@ for /f "usebackq tokens=1* delims==" %%A in ("%ENV_FILE%") do (
     )
 )
 
-:: 3. GLOBAL CD
+:: 3. GLOBAL CD (FIXED SYNTAX)
+:: We use the /d switch directly on the quoted variable. 
+:: If you are already on C:, this is all you need.
 cd /d "%ROOT_DIR%"
 
 exit /b 0

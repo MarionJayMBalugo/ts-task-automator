@@ -59,4 +59,4 @@ if !ERRORLEVEL! EQU 0 (
 :: 6. TEARDOWN
 :: =============================================================================
 :: Security cleanup and pause via your global script
-call "%~dp0_cleanup.bat"
+call "%~dp0_cleanup_db.bat"

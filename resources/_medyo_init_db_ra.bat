@@ -1,6 +1,6 @@
 @echo off
 :: 1. Load the Global Config first
-call "%~dp0_init.bat"
+call "%~dp0_init_kaau_as_in.bat"
 if !ERRORLEVEL! NEQ 0 exit /b !ERRORLEVEL!
 
 : Check if the required tool (Docker or MySQL) is actually installed
