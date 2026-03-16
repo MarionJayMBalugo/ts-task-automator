@@ -3,12 +3,22 @@ const path = require('node:path');
 const { exec } = require('node:child_process');
 const fs = require('node:fs');
 
-// Path to the local settings file in the user's AppData folder
+/**
+ * 1. HANDLE SQUIRREL INSTALL EVENTS
+ * This block must be at the very top to handle shortcut creation and 
+ * installation events before the app fully starts.
+ */
+if (require('electron-squirrel-startup')) {
+    app.quit();
+    process.exit(0);
+}
+
+// Path to settings in AppData
 const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+const isPackaged = app.isPackaged;
 
 /**
  * Safely loads settings from the JSON file.
- * Returns default empty path if file doesn't exist or is corrupted.
  */
 function getSettings() {
   try {
@@ -26,8 +36,8 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 950,
     height: 750,
-    title: "TS Automation Dashboard",
-    icon: path.join(__dirname, 'assets/icon.ico'),
+    title: "TMS Pulse",
+    icon: path.join(__dirname, 'assets', 'icon.ico'),
     backgroundColor: '#f0f2f5',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -35,11 +45,24 @@ function createWindow() {
       nodeIntegration: false
     }
   });
+
+  /**
+   * 2. FIX WINDOWS SEARCHABILITY
+   * Squirrel.Windows automatically sets a specific AppUserModelID for shortcuts.
+   * You must match it here so Windows indexes the app correctly.
+   * Format: com.squirrel.[config.name in forge.config.js].[package.json name]
+   */
+  app.setAppUserModelId("com.squirrel.ts_automation_app.ts-automation-app");
+
   win.setMenuBarVisibility(false);
-  win.loadFile('index.html');
+  win.loadFile(path.join(__dirname, 'ui', 'index.html'));
 }
 
-// IPC: Let user choose a folder for their manual script updates
+/**
+ * IPC HANDLERS
+ */
+
+// Handle folder selection for external workspace
 ipcMain.handle('select-folder', async () => {
   const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
   if (!result.canceled && result.filePaths.length > 0) {
@@ -54,28 +77,26 @@ ipcMain.handle('select-folder', async () => {
   return null;
 });
 
-// IPC: Send the current saved path back to the UI
+// Send current path back to UI
 ipcMain.handle('get-config-path', () => {
   return getSettings().customScriptPath;
 });
 
-// IPC: Copy ALL internal resources (files & folders) to the external folder
+// Copy internal resources to destination (handles app.asar.unpacked)
 ipcMain.handle('copy-scripts', async () => {
   const settings = getSettings();
   const destination = settings.customScriptPath;
 
   if (!destination) return "❌ Error: Select a folder first!";
 
-  const source = path.join(app.getAppPath(), 'resources');
+  // Point to unpacked directory in production or standard folder in dev
+  const source = isPackaged 
+    ? path.join(process.resourcesPath, 'app.asar.unpacked', 'resources') 
+    : path.join(app.getAppPath(), 'resources');
 
   try {
-    if (!fs.existsSync(source)) return `❌ Error: Source 'resources' not found.`;
+    if (!fs.existsSync(source)) return `❌ Error: Source 'resources' not found at ${source}`;
 
-    /**
-     * fs.cpSync is the modern way to copy directories recursively.
-     * recursive: true -> Copies subfolders and their contents.
-     * force: true -> Overwrites existing files if they already exist.
-     */
     fs.cpSync(source, destination, { 
       recursive: true, 
       force: true 
@@ -88,30 +109,27 @@ ipcMain.handle('copy-scripts', async () => {
   }
 });
 
-// IPC: Clear the custom path and revert to internal defaults
+// Reset custom workspace path
 ipcMain.handle('reset-config', () => {
   fs.writeFileSync(settingsPath, JSON.stringify({ customScriptPath: "" }));
   return "";
 });
 
-// IPC: Run the Batch file (Explicitly forcing Admin Elevation)
+// Execute Batch file with Administrator privileges
 ipcMain.on('execute-batch', (event, fileName) => {
   const settings = getSettings();
-  const internalPath = path.join(app.getAppPath(), 'resources', fileName);
+  
+  const internalBase = isPackaged 
+    ? path.join(process.resourcesPath, 'app.asar.unpacked', 'resources') 
+    : path.join(app.getAppPath(), 'resources');
+
+  const internalPath = path.join(internalBase, fileName);
   const externalPath = settings.customScriptPath ? path.join(settings.customScriptPath, fileName) : null;
 
-  // PRIORITY: Check external user folder first, fallback to internal if not found
   let finalPath = (externalPath && fs.existsSync(externalPath)) ? externalPath : internalPath;
 
-  /**
-   * THE ADMIN FIX:
-   * We use PowerShell's 'Start-Process' with the 'RunAs' verb.
-   * This guarantees a UAC prompt and Administrator privileges for the script.
-   * /k: Keeps the CMD window open so the user can see the script's output.
-   */
+  // Launch CMD via PowerShell to force UAC admin elevation
   const command = `powershell -Command "Start-Process cmd -ArgumentList '/k \\"${finalPath}\\"' -Verb RunAs"`;
-
-  console.log(`Requesting Admin elevation for: ${finalPath}`);
 
   exec(command, (error) => {
     if (error) {
@@ -124,12 +142,10 @@ ipcMain.on('execute-batch', (event, fileName) => {
 });
 
 /**
- * App Lifecycle
+ * APP LIFECYCLE
  */
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  if (process.platform !== 'darwin') app.quit();
 });

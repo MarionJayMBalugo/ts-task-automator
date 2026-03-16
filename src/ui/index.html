@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>TMS Pulse</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="modal-overlay" class="modal-backdrop">
+    <div class="tms-modal">
+        <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+        <h3 id="modal-title" style="font-weight: 800; font-size: 1.25rem; color: var(--tms-text-main); margin-bottom: 0.5rem;">Confirm Action</h3>
+        <p id="modal-body" style="color: var(--tms-text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 2rem;">Task description goes here.</p>
+        
+        <div class="d-flex gap-2">
+            <button onclick="closeModal()" class="btn btn-light flex-grow-1 fw-bold text-muted" style="font-size: 0.8rem; padding: 0.7rem;">Cancel</button>
+            <button id="modal-confirm-btn" class="btn btn-primary flex-grow-1 fw-bold" style="font-size: 0.8rem; padding: 0.7rem;">Execute Task</button>
+        </div>
+    </div>
+</div>
+
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand d-flex justify-content-between align-items-center">
+        <span class="brand-text">⚒️ TMS <span class="text-primary">PULSE</span></span>
+        <button id="sidebar-toggle" class="btn btn-sm text-white border-0 p-0" onclick="App.toggleSidebar()">
+            <div class="hamburger-icon" id="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+    </div>
+
+    <a href="#" class="nav-link active">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Dashboard</span>
+    </a>
+    <a href="#" class="nav-link">
+        <span class="nav-icon">📜</span>
+        <span class="nav-text">Log Viewer</span>
+    </a>
+    <a href="#" class="nav-link">
+        <span class="nav-icon">📚</span>
+        <span class="nav-text">Docs</span>
+    </a>
+
+    <div class="sidebar-footer">
+        <span class="version-tag mb-1">TMS Pulse v1.0.0</span>
+        <span class="text-success env-status">● ENVIRONMENT: READY</span>
+    </div>
+</nav>
+
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-start mb-5">
+        <div>
+            <h2 class="h4 fw-bold mb-1">Tech Specialist Console</h2>
+            <p class="text-muted small">Database-Related Tasks & Environment Automation</p>
+        </div>
+        <div class="bg-white p-2 rounded border shadow-sm">
+            <img src="../assets/team.png" alt="Logo" style="width: 32px; height: 32px;">
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="section-label m-0">Active Workspace</span>
+            <a onclick="changeFolder()" class="btn-link-sm text-primary">Change Directory</a>
+        </div>
+        <div class="path-strip">
+            <div id="path-info" class="path-text text-truncate">Checking directory...</div>
+            <button class="btn btn-warning btn-sm fw-bold px-3 py-1 text-white" style="font-size: 0.7rem;" onclick="generateLocalScripts()">Export All</button>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label">Database-related Tasks</span>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="action-card" data-description="Initialize new database schemas" onclick="triggerModal('create-database.bat', 'Create Databases')">
+                    <div class="action-icon">➕</div>
+                    <div class="action-label">Create DBs</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Export current DB to SQL dumps" onclick="triggerModal('export-db.bat', 'Export Databases')">
+                    <div class="action-icon">📤</div>
+                    <div class="action-label">Export DBs</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Import SQL files into local DB" onclick="triggerModal('import-db.bat', 'Import Databases')">
+                    <div class="action-icon">📥</div>
+                    <div class="action-label">Import DBs</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <span class="section-label">System Hooking</span>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="action-card" style="background: var(--tms-sidebar); border: none;" data-description="Configure Windows ENV variables" onclick="triggerModal('sys-env-setup.bat', 'System Environment Setup')">
+                    <div class="action-icon" style="background: rgba(255,255,255,0.1); color: white;">⚙️</div>
+                    <div class="action-label" style="color: white;">Setup ENV (WIN)</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" style="border-style: dashed; background: transparent; cursor: default;" data-description="Tool registration locked">
+                    <div class="action-icon" style="background: #f1f5f9; color: #94a3b8;">+</div>
+                    <div class="action-label" style="color: #94a3b8;">Register Tool</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
