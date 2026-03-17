@@ -3,16 +3,6 @@ const path = require('node:path');
 const { exec } = require('node:child_process');
 const fs = require('node:fs');
 
-/**
- * 1. HANDLE SQUIRREL INSTALL EVENTS
- * This block must be at the very top to handle shortcut creation and 
- * installation events before the app fully starts.
- */
-if (require('electron-squirrel-startup')) {
-    app.quit();
-    process.exit(0);
-}
-
 // Path to settings in AppData
 const settingsPath = path.join(app.getPath('userData'), 'settings.json');
 const isPackaged = app.isPackaged;
@@ -47,12 +37,11 @@ function createWindow() {
   });
 
   /**
-   * 2. FIX WINDOWS SEARCHABILITY
-   * Squirrel.Windows automatically sets a specific AppUserModelID for shortcuts.
-   * You must match it here so Windows indexes the app correctly.
-   * Format: com.squirrel.[config.name in forge.config.js].[package.json name]
+   * FIX WINDOWS SEARCHABILITY (ELECTRON BUILDER FORMAT)
+   * This links the running app to the Start Menu shortcut.
+   * Matches the appId we set in package.json!
    */
-  app.setAppUserModelId("com.squirrel.ts_automation_app.ts-automation-app");
+  app.setAppUserModelId("com.tsautomation.tmspulse");
 
   win.setMenuBarVisibility(false);
   win.loadFile(path.join(__dirname, 'ui', 'index.html'));
@@ -82,14 +71,14 @@ ipcMain.handle('get-config-path', () => {
   return getSettings().customScriptPath;
 });
 
-// Copy internal resources to destination (handles app.asar.unpacked)
+// Copy internal resources to destination
 ipcMain.handle('copy-scripts', async () => {
   const settings = getSettings();
   const destination = settings.customScriptPath;
 
   if (!destination) return "❌ Error: Select a folder first!";
 
-  // Point to unpacked directory in production or standard folder in dev
+  // In electron-builder, unpacked resources live in app.asar.unpacked
   const source = isPackaged 
     ? path.join(process.resourcesPath, 'app.asar.unpacked', 'resources') 
     : path.join(app.getAppPath(), 'resources');
@@ -128,7 +117,6 @@ ipcMain.on('execute-batch', (event, fileName) => {
 
   let finalPath = (externalPath && fs.existsSync(externalPath)) ? externalPath : internalPath;
 
-  // Launch CMD via PowerShell to force UAC admin elevation
   const command = `powershell -Command "Start-Process cmd -ArgumentList '/k \\"${finalPath}\\"' -Verb RunAs"`;
 
   exec(command, (error) => {

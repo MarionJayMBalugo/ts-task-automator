@@ -1,29 +1,39 @@
 {
   "name": "ts-automation-app",
+  "productName": "TMS Pulse",
   "version": "1.0.0",
   "description": "Internal automation tool for Technical Specialists",
   "main": "src/main.js",
   "author": "marion jay m balugo",
   "license": "ISC",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "build": "electron-builder --win"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.11.1",
-    "@electron-forge/maker-deb": "^7.11.1",
-    "@electron-forge/maker-rpm": "^7.11.1",
-    "@electron-forge/maker-squirrel": "^7.11.1",
-    "@electron-forge/maker-zip": "^7.11.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
-    "@electron-forge/plugin-fuses": "^7.11.1",
     "@electron/fuses": "^1.8.0",
-    "electron": "^40.8.0"
+    "electron": "^40.8.0",
+    "electron-builder": "^26.8.1"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^8.2.0"
+  },
+  "build": {
+    "appId": "com.tsautomation.tmspulse",
+    "asarUnpack": [
+      "resources/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "TMS Pulse",
+      "uninstallDisplayName": "TMS Pulse"
+    }
   }
 }

@@ -34,11 +34,11 @@ if not exist "!IMPORT_FILE_PATH!" (
 echo %YELLOW%[PROCESS]%RESET% Importing data... Please wait (this may take time)...
 
 if /I "!USE_DOCKER!"=="true" (
-    :: MODE: DOCKER
-    :: We use -i for interactive stream and pass the file via redirect <
+    REM MODE: DOCKER
+    REM We use -i for interactive stream and pass the file via redirect <
     docker exec -i -e MYSQL_PWD=!PW! !DOCKER_CONT! mysql -u !DB_USER! !DB_NAME_IMPORT! < "!IMPORT_FILE_PATH!"
 ) else (
-    :: MODE: SYSTEM-WIDE MYSQL
+    REM MODE: SYSTEM-WIDE MYSQL
     set "MYSQL_PWD=!PW!"
     mysql -h !DB_HOST! -u !DB_USER! !DB_NAME_IMPORT! < "!IMPORT_FILE_PATH!"
 )
