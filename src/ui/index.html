@@ -33,19 +33,20 @@
         </button>
     </div>
 
-    <a href="#" class="nav-link active">
-        <span class="nav-icon">📊</span>
+    <a href="#" id="nav-dashboard" class="nav-link active" onclick="switchTab('dashboard')">
         <span class="nav-text">Dashboard</span>
     </a>
-    <a href="#" class="nav-link">
-        <span class="nav-icon">📜</span>
-        <span class="nav-text">Log Viewer</span>
-    </a>
-    <a href="#" class="nav-link">
-        <span class="nav-icon">📚</span>
-        <span class="nav-text">Docs</span>
-    </a>
 
+    <a href="#" id="nav-server-validation" class="nav-link" onclick="switchTab('server-validation')">
+        <span class="nav-text">Server Validation</span>
+    </a>
+    <a href="#" id="nav-server-installation" class="nav-link" onclick="switchTab('server-installation')">
+        <span class="nav-text">Server Installation</span>
+    </a>
+    
+    <a href="#" id="nav-settings" class="nav-link" onclick="switchTab('settings')">
+        <span class="nav-text">Settings</span>
+    </a>
     <div class="sidebar-footer">
         <span class="version-tag mb-1">TMS Pulse v1.0.0</span>
         <span class="text-success env-status">● ENVIRONMENT: READY</span>
@@ -53,68 +54,290 @@
 </nav>
 
 <div class="main-content">
-    <div class="d-flex justify-content-between align-items-start mb-5">
+    
+    <div id="dashboard-view" class="app-view">
+        <div class="d-flex justify-content-between align-items-start mb-5">
+            <div>
+                <h2 class="h4 fw-bold mb-1">Tech Specialist Console</h2>
+                <p class="text-muted small">Database-Related Tasks & Environment Automation</p>
+            </div>
+            <div class="bg-white p-2 rounded border shadow-sm">
+                <img src="../assets/team.png" alt="Logo" style="width: 32px; height: 32px;">
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="section-label m-0">Active Workspace</span>
+                <a onclick="changeFolder()" class="btn-link-sm text-primary" style="cursor: pointer;">Change Directory</a>
+            </div>
+            <div class="path-strip">
+                <div id="path-info" class="path-text text-truncate">Checking directory...</div>
+                <button class="btn btn-warning btn-sm fw-bold px-3 py-1 text-white" style="font-size: 0.7rem;" onclick="generateLocalScripts()">Export All</button>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <span class="section-label">Database-related Tasks</span>
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="action-card" data-description="Initialize new database schemas" onclick="triggerModal('create-database.bat', 'Create Databases')">
+                        <div class="action-icon">➕</div>
+                        <div class="action-label">Create DBs</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="action-card" data-description="Export current DB to SQL dumps" onclick="triggerModal('export-db.bat', 'Export Databases')">
+                        <div class="action-icon">📤</div>
+                        <div class="action-label">Export DBs</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="action-card" data-description="Import SQL files into local DB" onclick="triggerModal('import-db.bat', 'Import Databases')">
+                        <div class="action-icon">📥</div>
+                        <div class="action-label">Import DBs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div>
-            <h2 class="h4 fw-bold mb-1">Tech Specialist Console</h2>
-            <p class="text-muted small">Database-Related Tasks & Environment Automation</p>
-        </div>
-        <div class="bg-white p-2 rounded border shadow-sm">
-            <img src="../assets/team.png" alt="Logo" style="width: 32px; height: 32px;">
-        </div>
-    </div>
-
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="section-label m-0">Active Workspace</span>
-            <a onclick="changeFolder()" class="btn-link-sm text-primary">Change Directory</a>
-        </div>
-        <div class="path-strip">
-            <div id="path-info" class="path-text text-truncate">Checking directory...</div>
-            <button class="btn btn-warning btn-sm fw-bold px-3 py-1 text-white" style="font-size: 0.7rem;" onclick="generateLocalScripts()">Export All</button>
-        </div>
-    </div>
-
-    <div class="mb-5">
-        <span class="section-label">Database-related Tasks</span>
-        <div class="row row-cols-1 row-cols-md-3 g-3">
-            <div class="col">
-                <div class="action-card" data-description="Initialize new database schemas" onclick="triggerModal('create-database.bat', 'Create Databases')">
-                    <div class="action-icon">➕</div>
-                    <div class="action-label">Create DBs</div>
+            <span class="section-label">System Hooking</span>
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="action-card" style="background: var(--tms-sidebar); border: none;" data-description="Configure Windows ENV variables" onclick="triggerModal('sys-env-setup.bat', 'System Environment Setup')">
+                        <div class="action-icon" style="background: rgba(255,255,255,0.1); color: white;">⚙️</div>
+                        <div class="action-label" style="color: white;">Setup ENV (WIN)</div>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="action-card" data-description="Export current DB to SQL dumps" onclick="triggerModal('export-db.bat', 'Export Databases')">
-                    <div class="action-icon">📤</div>
-                    <div class="action-label">Export DBs</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="action-card" data-description="Import SQL files into local DB" onclick="triggerModal('import-db.bat', 'Import Databases')">
-                    <div class="action-icon">📥</div>
-                    <div class="action-label">Import DBs</div>
+                <div class="col">
+                    <div class="action-card" style="border-style: dashed; background: transparent; cursor: default;" data-description="Tool registration locked">
+                        <div class="action-icon" style="background: #f1f5f9; color: #94a3b8;">+</div>
+                        <div class="action-label" style="color: #94a3b8;">Register Tool</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div>
-        <span class="section-label">System Hooking</span>
-        <div class="row row-cols-1 row-cols-md-3 g-3">
-            <div class="col">
-                <div class="action-card" style="background: var(--tms-sidebar); border: none;" data-description="Configure Windows ENV variables" onclick="triggerModal('sys-env-setup.bat', 'System Environment Setup')">
-                    <div class="action-icon" style="background: rgba(255,255,255,0.1); color: white;">⚙️</div>
-                    <div class="action-label" style="color: white;">Setup ENV (WIN)</div>
+  <div id="server-validation-view" class="app-view" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="h4 fw-bold mb-1">Server Diagnostics</h2>
+                <p class="text-muted small mb-0">Live system resources and dependencies</p>
+            </div>
+            <button class="btn btn-primary btn-sm fw-bold shadow-sm px-3" onclick="loadServerInfo()">
+                🔄 Refresh
+            </button>
+        </div>
+        <div class="mb-4">
+            <span class="section-label mb-2 d-block">System Quick Access</span>
+            <div class="bg-white p-2 rounded border shadow-sm d-flex gap-2 flex-wrap">
+                <button class="btn btn-light border btn-sm fw-bold px-3" onclick="openTool('ipconfig')">⌨️ IPConfig</button>
+                <button class="btn btn-light border btn-sm fw-bold px-3" onclick="openTool('dxdiag')">🎮 DXDiag</button>
+                <button class="btn btn-light border btn-sm fw-bold px-3" onclick="openTool('explorer-d')">📂 Drive D:</button>
+                <button class="btn btn-light border btn-sm fw-bold px-3" onclick="openTool('explorer-pc')">🖥️ This PC</button>
+                <button class="btn btn-light border btn-sm fw-bold px-3" onclick="openTool('about-pc')">ℹ️ About PC</button>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-lg-7 col-12">
+                <span class="section-label mb-2 d-block">Hardware & OS</span>
+                <div class="bg-white p-3 rounded border shadow-sm">
+                    <div class="row g-3">
+                        <div class="col-6 col-sm-4">
+                            <div class="info-label text-muted text-uppercase fw-bold">Hostname</div>
+                            <div class="info-value fw-bold" id="sys-hostname">---</div>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <div class="info-label text-muted text-uppercase fw-bold">IPv4</div>
+                            <div class="info-value fw-bold text-primary" id="sys-ip">---</div>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <div class="info-label text-muted text-uppercase fw-bold">RAM</div>
+                            <div class="info-value fw-bold" id="sys-ram">---</div>
+                        </div>
+                        <div class="col-12 col-sm-8">
+                            <div class="info-label text-muted text-uppercase fw-bold">Processor</div>
+                            <div class="info-value fw-bold small" id="sys-cpu">---</div>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <div class="info-label text-muted text-uppercase fw-bold">Storage</div>
+                            <div class="info-value fw-bold text-success" id="sys-drive-d">---</div>
+                        </div>
+                        <div class="col-12">
+                            <div class="info-label text-muted text-uppercase fw-bold">OS Version</div>
+                            <div class="info-value fw-bold small" id="sys-os">---</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="action-card" style="border-style: dashed; background: transparent; cursor: default;" data-description="Tool registration locked">
-                    <div class="action-icon" style="background: #f1f5f9; color: #94a3b8;">+</div>
-                    <div class="action-label" style="color: #94a3b8;">Register Tool</div>
+
+            <div class="col-lg-5 col-12">
+                <span class="section-label mb-2 d-block">Environment Checks</span>
+                <div class="bg-white p-3 rounded border shadow-sm">
+                    <p class="text-muted info-label fw-bold text-uppercase mb-2">Network Whitelist</p>
+                    <div class="d-flex flex-wrap gap-2 mb-3 pb-3 border-bottom">
+                        <div class="d-flex align-items-center bg-light border rounded p-1 px-2">
+                            <span class="small me-2">Upload</span>
+                            <span id="status-upload" class="badge bg-secondary">...</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-light border rounded p-1 px-2">
+                            <span class="small me-2">Deploy</span>
+                            <span id="status-deploy" class="badge bg-secondary">...</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-light border rounded p-1 px-2">
+                            <span class="small me-2">Google</span>
+                            <span id="status-google" class="badge bg-secondary">...</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-light border rounded p-1 px-2">
+                            <span class="small me-2">Innovar</span>
+                            <span id="status-innovar" class="badge bg-secondary">...</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-light border rounded p-1 px-2">
+                            <span class="small me-2">NextGen</span>
+                            <span id="status-nextgen" class="badge bg-secondary">...</span>
+                        </div>
+                    </div>
+
+                    <p class="text-muted info-label fw-bold text-uppercase mb-2">Installations</p>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <div class="info-label text-muted fw-bold">TMS-DOS</div>
+                                <span id="status-tmsdos" class="badge bg-secondary">...</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <div class="info-label text-muted fw-bold">Mirth</div>
+                                <span id="status-mirth" class="badge bg-secondary">...</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <div class="info-label text-muted fw-bold">BridgeLink</div>
+                                <span id="status-bridgelink" class="badge bg-secondary">...</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 text-center bg-light">
+                                <div class="info-label text-muted fw-bold">VS Code</div>
+                                <span id="status-vscode" class="badge bg-secondary">...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="server-installation-view" class="app-view" style="display: none;">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h2 class="h4 fw-bold mb-1">Server Installation</h2>
+                <p class="text-muted small">Deploy applications and configure environment structures</p>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <span class="section-label mb-2 d-block">Initialization</span>
+                <div class="action-card d-flex align-items-center p-3" 
+                    data-description="Create the standard TMS directory structure on the target drive." 
+                    onclick="triggerModal('setup-folders.bat', 'Initialize Folders')">
+                    <div class="action-icon me-3">📂</div>
+                    <div>
+                        <div class="fw-bold">Initialize Directory Tree</div>
+                        <div class="small text-muted">Builds D:\tms-dos and subfolders</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="settings-view" class="app-view" style="display: none;">
+        <div class="d-flex justify-content-between align-items-start mb-5">
+            <div>
+                <h2 class="h4 fw-bold mb-1">Application Settings</h2>
+                <p class="text-muted small">Configure TMS Pulse preferences and workspace behaviors</p>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <span class="section-label">Workspace Configuration</span>
+            <div class="bg-white p-4 rounded border shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h6 class="fw-bold mb-1">External Scripts Directory</h6>
+                        <p class="text-muted small mb-0">The folder where TMS Pulse will look for your custom .bat files.</p>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm fw-bold" onclick="changeFolder()">Browse</button>
+                </div>
+                <div class="bg-light p-2 rounded border small text-muted text-truncate mb-3" id="settings-path-info">
+                    Checking directory...
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-outline-danger btn-sm fw-bold" onclick="resetConfigPath()">Reset to Default</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <span class="section-label">Drive Configuration</span>
+            <div class="bg-white p-4 rounded border shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-1">Target Application Drive</h6>
+                        <p class="text-muted small mb-0">Select the drive letter to scan for installed dependencies (TMS-DOS, Mirth, etc.).</p>
+                    </div>
+                    <div class="w-25">
+                        <select class="form-select fw-bold text-primary border-primary" id="target-drive-select" onchange="changeTargetDrive(this.value)">
+                            <option value="C:\">Drive C:\</option>
+                            <option value="D:\">Drive D:\</option>
+                            <option value="E:\">Drive E:\</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <span class="section-label">Execution Preferences</span>
+            <div class="bg-white p-4 rounded border shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-1">Auto-Close Command Prompt</h6>
+                        <p class="text-muted small mb-0">Automatically close the black terminal window when a task finishes.</p>
+                    </div>
+                    <div class="form-check form-switch fs-4 m-0">
+                        <input class="form-check-input" type="checkbox" id="auto-close-switch" onchange="toggleAutoClose(this.checked)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <span class="section-label">Application Information</span>
+            <div class="bg-white p-4 rounded border shadow-sm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6 class="fw-bold mb-1">Version</h6>
+                        <p class="text-muted small mb-0">TMS Pulse v1.0.0 (Production)</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="fw-bold mb-1">Electron Engine</h6>
+                        <p class="text-muted small mb-0">v40.8.0</p>
+                    </div>
+                    <div class="col-md-12">
+                        <h6 class="fw-bold mb-1">Developer</h6>
+                        <p class="text-muted small mb-0">Marion Jay M Balugo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
 <script src="app.js"></script>
 </body>

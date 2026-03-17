@@ -50,6 +50,7 @@ for /f "usebackq tokens=1* delims==" %%A in ("%ENV_FILE%") do (
         if /I "!key!"=="DB_DUMP_OPTS"      set "DUMP_OPTS=!val!"
         if /I "!key!"=="DB_NAME_IMPORT"    set "DB_NAME_IMPORT=!val!"
         if /I "!key!"=="IMPORT_FILE_PATH"  set "IMPORT_FILE_PATH=!val!"
+        if /I "!key!"=="TMS_INFRA_FOLDERS" set "TMS_INFRA_FOLDERS=!val!"
     )
 )
 

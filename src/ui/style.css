@@ -119,4 +119,23 @@ body {
     z-index: 10000; animation: modalFadeIn 0.3s ease;
 }
 
+/* Ensure long text doesn't break the layout */
+.info-value {
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+/* Make labels consistent */
+.info-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    margin-bottom: 2px;
+}
+
+/* Adjust badges for tighter spaces */
+.badge {
+    font-size: 0.7rem !important;
+    font-weight: 700;
+}
+
 @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
