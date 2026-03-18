@@ -98,6 +98,18 @@
                         <div class="action-label">Import DBs</div>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="action-card d-flex align-items-center p-3 bg-white border rounded shadow-sm"  data-description="Generates credentials from .env"  style="cursor: pointer; transition: all 0.2s;"
+                         onclick="triggerModal('create-db-user.bat', 'Create DB User')">
+                         <div class="action-icon">👤</div>
+                        <div class="action-label">Create DB User</div>
+                        <!-- <div class="action-icon me-3 text-warning" style="font-size: 1.5rem;"></div>
+                        <div>
+                            <div class="fw-bold text-dark">Create DB User</div>
+                            <div class="small text-muted">Generates credentials from .env</div>
+                        </div> -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -232,7 +244,7 @@
         </div>
     </div>
 
-    <div id="server-installation-view" class="app-view" style="display: none;">
+   <div id="server-installation-view" class="app-view" style="display: none;">
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <h2 class="h4 fw-bold mb-1">Server Installation</h2>
@@ -240,20 +252,56 @@
             </div>
         </div>
 
-        <div class="row g-3">
-            <div class="col-md-6">
-                <span class="section-label mb-2 d-block">Initialization</span>
-                <div class="action-card d-flex align-items-center p-3" 
-                    data-description="Create the standard TMS directory structure on the target drive." 
-                    onclick="triggerModal('setup-folders.bat', 'Initialize Folders')">
-                    <div class="action-icon me-3">📂</div>
-                    <div>
-                        <div class="fw-bold">Initialize Directory Tree</div>
-                        <div class="small text-muted">Builds D:\tms-dos and subfolders</div>
+        <div class="mb-5">
+            <span class="section-label mb-3 d-block text-uppercase fw-bold text-muted" style="font-size: 0.75rem; letter-spacing: 0.05rem;">Infrastructure & Environment</span>
+            <div class="row g-3">
+                
+                <div class="col-md-6">
+                    <div class="action-card d-flex align-items-center p-3 bg-white border rounded shadow-sm" 
+                         data-description="Builds D:\tms-dos and subfolders"
+                         onclick="triggerModal('setup-folders.bat', 'Initialize Folders')">
+                        <div class="action-icon me-3 fs-3">📂</div>
+                        <div class="fw-bold text-dark">Initialize Directory Tree</div>
                     </div>
                 </div>
+
+                <div class="col-md-6">
+                    <div class="action-card d-flex align-items-center p-3 bg-dark text-white border rounded shadow-sm" 
+                         data-description="Configures Windows environment variables"
+                         onclick="triggerModal('sys-env-setup.bat', 'Setup System ENV')">
+                        <div class="action-icon me-3 fs-3">⚙️</div>
+                        <div class="fw-bold">Setup ENV (WIN)</div>
+                    </div>
+                </div>
+
             </div>
         </div>
+
+        <div class="mb-5">
+            <span class="section-label mb-3 d-block text-uppercase fw-bold text-muted" style="font-size: 0.75rem; letter-spacing: 0.05rem;">Database Configuration</span>
+            <div class="row g-3">
+                
+                <div class="col-md-6">
+                    <div class="action-card d-flex align-items-center p-3 bg-white border rounded shadow-sm" 
+                         data-description="Generates databases from .env"
+                         onclick="triggerModal('create-database.bat', 'Create DBs')">
+                        <div class="action-icon me-3 fs-3 text-primary">➕</div>
+                        <div class="fw-bold text-dark">Create DBs</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="action-card d-flex align-items-center p-3 bg-white border rounded shadow-sm" 
+                         data-description="Generates credentials from .env"
+                         onclick="triggerModal('create-db-user.bat', 'Create DB User')">
+                        <div class="action-icon me-3 fs-3" style="color: #6f42c1;">👤</div>
+                        <div class="fw-bold text-dark">Create DB User</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
     
     <div id="settings-view" class="app-view" style="display: none;">

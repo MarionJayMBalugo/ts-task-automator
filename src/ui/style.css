@@ -79,9 +79,11 @@ body {
     background: white; border: 1px solid var(--tms-border); border-radius: 12px;
     padding: 1rem; transition: all 0.2s ease; cursor: pointer; 
     display: flex; align-items: center; gap: 0.75rem; position: relative;
+    position: relative; /* Required for z-index to work */
+    z-index: 1;         /* Keep them at base level normally */
 }
 
-.action-card:hover { border-color: var(--tms-blue); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+.action-card:hover { border-color: var(--tms-blue); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);z-index: 10;        /* Pops the card to the front when hovered! */ }
 
 /* --- TOOLTIPS --- */
 .action-card::after {

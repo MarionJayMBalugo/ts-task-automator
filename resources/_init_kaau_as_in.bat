@@ -51,6 +51,10 @@ for /f "usebackq tokens=1* delims==" %%A in ("%ENV_FILE%") do (
         if /I "!key!"=="DB_NAME_IMPORT"    set "DB_NAME_IMPORT=!val!"
         if /I "!key!"=="IMPORT_FILE_PATH"  set "IMPORT_FILE_PATH=!val!"
         if /I "!key!"=="TMS_INFRA_FOLDERS" set "TMS_INFRA_FOLDERS=!val!"
+        if /I "!key!"=="NEW_DB_USERNAME"     set "NEW_DB_USERNAME=!val!"
+        if /I "!key!"=="NEW_DB_USER_HOST"     set "NEW_DB_USER_HOST=!val!"
+        if /I "!key!"=="NEW__DB_USER_PASS"     set "NEW__DB_USER_PASS=!val!"
+        if /I "!key!"=="NEW_DB_USER_PRIV"     set "NEW_DB_USER_PRIV=!val!"
     )
 )
 
