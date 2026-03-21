@@ -1,0 +1,157 @@
+<div id="server-validation-view" class="app-view">
+    <div class="d-flex justify-content-between align-items-start mb-5">
+        <div>
+            <h2 class="h4 fw-bold mb-1" data-i18n="validation.title"></h2>
+            <p class="text-muted small mb-0" data-i18n="validation.subtitle"></p>
+        </div>
+        <button class="btn btn-primary fw-bold shadow-sm px-4 py-2 d-flex align-items-center gap-2" onclick="App.runValidation()">
+            <svg width="18" height="18"><use href="#icon-refresh"></use></svg>
+            <span data-i18n="validation.refresh"></span>
+        </button>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label" data-i18n="validation.quickAccess"></span>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+            <div class="col">
+                <div class="action-card" onclick="App.openTool('ipconfig')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
+                        <svg width="20" height="20"><use href="#icon-terminal"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="validation.btns.ipconfig"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" onclick="App.openTool('dxdiag')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
+                        <svg width="20" height="20"><use href="#icon-cpu"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="validation.btns.dxdiag"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" onclick="App.openTool('explorer-d')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="20" height="20"><use href="#icon-folder"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="validation.btns.driveD"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" onclick="App.openTool('explorer-pc')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
+                        <svg width="20" height="20"><use href="#icon-monitor"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="validation.btns.thisPc"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" onclick="App.openTool('about-pc')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-info">
+                        <svg width="20" height="20"><use href="#icon-info"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="validation.btns.aboutPc"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7 col-12">
+            <span class="section-label" data-i18n="validation.hw"></span>
+            <div class="bg-white p-4 rounded border shadow-sm h-100">
+                <div class="row g-4">
+                    <div class="col-6 col-md-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-1" data-i18n="validation.hostname"></div>
+                        <div class="fs-6 fw-bold text-dark" id="sys-hostname">---</div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-1" data-i18n="validation.ipv4"></div>
+                        <div class="fs-6 fw-bold text-primary" id="sys-ip">---</div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-1" data-i18n="validation.ram"></div>
+                        <div class="fs-6 fw-bold text-dark" id="sys-ram">---</div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <div class="text-muted small text-uppercase fw-bold mb-1" data-i18n="validation.processor"></div>
+                        <div class="small fw-bold text-dark" id="sys-cpu">---</div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="text-muted small text-uppercase fw-bold mb-1" data-i18n="validation.storage"></div>
+                        <div class="fs-6 fw-bold text-success" id="sys-drive-d">---</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-muted small text-uppercase fw-bold mb-1" data-i18n="validation.os"></div>
+                        <div class="small fw-bold text-dark" id="sys-os">---</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-12 mt-5 mt-lg-4">
+            <div class="mt-2 mt-lg-0 h-100 d-flex flex-column">
+                <span class="section-label" data-i18n="validation.envChecks"></span>
+                <div class="bg-white p-4 rounded border shadow-sm flex-grow-1">
+                    
+                    <div class="mb-4">
+                        <p class="text-muted small text-uppercase fw-bold mb-3" data-i18n="validation.whitelist"></p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <div class="d-flex align-items-center bg-light border rounded py-1 px-3">
+                                <span class="small fw-bold me-2" data-i18n="validation.network.upload"></span>
+                                <span id="status-upload" class="badge bg-secondary">...</span>
+                            </div>
+                            <div class="d-flex align-items-center bg-light border rounded py-1 px-3">
+                                <span class="small fw-bold me-2" data-i18n="validation.network.deploy"></span>
+                                <span id="status-deploy" class="badge bg-secondary">...</span>
+                            </div>
+                            <div class="d-flex align-items-center bg-light border rounded py-1 px-3">
+                                <span class="small fw-bold me-2" data-i18n="validation.network.google"></span>
+                                <span id="status-google" class="badge bg-secondary">...</span>
+                            </div>
+                            <div class="d-flex align-items-center bg-light border rounded py-1 px-3">
+                                <span class="small fw-bold me-2" data-i18n="validation.network.innovar"></span>
+                                <span id="status-innovar" class="badge bg-secondary">...</span>
+                            </div>
+                            <div class="d-flex align-items-center bg-light border rounded py-1 px-3">
+                                <span class="small fw-bold me-2" data-i18n="validation.network.nextgen"></span>
+                                <span id="status-nextgen" class="badge bg-secondary">...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-muted small text-uppercase fw-bold mb-3" data-i18n="validation.installations"></p>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
+                                    <span class="small fw-bold text-dark" data-i18n="validation.apps.tmsDos"></span>
+                                    <span id="status-tmsdos" class="badge bg-secondary">...</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
+                                    <span class="small fw-bold text-dark" data-i18n="validation.apps.mirth"></span>
+                                    <span id="status-mirth" class="badge bg-secondary">...</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
+                                    <span class="small fw-bold text-dark" data-i18n="validation.apps.bridgeLink"></span>
+                                    <span id="status-bridgelink" class="badge bg-secondary">...</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
+                                    <span class="small fw-bold text-dark" data-i18n="validation.apps.vsCode"></span>
+                                    <span id="status-vscode" class="badge bg-secondary">...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

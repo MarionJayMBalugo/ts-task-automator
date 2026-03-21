@@ -1,0 +1,101 @@
+<div id="dashboard-view" class="app-view">
+    <div class="d-flex justify-content-between align-items-start mb-5">
+        <div>
+            <h2 class="h4 fw-bold mb-1" data-i18n="dashboard.title"></h2>
+            <p class="text-muted small" data-i18n="dashboard.subtitle"></p>
+        </div>
+        <!-- <div class="bg-white p-2 rounded border shadow-sm">
+            <img src="../assets/icon.ico" alt="Logo" style="width: 32px; height: 32px;">
+        </div> -->
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label" data-i18n="dashboard.quickaccess"></span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
+            <div class="col">
+                <div class="action-card" data-description="Opens the TMS-DOS directory" onclick="App.openTool('open-tms-dos')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="16" height="16"><use href="#icon-folder"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="opentmsdos"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Opens the Customers directory" onclick="App.openTool('open-customers')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="16" height="16"><use href="#icon-folder"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="opencustomer"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Opens the TMS-TOOLS directory" onclick="App.openTool('open-tms-tools')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="16" height="16"><use href="#icon-folder"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="opentmstool"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label" data-i18n="sections.db2"></span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
+            <div class="col">
+                <div class="action-card" data-description="Initialize new database schemas" onclick="UI.openModal('create-database.bat', 'Create Databases', 'This will launch create-database.bat in an elevated command prompt to initialize the core schemas. Ensure your .env file is correct.')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="16" height="16"><use href="#icon-plus"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="btns.createdb"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Export current DB to SQL dumps" onclick="UI.openModal('export-db.bat', 'Export Databases', 'This will run export-db.bat to generate SQL dumps of your current environment.')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-info">
+                        <svg width="16" height="16"><use href="#icon-export"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="btns.exportdb"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Import SQL files into local DB" onclick="UI.openModal('import-db.bat', 'Import Databases', 'This will run import-db.bat to populate your local database from existing SQL dumps.')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-success">
+                        <svg width="16" height="16"><use href="#icon-import"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="btns.importdb"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" data-description="Generates credentials from .env" onclick="UI.openModal('create-db-user.bat', 'Create DB User', 'This will run create-db-user.bat to generate database credentials using your .env configuration.')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
+                        <svg width="16" height="16"><use href="#icon-user"></use></svg>
+                    </div>
+                    <div class="action-label" data-i18n="btns.createdbuser"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <span class="section-label" data-i18n="sections.systemhook"></span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
+            <div class="col">
+                <div class="action-card" style="background: var(--tms-sidebar); border: none;" data-description="Configure Windows ENV variables" onclick="UI.openModal('sys-env-setup.bat', 'System Environment Setup', 'This will run sys-env-setup.bat to permanently set Windows environment variables. You may need to restart your PC afterward.')">
+                    <div class="action-icon d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.1); color: white;">
+                        <svg width="16" height="16"><use href="#icon-gear"></use></svg>
+                    </div>
+                    <div class="action-label text-white" data-i18n="btns.setupwinenv"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="action-card" style="border-style: dashed; background: transparent; cursor: default;" data-description="Tool registration locked">
+                    <div class="action-icon d-flex align-items-center justify-content-center" style="background: #f1f5f9; color: #94a3b8;">
+                        <svg width="16" height="16"><use href="#icon-plus"></use></svg>
+                    </div>
+                    <div class="action-label" style="color: #94a3b8;" data-i18n="btns.registertool"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
