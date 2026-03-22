@@ -222,3 +222,37 @@ h2, .h4, .fw-bold {
 [data-bs-theme="dark"] .section-label::after {
     border-color: rgba(255, 255, 255, 0.15) !important;
 }
+
+/* Dark mode fixes for Action Card Variants */
+[data-bs-theme="dark"] .action-card.card-dashed .action-icon {
+    background: rgba(255,255,255,0.05) !important; 
+    color: #6c757d !important;
+}
+[data-bs-theme="dark"] .action-card.card-dashed .action-label {
+    color: #6c757d !important;
+}
+
+/* --- DARK MODE OVERRIDES FOR MODAL --- */
+[data-bs-theme="dark"] .tms-modal {
+    background-color: #212529; /* Deep dark gray */
+    border-color: #373b3e;     /* Subtle dark border */
+}
+
+[data-bs-theme="dark"] .tms-modal-title {
+    color: #f8f9fa; /* Crisp white for the title */
+}
+
+[data-bs-theme="dark"] .tms-modal-body {
+    color: #adb5bd; /* Softer gray for the description */
+}
+
+/* Fix the "Cancel" button (which is .btn-light) */
+[data-bs-theme="dark"] .tms-modal .btn-light {
+    background-color: #2b3035;
+    border-color: #495057;
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] .tms-modal .btn-light:hover {
+    background-color: #343a40;
+}

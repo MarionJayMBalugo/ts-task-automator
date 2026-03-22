@@ -22,13 +22,13 @@
             </div>
 
             <div class="col">
-                <div class="action-card" style="background: var(--tms-sidebar); border: none;"
+                <div class="action-card card-accent" 
                      i18n-desc="install.btns.env.desc"
                      onclick="UI.openModal('sys-env-setup.bat', 'Setup System ENV', 'This will configure Windows environment variables. A system restart may be required.')">
-                    <div class="action-icon d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.1); color: white;">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
-                    <div class="action-label text-white" i18n="install.btns.env.title"></div>
+                    <div class="action-label" i18n="install.btns.env.title"></div>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                 <div class="action-card" 
                      i18n-desc="install.btns.createUser.desc"
                      onclick="UI.openModal('create-db-user.bat', 'Create DB User', 'This will run create-db-user.bat to generate credentials from your .env file.')">
-                    <div class="action-icon d-flex align-items-center justify-content-center" style="color: #6f42c1;">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
                         <svg width="20" height="20"><use href="#icon-user"></use></svg>
                     </div>
                     <div class="action-label" i18n="install.btns.createUser.title"></div>

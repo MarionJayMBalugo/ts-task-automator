@@ -77,22 +77,25 @@
     <div>
         <span class="section-label" i18n="sections.systemhook"></span>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
+            
             <div class="col">
-                <div class="action-card" style="background: var(--tms-sidebar); border: none;" i18n-desc="desc.winenv" onclick="UI.openModal('sys-env-setup.bat', 'System Environment Setup', 'This will run sys-env-setup.bat to permanently set Windows environment variables. You may need to restart your PC afterward.')">
-                    <div class="action-icon d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.1); color: white;">
+                <div class="action-card card-accent" i18n-desc="desc.winenv" onclick="UI.openModal('sys-env-setup.bat', 'System Environment Setup', 'This will run sys-env-setup.bat to permanently set Windows environment variables. You may need to restart your PC afterward.')">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="16" height="16"><use href="#icon-gear"></use></svg>
                     </div>
-                    <div class="action-label text-white" i18n="btns.setupwinenv"></div>
+                    <div class="action-label" i18n="btns.setupwinenv"></div>
                 </div>
             </div>
+
             <div class="col">
-                <div class="action-card" style="border-style: dashed; background: transparent; cursor: default;" i18n-desc="desc.tlook">
-                    <div class="action-icon d-flex align-items-center justify-content-center" style="background: #f1f5f9; color: #94a3b8;">
+                <div class="action-card card-dashed" i18n-desc="desc.tlook">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="16" height="16"><use href="#icon-plus"></use></svg>
                     </div>
-                    <div class="action-label" style="color: #94a3b8;" i18n="btns.registertool"></div>
+                    <div class="action-label" i18n="btns.registertool"></div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
