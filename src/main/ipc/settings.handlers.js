@@ -14,7 +14,10 @@ module.exports = function registerSettingsHandlers(ipcMain) {
         return null;
     });
 
-    ipcMain.handle('reset-config', () => SetSvc.update('customScriptPath', ""));
+    ipcMain.handle('reset-config', () => {
+        SetSvc.update('customScriptPath', "");
+        return `✅ Successfully reset the folder path to default`;
+    });
     ipcMain.handle('toggle-auto-close', (_, val) => SetSvc.update('autoCloseCmd', val));
     ipcMain.handle('set-target-drive', (_, val) => SetSvc.update('targetDrive', val));
 };

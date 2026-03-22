@@ -132,7 +132,10 @@ const i18n = {
             importsql: "Import SQL files into local DB",
             mcred: "Generates credentials from .env",
             winenv: "Configure Windows ENV variables",
-            tlook: "Tool registration locked"
+            tlook: "Tool registration locked",
+            sysIpconfig: "Runs ipconfig /all in terminal",
+            sysDxdiag: "Opens DirectX Diagnostic Tool",
+            sysAbout: "Opens Windows About PC settings",
         },
         opentmsdos: "Open TMS-DOS",
         opencustomer: "Open Customers",

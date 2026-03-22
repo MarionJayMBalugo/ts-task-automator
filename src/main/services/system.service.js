@@ -27,6 +27,25 @@ const SystemService = {
             }
         }
         return false;
+    },
+    getDSpace: async (driveLetter) => {
+        // Ensure we just have the letter and a colon (e.g., "C:")
+        const dl = driveLetter.replace(/[^A-Za-z]/g, '').toUpperCase() + ':';
+        const cmd = `Get-CimInstance Win32_LogicalDisk | Where-Object DeviceID -eq '${dl}' | Select-Object FreeSpace, Size | ConvertTo-Json -Compress`;
+
+        try {
+            const out = await SystemService.execPS(cmd);
+            if (!out) return null;
+            
+            const data = JSON.parse(out);
+            // Convert bytes to GB and round to whole numbers
+            const freeGB = Math.round(data.FreeSpace / (1024 ** 3));
+            const totalGB = Math.round(data.Size / (1024 ** 3));
+            
+            return { letter: dl, free: freeGB, total: totalGB };
+        } catch (e) {
+            return null; // Fails silently if drive doesn't exist
+        }
     }
 };
 

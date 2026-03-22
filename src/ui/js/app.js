@@ -65,8 +65,15 @@ const App = {
     },
 
     async runValidation() {
-        const info = await API.getSystemInfo();
-        UI.updateValidationBadges(info);
+        UI.setValidationLoading(true); // <-- Start spinning!
+        try {
+            const info = await API.getSystemInfo();
+            UI.updateValidationBadges(info);
+        } catch (error) {
+            console.error("Validation failed:", error);
+        } finally {
+            UI.setValidationLoading(false); // <-- Stop spinning!
+        }
     },
 
     async exportScripts() {
@@ -85,8 +92,13 @@ const App = {
         if (await API.selectFolder()) this.refreshSettings();
     },
     async resetConfig() {
-        await API.resetConfig();
-        this.refreshSettings();
+        const result = await API.resetConfig();
+        console.log(result)
+        if (result) {
+            const isError = result.includes('❌');
+            UI.showAlert(result, isError);
+            this.refreshSettings();
+        }
     },
     toggleDarkMode(isDark) {
         const theme = isDark ? 'dark' : 'light';
@@ -96,8 +108,10 @@ const App = {
 
     async copyScripts() {
         const result = await API.copyScripts();
-        if (result && result.success) {
-            console.log("Exported successfully to:", result.path);
+
+        if (result) {
+            const isError = result.includes('❌');
+            UI.showAlert(result, isError);
             this.refreshSettings();
         }
     },

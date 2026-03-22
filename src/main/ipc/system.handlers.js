@@ -1,6 +1,7 @@
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
+const { dialog } = require('electron');
 
 const { exec } = require('node:child_process');
 
@@ -74,6 +75,7 @@ module.exports = function registerSystemHandlers(ipcMain, app) {
         const settings = SetSvc.get();
         const targetDrive = settings.targetDrive || 'D:\\';
         const baseDrive = targetDrive.endsWith('\\') ? targetDrive : targetDrive + '\\';
+        const targetDriveLetter = targetDrive.charAt(0).toUpperCase();
 
         // 1. Basic OS Info
         const hostname = os.hostname();
@@ -100,8 +102,12 @@ module.exports = function registerSystemHandlers(ipcMain, app) {
             SystemService.checkUrl('https://www.nextgen.com/')
         ]);
 
+        const driveC = await SystemService.getDSpace('C');
+        const driveTarget = targetDriveLetter !== 'C' ? await SystemService.getDSpace(targetDriveLetter) : null;
+
         return {
             ip, hostname, ramGB, cpuInfo, osVersion, driveD: "Checked " + targetDrive,
+            storage: { c: driveC, target: driveTarget },
             urls: { upload: urls[0], deploy: urls[1], google: urls[2], innovar: urls[3], nextgen: urls[4] },
             apps: {
                 tmsDos: SystemService.checkApp(baseDrive, ['tms-dos', 'TMS-DOS', 'TMS DOS']), 
