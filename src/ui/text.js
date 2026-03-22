@@ -125,6 +125,15 @@ const i18n = {
             setupwinenv: "Setup ENV (WIN)",
             registertool: "Register Tool",
         },
+        desc: {
+            openDir: "Opens the {dirName} directory",
+            initdb: "Initialize new database schemas",
+            exportdb: "Export current DB to SQL dumps",
+            importsql: "Import SQL files into local DB",
+            mcred: "Generates credentials from .env",
+            winenv: "Configure Windows ENV variables",
+            tlook: "Tool registration locked"
+        },
         opentmsdos: "Open TMS-DOS",
         opencustomer: "Open Customers",
         opentmstool: "Open TMS-tools",

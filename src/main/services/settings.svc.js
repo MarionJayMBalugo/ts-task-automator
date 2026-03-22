@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const settingsPath = path.join(app.getPath('userData'), 'settings.json');
 const defaultSettings = { customScriptPath: "", autoCloseCmd: false, targetDrive: "D:\\" };
 
-const SettingsService = {
+const SetSvc = {
     get() {
         try {
             if (fs.existsSync(settingsPath)) {
@@ -36,4 +36,4 @@ const SettingsService = {
     }
 };
 
-module.exports = SettingsService;
+module.exports = SetSvc;

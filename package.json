@@ -10,6 +10,12 @@
     "start": "electron .",
     "build": "electron-builder --win"
   },
+  "imports": {
+    "#src": "./src/*",
+    "#cnf/*": "./src/cnf/*",
+    "#svc/*": "./src/main/services/*",
+    "#helpers/*": "./src/helpers/*"
+  },
   "devDependencies": {
     "@electron/fuses": "^1.8.0",
     "electron": "^40.8.0",

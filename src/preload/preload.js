@@ -2,8 +2,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   system : {
-    runBatch: (fileName) => ipcRenderer.send('execute-batch', fileName),
-    openTool: (toolKey) => ipcRenderer.send('open-system-tool', toolKey),
+    runBatch: (file, data) => ipcRenderer.send('execute-batch', file, data),
+    openTool: (toolKey) => ipcRenderer.send('open-sys-tool', toolKey),
     getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
   },
   settings: {

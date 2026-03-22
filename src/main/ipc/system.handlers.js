@@ -1,16 +1,19 @@
-const { exec } = require('node:child_process');
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
-const SettingsService = require('../services/settings.service');
+
+const { exec } = require('node:child_process');
+
+const SetSvc = require('../services/settings.svc');
 const SystemService = require('../services/system.service');
+const ToolService = require('#svc/tools.svc.js');
 
 module.exports = function registerSystemHandlers(ipcMain, app) {
     const isPackaged = app.isPackaged;
 
     // --- SCRIPTS & BATCH FILES ---
     ipcMain.handle('copy-scripts', async () => {
-        const settings = SettingsService.get();
+        const settings = SetSvc.get();
         const destination = settings.customScriptPath;
         if (!destination) return "❌ Error: Select a folder first!";
         
@@ -27,8 +30,20 @@ module.exports = function registerSystemHandlers(ipcMain, app) {
         }
     });
 
-    ipcMain.on('execute-batch', (event, fileName) => {
-        const settings = SettingsService.get();
+    ipcMain.on('execute-batch', (event, fileName, data) => {
+        let args = [];
+    
+        if (data) {
+            Object.values(data).forEach(val => {
+                if (Array.isArray(val)) {
+                    args.push(...val); // Flatten arrays (like your dbNames)
+                } else {
+                    args.push(val.toString());
+                }
+            });
+        }
+
+        const settings = SetSvc.get();
         const internalBase = isPackaged 
             ? path.join(process.resourcesPath, 'app.asar.unpacked', 'resources') 
             : path.join(app.getAppPath(), 'resources');
@@ -38,8 +53,11 @@ module.exports = function registerSystemHandlers(ipcMain, app) {
         let finalPath = (externalPath && fs.existsSync(externalPath)) ? externalPath : internalPath;
         
         const cmdFlag = settings.autoCloseCmd ? '/c' : '/k';
-        const driveArg = (settings.targetDrive || 'D:').replace(/\\+$/, ''); 
-        const command = `powershell -Command "Start-Process cmd -ArgumentList '${cmdFlag} \\"${finalPath}\\" ${driveArg}' -Verb RunAs"`;
+        const driveArg = (settings.targetDrive || 'D:').replace(/\\+$/, '');
+        const scriptArgs = args.length > 0 ? args.map(arg => `\\"${arg}\\"`).join(' ') : '';
+
+        const command = `powershell -Command "Start-Process cmd -ArgumentList '${cmdFlag} \\"\\"${finalPath}\\" ${driveArg} ${scriptArgs}\\"' -Verb RunAs"`;
+        console.log(command);
         
         exec(command, (error) => {
             if (error) event.reply('batch-reply', `Error: Elevation denied or failed.`);
@@ -47,31 +65,13 @@ module.exports = function registerSystemHandlers(ipcMain, app) {
         });
     });
 
-    ipcMain.on('open-system-tool', (event, toolKey) => {
-        let command = '';
-        const drive = (SettingsService.get().targetDrive || 'D:\\').charAt(0) + ':';
-
-        switch (toolKey) {
-            case 'ipconfig': command = 'start cmd /k "ipconfig /all"'; break;
-            case 'dxdiag': command = 'dxdiag'; break;
-            case 'explorer-d': command = `explorer ${drive}\\`; break;
-            case 'explorer-pc': command = 'explorer shell:MyComputerFolder'; break;
-            case 'about-pc': command = 'start ms-settings:about'; break;
-            case 'open-tms-dos': command = `explorer ${drive}\\tms-dos`; break;
-            case 'open-customers': command = `explorer ${drive}\\Customers`; break;
-            case 'open-tms-tools': command = `explorer ${drive}\\tms-tools`; break;
-        }
-
-        if (command) {
-            exec(command, (err) => { 
-                if (err) console.error(`Failed to open ${toolKey}:`, err); 
-            });
-        }
+    ipcMain.on('open-sys-tool', async (event, toolKey) => {
+        await ToolService.handleSysTool(event, toolKey)
     });
 
     // --- SYSTEM DIAGNOSTICS ---
     ipcMain.handle('get-system-info', async () => {
-        const settings = SettingsService.get();
+        const settings = SetSvc.get();
         const targetDrive = settings.targetDrive || 'D:\\';
         const baseDrive = targetDrive.endsWith('\\') ? targetDrive : targetDrive + '\\';
 

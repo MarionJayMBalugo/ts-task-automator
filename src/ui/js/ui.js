@@ -1,18 +1,18 @@
 import { API } from './api.js';
-import { state } from './state.js';
 import { I18n } from './i18n.js';
+import { ModalService } from './modal.js';
 
 export const UI = {
     el: {},
 
     init() {
         this.el.sidebar = document.getElementById('sidebar');
-        this.el.modalOverlay = document.getElementById('modal-overlay');
-        this.el.modalTitle = document.getElementById('modal-title');
-        this.el.modalBody = document.getElementById('modal-body');
         this.el.appContainer = document.getElementById('app-container');
         this.el.versionDisplay = document.getElementById('app-version-display');
         this.el.pathInfo = document.getElementById('path-info');
+        
+        // Expose closeModal globally so the HTML "Cancel" button can use it
+        window.closeModal = () => ModalService.closeModal();
     },
 
     toggleSidebar() {
@@ -28,18 +28,7 @@ export const UI = {
         I18n.apply(); 
     },
 
-    openModal(fileName, title, desc) {
-        if (!this.el.modalOverlay) return;
-        this.el.modalTitle.innerText = `Run ${title}?`;
-        this.el.modalBody.innerText = desc;
-        state.pendingTask = fileName; // Mutating imported state works!
-        this.el.modalOverlay.style.display = 'flex';
-    },
-
-    closeModal() {
-        if (this.el.modalOverlay) this.el.modalOverlay.style.display = 'none';
-        state.pendingTask = null;
-    },
+    // DELETED the old openModal and closeModal from here!
 
     updateSettingsUI(settings) {
         const displayPath = settings.customScriptPath || "Default: /resources/";
@@ -69,9 +58,47 @@ export const UI = {
             el.className = isSuccess ? "badge bg-success px-2 py-1" : "badge bg-danger px-2 py-1";
         };
 
-        // URLs & Apps
         setBadge('status-upload', info.urls.upload);
         setBadge('status-deploy', info.urls.deploy);
-        // ... (call setBadge for the rest of your items) ...
+    },
+
+    promptCreateDB() {
+        ModalService.openModal(
+            'create-database.bat', 
+            'Run Create Databases?', 
+            'Enter the target database names to initialize the core schemas.', 
+            [
+                { 
+                    id: 'dbNames', 
+                    type: 'list',  
+                    label: 'Target Database Names', 
+                    placeholder: 'Type a name and press Enter or Add', 
+                    required: true 
+                }
+            ],
+            (scriptName, data) => {
+                const argsForBatch = [
+                    data.dbNames.join(',')
+                ];
+                console.log("Modal finished! Sending to backend:", scriptName, argsForBatch);
+                // Make sure your backend API handles this properly!
+                API.runBatch(scriptName, argsForBatch); 
+            }
+        );
+    },
+
+    // This handles all the "old" simple buttons that don't need input fields!
+    openModal(fileName, title, desc) {
+        ModalService.openModal(
+            fileName, 
+            title, 
+            desc, 
+            [], // Pass an empty array because there are no input fields needed!
+            (scriptName, data) => {
+                console.log("Executing standard task:", scriptName);
+                // Run the script without any extra data
+                API.runBatch(scriptName); 
+            }
+        );
     },
 };

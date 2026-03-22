@@ -2,7 +2,7 @@
 <html data-bs-theme="dark">
 <head>
     <meta charset="UTF-8" />
-    <title data-i18n="app.title"></title>
+    <title i18n="app.title"></title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,22 +11,9 @@
 </head>
 <body>
 
-<div id="modal-overlay" class="modal-backdrop">
-    <div class="tms-modal">
-        <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
-        <h3 id="modal-title" style="font-weight: 800; font-size: 1.25rem; color: var(--tms-text-main); margin-bottom: 0.5rem;" data-i18n="dialog.action"></h3>
-        <p id="modal-body" style="color: var(--tms-text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 2rem;" data-i18n="dialog.description"></p>
-        
-        <div class="d-flex gap-2">
-            <button onclick="UI.closeModal()" class="btn btn-light flex-grow-1 fw-bold text-muted" style="font-size: 0.8rem; padding: 0.7rem;" data-i18n="field.cancel"></button>
-            <button id="modal-confirm-btn" class="btn btn-primary flex-grow-1 fw-bold" style="font-size: 0.8rem; padding: 0.7rem;" data-i18n="field.execute"></button>
-        </div>
-    </div>
-</div>
-
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-brand d-flex justify-content-between align-items-center">
-        <span class="brand-text">⚒️<span data-i18n="app.titlesubone"></span> <span class="text-primary" data-i18n="app.titlesubtwo"></span></span>
+        <span class="brand-text">⚒️<span i18n="app.titlesubone"></span> <span class="text-primary" i18n="app.titlesubtwo"></span></span>
         
         <button id="sidebar-toggle" class="btn btn-sm text-white border-0 p-0" onclick="UI.toggleSidebar()">
             <div class="hamburger-icon" id="hamburger-icon">
@@ -39,33 +26,33 @@
 
     <a href="#" id="nav-dashboard" class="nav-link active" onclick="App.loadTab('dashboard')">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-folder"></use></svg></span>
-        <span class="nav-text" data-i18n="sidebar.dashboard"></span>
+        <span class="nav-text" i18n="sidebar.dashboard"></span>
     </a>
 
     <a href="#" id="nav-server-validation" class="nav-link" onclick="App.loadTab('server-validation')">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-shield"></use></svg></span>
-        <span class="nav-text" data-i18n="sidebar.servervalidation"></span>
+        <span class="nav-text" i18n="sidebar.servervalidation"></span>
     </a>
     
     <a href="#" id="nav-server-installation" class="nav-link" onclick="App.loadTab('server-installation')">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-package"></use></svg></span>
-        <span class="nav-text" data-i18n="sidebar.serverinstall"></span>
+        <span class="nav-text" i18n="sidebar.serverinstall"></span>
     </a>
     
     <a href="#" id="nav-settings" class="nav-link" onclick="App.loadTab('settings')">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-gear"></use></svg></span>
-        <span class="nav-text" data-i18n="sidebar.settings"></span>
+        <span class="nav-text" i18n="sidebar.settings"></span>
     </a>
     
     <div class="sidebar-footer">
-        <span class="version-tag mb-1"><span data-i18n="app.title"></span> <span id="app-version-display">v0.0.0</span></span>
+        <span class="version-tag mb-1"><span i18n="app.title"></span> <span id="app-version-display">v0.0.0</span></span>
     </div>
 </nav>
 
 <div class="main-content">
     <div id="app-container">
         <div class="d-flex flex-column justify-content-center align-items-center text-muted" style="height: 60vh;">
-            <h6 class="fw-bold mb-3 text-uppercase" style="letter-spacing: 2px; font-size: 0.8rem;" data-i18n="loader.description"></h6>
+            <h6 class="fw-bold mb-3 text-uppercase" style="letter-spacing: 2px; font-size: 0.8rem;" i18n="loader.description"></h6>
             <div class="tms-loader-bar">
                 <div class="tms-loader-progress"></div>
             </div>

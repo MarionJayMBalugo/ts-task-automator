@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
-const APP_CONFIG = require('../config/appconfig');
+const APP_CONFIG = require('../cnf/app');
 // const setupIPC = require('./ipc/ipc-handlers');
 const setupIPC = require('./ipc/index');
 
@@ -13,7 +13,7 @@ function createWindow() {
     title: APP_CONFIG.title,
     icon: APP_CONFIG.icon,
     backgroundColor: APP_CONFIG.bgColor,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     webPreferences: {
       preload: APP_CONFIG.preload,
       contextIsolation: true,

@@ -1,34 +1,34 @@
 <div id="server-installation-view" class="app-view">
     <div class="d-flex justify-content-between align-items-start mb-5">
         <div>
-            <h2 class="h4 fw-bold mb-1" data-i18n="install.title"></h2>
-            <p class="text-muted small" data-i18n="install.subtitle"></p>
+            <h2 class="h4 fw-bold mb-1" i18n="install.title"></h2>
+            <p class="text-muted small" i18n="install.subtitle"></p>
         </div>
     </div>
 
     <div class="mb-5">
-        <span class="section-label" data-i18n="install.sections.infra"></span>
+        <span class="section-label" i18n="install.sections.infra"></span>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             
             <div class="col">
                 <div class="action-card" 
-                     data-i18n-desc="install.btns.init.desc"
+                     i18n-desc="install.btns.init.desc"
                      onclick="UI.openModal('setup-folders.bat', 'Initialize Folders', 'This will run setup-folders.bat to build the TMS directory tree.')">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
-                    <div class="action-label" data-i18n="install.btns.init.title"></div>
+                    <div class="action-label" i18n="install.btns.init.title"></div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="action-card" style="background: var(--tms-sidebar); border: none;"
-                     data-i18n-desc="install.btns.env.desc"
+                     i18n-desc="install.btns.env.desc"
                      onclick="UI.openModal('sys-env-setup.bat', 'Setup System ENV', 'This will configure Windows environment variables. A system restart may be required.')">
                     <div class="action-icon d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.1); color: white;">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
-                    <div class="action-label text-white" data-i18n="install.btns.env.title"></div>
+                    <div class="action-label text-white" i18n="install.btns.env.title"></div>
                 </div>
             </div>
 
@@ -36,28 +36,28 @@
     </div>
 
     <div class="mb-5">
-        <span class="section-label" data-i18n="install.sections.db"></span>
+        <span class="section-label" i18n="install.sections.db"></span>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             
             <div class="col">
                 <div class="action-card" 
-                     data-i18n-desc="install.btns.createDb.desc"
+                     i18n-desc="install.btns.createDb.desc"
                      onclick="UI.openModal('create-database.bat', 'Create DBs', 'This will run create-database.bat to initialize new database schemas.')">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-plus"></use></svg>
                     </div>
-                    <div class="action-label" data-i18n="install.btns.createDb.title"></div>
+                    <div class="action-label" i18n="install.btns.createDb.title"></div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="action-card" 
-                     data-i18n-desc="install.btns.createUser.desc"
+                     i18n-desc="install.btns.createUser.desc"
                      onclick="UI.openModal('create-db-user.bat', 'Create DB User', 'This will run create-db-user.bat to generate credentials from your .env file.')">
                     <div class="action-icon d-flex align-items-center justify-content-center" style="color: #6f42c1;">
                         <svg width="20" height="20"><use href="#icon-user"></use></svg>
                     </div>
-                    <div class="action-label" data-i18n="install.btns.createUser.title"></div>
+                    <div class="action-label" i18n="install.btns.createUser.title"></div>
                 </div>
             </div>
 

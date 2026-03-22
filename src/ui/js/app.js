@@ -1,25 +1,18 @@
 import { API } from './api.js';
-import { state } from './state.js';
 import { UI } from './ui.js';
 import { I18n } from './i18n.js';
 
 const App = {
     async init() {
+        await this.loadGlobalComponents(['icons', 'modal']);
+
         UI.init();
         this.setupListeners();
 
-        try {
-            const iconSprite = await API.loadView('icons');
-            document.body.insertAdjacentHTML('afterbegin', iconSprite);
-        } catch (e) {
-            console.error("Failed to load icon sprite");
-        }
-        // Run this when the app loads
         const savedTheme = localStorage.getItem('tms-theme') || 'light';
         document.documentElement.setAttribute('data-bs-theme', savedTheme);
-
-        // Also, make sure the switch in settings reflects the saved state
         const themeSwitch = document.getElementById('dark-mode-switch');
+
         if (themeSwitch) {
             themeSwitch.checked = (savedTheme === 'dark');
         }
@@ -33,14 +26,27 @@ const App = {
         this.loadTab('dashboard');
     },
 
-    setupListeners() {
-        document.getElementById('modal-confirm-btn')?.addEventListener('click', () => {
-            if (state.pendingTask) API.runBatch(state.pendingTask);
-            UI.closeModal();
-        });
+    async loadGlobalComponents(components) {
+        try {
+            const htmlStrings = await Promise.all(
+                components.map(comp => API.loadView(comp))
+            );
+            
+            htmlStrings.forEach((html, index) => {
+                const position = components[index] === 'icons' ? 'afterbegin' : 'beforeend';
+                document.body.insertAdjacentHTML(position, html);
+            });
+        } catch (e) {
+            console.error("Failed to load global components:", e);
+        }
+    },
 
+    setupListeners() {
         window.addEventListener('click', (e) => {
-            if (e.target === UI.el.modalOverlay) UI.closeModal();
+            const overlay = document.getElementById('modal-overlay');
+            if (e.target === overlay && typeof window.closeModal === 'function') {
+                window.closeModal(); 
+            }
         });
     },
 
@@ -63,6 +69,14 @@ const App = {
         UI.updateValidationBadges(info);
     },
 
+    async exportScripts() {
+        const result = await API.exportScripts();
+        if (result && result.success) {
+            console.log("Exported successfully to:", result.path);
+            this.refreshSettings();
+        }
+    },
+
     openTool: (key) => API.openTool(key),
     toggleAutoClose: (val) => API.toggleAutoClose(val),
     changeTargetDrive: (val) => API.setTargetDrive(val),
@@ -75,14 +89,18 @@ const App = {
         this.refreshSettings();
     },
     toggleDarkMode(isDark) {
-        if (isDark) {
-            document.documentElement.setAttribute('data-bs-theme', 'dark');
-            localStorage.setItem('tms-theme', 'dark'); // Save preference
-        } else {
-            document.documentElement.setAttribute('data-bs-theme', 'light');
-            localStorage.setItem('tms-theme', 'light');
+        const theme = isDark ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        localStorage.setItem('tms-theme', theme);
+    },
+
+    async copyScripts() {
+        const result = await API.copyScripts();
+        if (result && result.success) {
+            console.log("Exported successfully to:", result.path);
+            this.refreshSettings();
         }
-    }
+    },
 };
 
 window.App = App;

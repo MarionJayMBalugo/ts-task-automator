@@ -8,8 +8,19 @@ if !ERRORLEVEL! NEQ 0 exit /b !ERRORLEVEL!
 :: =============================================================================
 :: 3. VALIDATION & PRE-FLIGHT CHECKS
 :: =============================================================================
-if "!TARGET_DATABASES!"=="" (
-    echo %ERROR% TARGET_DATABASES is empty in .env.
+
+:: Grab the 2nd argument passed from the UI (Argument 1 is the Drive Letter)
+set "UI_DATABASES=%~2"
+
+:: Determine the Source of Truth: UI takes priority, .env is fallback
+if not "!UI_DATABASES!"=="" (
+    echo %CYAN%[INFO]%RESET% Using Target Databases from UI Input.
+    set "FINAL_DB_LIST=!UI_DATABASES!"
+) else if not "!TARGET_DATABASES!"=="" (
+    echo %CYAN%[INFO]%RESET% Using Target Databases from .env file.
+    set "FINAL_DB_LIST=!TARGET_DATABASES!"
+) else (
+    echo %ERROR% No databases provided. TARGET_DATABASES is empty in UI and .env.
     pause
     exit /b 1
 )
@@ -32,8 +43,8 @@ if not "!DB_CUSTOM_RULES!"=="" (
 )
 echo.
 
-:: Replace commas with spaces
-set "CLEAN_LIST=!TARGET_DATABASES:,= !"
+:: Replace commas with spaces so the FOR loop can read them properly
+set "CLEAN_LIST=!FINAL_DB_LIST:,= !"
 
 for %%D in (!CLEAN_LIST!) do (
     set "CURRENT_DB=%%D"

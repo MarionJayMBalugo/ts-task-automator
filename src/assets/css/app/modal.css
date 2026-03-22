@@ -11,6 +11,31 @@
     z-index: 10000; animation: modalFadeIn 0.3s ease;
 }
 
+/* --- MODAL TYPOGRAPHY & BUTTONS --- */
+.tms-modal-title {
+    font-weight: 800; font-size: 1.25rem; 
+    color: var(--tms-text-main); margin-bottom: 0.5rem;
+}
+
+.tms-modal-body {
+    color: var(--tms-text-muted); font-size: 0.85rem; 
+    line-height: 1.6; margin-bottom: 1.5rem;
+}
+
+.tms-modal-btn {
+    font-size: 0.95rem; /* Upgraded for better readability */
+    padding: 0.75rem;
+}
+
+/* --- OVERRIDE BOOTSTRAP FOCUS GLOW --- */
+.tms-modal .form-control:focus, 
+.tms-modal .form-select:focus,
+.tms-modal .btn:focus {
+    box-shadow: none;
+    border-color: #0d6efd; /* Uses standard primary blue, or use your var() */
+    outline: none;
+}
+
 @keyframes modalFadeIn { 
     from { opacity: 0; transform: scale(0.95); } 
     to { opacity: 1; transform: scale(1); } 

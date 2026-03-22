@@ -23,7 +23,6 @@ if exist "!SETTINGS_FILE!" (
     for /f "delims=" %%I in ('powershell -NoProfile -Command "(Get-Content '!SETTINGS_FILE!' | ConvertFrom-Json).autoCloseCmd"') do set "AUTO_CLOSE=%%I"
 )
 
-echo !SETTINGS_FILE! !AUTO_CLOSE!
 if /I "!AUTO_CLOSE!"=="True" (
     echo.
     echo Task finished successfully. Auto-closing in 3 seconds...
