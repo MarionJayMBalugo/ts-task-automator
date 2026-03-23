@@ -256,3 +256,17 @@ h2, .h4, .fw-bold {
 [data-bs-theme="dark"] .tms-modal .btn-light:hover {
     background-color: #343a40;
 }
+
+/* --- DARK MODE FIX FOR ACTION ICONS --- */
+[data-bs-theme="dark"] .action-card .action-icon {
+    /* Uses a very subtle, translucent white so it naturally blends with the dark card */
+    background-color: rgba(255, 255, 255, 0.05) !important; 
+}
+
+/* Optional: Make the primary (blue) and info (cyan) icons pop a bit more in dark mode */
+[data-bs-theme="dark"] .action-icon.text-primary {
+    color: #6ea8fe !important; /* Lighter Bootstrap primary for dark mode */
+}
+[data-bs-theme="dark"] .action-icon.text-info {
+    color: #6edff6 !important; /* Lighter Bootstrap info for dark mode */
+}
