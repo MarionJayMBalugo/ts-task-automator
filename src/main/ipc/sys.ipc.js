@@ -14,11 +14,11 @@ const { dialog } = require('electron');
 const { exec } = require('node:child_process');
 
 // Internal Service Imports
-const SetSvc = require('../services/settings.svc');
-const SystemService = require('../services/system.service');
+const SetSvc = require('#svc/settings.svc.js');
+const SystemService = require('#svc/system.service.js');
 const ToolSvc = require('#svc/tools.svc.js');
 
-module.exports = function registerSystemHandlers(ipcMain, app) {
+module.exports = function setSysIPC(ipcMain, app) {
     /** @type {boolean} Flag to determine if running in production (ASAR) or development */
     const isPackaged = app.isPackaged;
 

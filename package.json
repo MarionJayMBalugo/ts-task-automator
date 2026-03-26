@@ -13,7 +13,7 @@
   "imports": {
     "#src": "./src/*",
     "#cnf/*": "./src/cnf/*",
-    "#svc/*": "./src/main/services/*",
+    "#svc/*": "./src/main/svc/*",
     "#helpers/*": "./src/helpers/*"
   },
   "devDependencies": {

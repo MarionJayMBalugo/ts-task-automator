@@ -1,7 +1,7 @@
 const { dialog } = require('electron');
-const SetSvc = require('../services/settings.svc');
+const SetSvc = require('#svc/settings.svc.js');
 
-module.exports = function registerSettingsHandlers(ipcMain) {
+module.exports = function setCfgIPC(ipcMain) {
     ipcMain.handle('get-settings', () => SetSvc.get());
     ipcMain.handle('get-config-path', () => SetSvc.get().customScriptPath);
 

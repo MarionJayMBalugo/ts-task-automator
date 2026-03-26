@@ -1,7 +1,7 @@
 const path = require('node:path');
 const fs = require('node:fs');
 
-module.exports = function registerUiHandlers(ipcMain, app) {
+module.exports = function setUiIPC(ipcMain, app) {
     
     // Send the current version from package.json to the UI
     ipcMain.handle('get-app-version', () => {
