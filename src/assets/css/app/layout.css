@@ -20,6 +20,11 @@ h2, .h4, .fw-bold {
     letter-spacing: -0.02em;
 }
 
+/* Unwraps the container so children (like .col-*) align directly with the parent grid. */
+.ghst { 
+    display: contents;
+}
+
 /* --- SIDEBAR --- */
 .sidebar {
     width: 240px; min-width: 240px;

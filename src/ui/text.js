@@ -13,9 +13,9 @@ const i18n = {
             description: "Initializing Workspace"
         },
         dashboard: {
-            title:  "TS Dashboard",
+            title:  "Dashboard",
             subtitle: "Streamlined Server Setup, Maintenance, and Operational Workflows",
-            quickaccess: "Quick Access"
+            quickaccess: "Quick Access Directory"
         },
         nav: {
             dashboard: "Dashboard",
@@ -28,7 +28,7 @@ const i18n = {
             description: "Task description goes here."
         },
         sidebar: {
-            dashboard: "TS Dashboard",
+            dashboard: "Dashboard",
             servervalidation: "Server Validation",
             serverinstall: "Server Installation",
             settings: "Settings",

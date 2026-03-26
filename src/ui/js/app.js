@@ -1,6 +1,9 @@
 import { API } from './api.js';
 import { UI } from './ui.js';
 import { I18n } from './i18n.js';
+import { TAB_CONFIG } from './cnf.js';
+
+let cachedSystemInfo = null;
 
 const App = {
     async init() {
@@ -51,12 +54,18 @@ const App = {
     },
 
     async loadTab(tabName) {
+        // Always switch the UI first
         await UI.switchTab(tabName);
-        if (tabName === 'dashboard' || tabName === 'settings') {
-            this.refreshSettings();
-        } else if (tabName === 'server-validation') {
-            this.runValidation();
-        }
+
+        // Get the list of actions for this tab from our config
+        const actions = TAB_CONFIG[tabName] || [];
+
+        // Run every action assigned to this tab
+        actions.forEach(actionName => {
+            if (typeof this[actionName] === 'function') {
+                this[actionName]();
+            }
+        });
     },
 
     async refreshSettings() {
@@ -64,11 +73,17 @@ const App = {
         UI.updateSettingsUI(settings);
     },
 
-    async runValidation() {
-        UI.setValidationLoading(true); // <-- Start spinning!
+    async runValidation(force = false) {
+        // If we already have data AND we aren't forcing a refresh, just paint the UI instantly
+        if (!force && cachedSystemInfo) {
+            UI.updateValidationBadges(cachedSystemInfo);
+            return; 
+        }
+
+        UI.setValidationLoading(true); // <-- Start spinning
         try {
-            const info = await API.getSystemInfo();
-            UI.updateValidationBadges(info);
+            cachedSystemInfo = await API.getSystemInfo();
+            UI.updateValidationBadges(cachedSystemInfo);
         } catch (error) {
             console.error("Validation failed:", error);
         } finally {
@@ -91,6 +106,7 @@ const App = {
     async changeFolder() {
         if (await API.selectFolder()) this.refreshSettings();
     },
+
     async resetConfig() {
         const result = await API.resetConfig();
         console.log(result)
@@ -100,6 +116,7 @@ const App = {
             this.refreshSettings();
         }
     },
+
     toggleDarkMode(isDark) {
         const theme = isDark ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', theme);

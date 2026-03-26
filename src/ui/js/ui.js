@@ -25,11 +25,17 @@ export const UI = {
         if (active) active.classList.add('active');
 
         this.el.appContainer.innerHTML = await API.loadView(tabName);
+
+        //Micro-Component Auto-Loader (Fast Parallel Loading)
+        const components = Array.from(this.el.appContainer.querySelectorAll('[data-component]'));
+        await Promise.all(components.map(async (mount) => {
+            const compName = mount.getAttribute('data-component');
+            mount.innerHTML = await API.loadView(compName);
+        }));
         I18n.apply(); 
     },
 
     // DELETED the old openModal and closeModal from here!
-
     updateSettingsUI(settings) {
         const displayPath = settings.customScriptPath || "Default: /resources/";
         if (this.el.pathInfo) this.el.pathInfo.innerText = displayPath;
@@ -49,7 +55,7 @@ export const UI = {
     },
 
     setValidationLoading(isLoading) {
-        const btn = document.querySelector('button[onclick="App.runValidation()"]');
+        const btn = document.querySelector('button[onclick^="App.runValidation"]');
         if (btn) {
             btn.disabled = isLoading;
             btn.innerHTML = isLoading 

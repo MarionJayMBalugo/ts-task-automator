@@ -10,7 +10,7 @@
         <span class="section-label" i18n="dashboard.quickaccess"></span>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
-                <div class="action-card" i18n-desc="desc.openDir" data-dir-name="TMS-DOS" onclick="App.openTool('open-tms-dos')">
+                <div class="action-card" i18n-desc="desc.openDir" data-dir-name="TMS-DOS" onclick="App.openTool('opentmsdos')">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="16" height="16"><use href="#icon-folder"></use></svg>
                     </div>
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="col">
-                <div class="action-card" i18n-desc="desc.openDir" data-dir-name="Customers" onclick="App.openTool('open-customers')">
+                <div class="action-card" i18n-desc="desc.openDir" data-dir-name="Customers" onclick="App.openTool('opencustomers')">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="16" height="16"><use href="#icon-folder"></use></svg>
                     </div>
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="col">
-                <div class="action-card" i18n-desc="desc.openDir" data-dir-name="TMS-TOOLS" onclick="App.openTool('open-tms-tools')">
+                <div class="action-card" i18n-desc="desc.openDir" data-dir-name="TMS-TOOLS" onclick="App.openTool('opentmstools')">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="16" height="16"><use href="#icon-folder"></use></svg>
                     </div>
@@ -37,6 +37,11 @@
     </div>
 
     <div class="mb-5">
+        <div class="ghst" data-component="partials/sys-hw"></div>
+        <div class="ghst" data-component="partials/sys-env"></div>
+    </div>
+
+    <!-- <div class="mb-5">
         <span class="section-label" i18n="sections.db2"></span>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
@@ -97,5 +102,5 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 </div>
