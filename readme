@@ -15,13 +15,12 @@ Getting up and running is designed to be completely frictionless.
 
 1. Clone the repository
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+
+    npm install
+
 3. Boot the application in development mode:
-   ```bash
-   npm run start
-   ```
+
+    npm run start
 
 ## 🏗️ Project Architecture
 
@@ -32,8 +31,6 @@ We follow a strict separation of concerns to keep the codebase secure and mainta
 * `/src/ui/` - The frontend UI. Built with vanilla JS and component-based HTML.
 * `/resources/` - Contains the raw `.bat` and `.ps1` automation scripts.
 
----
-
 ## 🧠 Coding Standards & Philosophy
 
 To keep this codebase scalable and developer-friendly, we adhere to the following core rules:
@@ -42,12 +39,11 @@ To keep this codebase scalable and developer-friendly, we adhere to the followin
 We optimize for clean UI code and fast file searching.
 * **Keep it brief:** We use `API.run('pc')` instead of `window.electronAPI.system.executeSystemToolCommand('explorer-pc')`.
 * **IPC Handlers:** We use 3-letter prefixes for backend modules (e.g., `sys.ipc.js`, `set.ipc.js`, `ui.ipc.js`).
-* *Why?* It makes the HTML infinitely easier to read, keeps the VS Code file tree clean, and reduces typos.
 
 ### 2. Extensive Commenting (The "Amnesia" Rule)
-Comments are stripped out by the build tool during minification (`npm run build`), meaning **they cost zero performance or disk space in production**.
+Comments are stripped out by the build tool during minification (`npm run build`), meaning they cost zero performance or disk space in production.
 * **Rule:** Comment like your future self will have amnesia in six months.
-* **Focus on the WHY:** Don't just explain *what* the code does; explain *why* it does it (e.g., explaining why `app.asar.unpacked` is required for batch files). Use JSDoc (`/** ... */`) for function headers.
+* **Focus on the WHY:** Don't just explain what the code does; explain why it does it.
 
 ### 3. DRY (Don't Repeat Yourself)
 If you do it twice, abstract it. 
@@ -57,7 +53,6 @@ If you do it twice, abstract it.
 
 To package the application for production (creates the `.exe` installer):
 
-```bash
-npm run build
-```
+    npm run build
+
 *(Note: Building will minify the code, strip comments, and bundle resources into an encrypted ASAR archive for distribution.)*
