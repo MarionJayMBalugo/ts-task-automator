@@ -1,23 +1,33 @@
-const { dialog } = require('electron');
-const SetSvc = require('#svc/settings.svc.js');
+/**
+ * =============================================================================
+ * SETTINGS IPC HANDLERS
+ * =============================================================================
+ * Acts strictly as a router for reading/writing user preferences.
+ */
+const { SetSvc } = require('#svc/index.js');
+const { MSG } = require('#cnf/index.js');
 
 module.exports = function setCfgIPC(ipcMain) {
+    // Reads the entire settings object
     ipcMain.handle('get-settings', () => SetSvc.get());
-    ipcMain.handle('get-config-path', () => SetSvc.get().customScriptPath);
 
-    ipcMain.handle('select-folder', async () => {
-        const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-        if (!result.canceled && result.filePaths.length > 0) {
-            SetSvc.update('customScriptPath', result.filePaths[0]);
-            return result.filePaths[0];
-        }
-        return null;
+    // Reads just the custom script location
+    ipcMain.handle('cfg-path', () => SetSvc.get().customScriptLoc);
+
+    // Triggers OS dialog to select a folder
+    ipcMain.handle('sel-dir', async () => {
+        return await SetSvc.selectCustomDir();
     });
 
-    ipcMain.handle('reset-config', () => {
-        SetSvc.update('customScriptPath', "");
-        return `✅ Successfully reset the folder path to default`;
+    // Resets the folder location and returns success msg
+    ipcMain.handle('rst-cfg', () => {
+        SetSvc.resetCustomDir();
+        return MSG.ok.resetDir;
     });
-    ipcMain.handle('toggle-auto-close', (_, val) => SetSvc.update('autoCloseCmd', val));
-    ipcMain.handle('set-target-drive', (_, val) => SetSvc.update('targetDrive', val));
+    
+    // Toggles the auto-close CMD window flag
+    ipcMain.handle('tog-exit', (_, val) => SetSvc.update('autoCloseCmd', val));
+
+    // Sets the target drive letter (e.g., 'E:')
+    ipcMain.handle('set-drv', (_, val) => SetSvc.update('targetDrive', val));
 };

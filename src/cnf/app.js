@@ -21,7 +21,12 @@ const APP_CNF = {
     width: 950,                  // Default window width in pixels
     height: 750,                 // Default window height in pixels
     bgColor: '#f0f2f5',          // Background color shown while the UI is loading (prevents white flash)
-
+    defDrv: 'D',
+    devDefDrv: 'C',
+    encoding: 'utf8',
+    resourcesFldr: 'resources',
+    unpackKey: 'app.asar.unpacked',
+    uiDir: path.join(__dirname, '..', 'ui'),
     /**
      * Application ID (UAMID)
      * Prioritizes the ID defined in electron-builder config, 

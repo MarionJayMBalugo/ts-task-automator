@@ -37,7 +37,7 @@ export const UI = {
 
     // DELETED the old openModal and closeModal from here!
     updateSettingsUI(settings) {
-        const displayPath = settings.customScriptPath || "Default: /resources/";
+        const displayPath = settings.customScriptLoc || "Default: /resources/";
         if (this.el.pathInfo) this.el.pathInfo.innerText = displayPath;
         
         const sPath = document.getElementById('settings-path-info');

@@ -1,15 +1,24 @@
-const { app } = require('electron');
+const { app, dialog } = require('electron'); // <-- Added dialog here
 const path = require('node:path');
 const fs = require('node:fs');
 
+// 1. Use your clean barrel import!
+const { APP_CNF } = require('#cnf/index.js'); 
+
 const settingsPath = path.join(app.getPath('userData'), 'settings.json');
-const defaultSettings = { customScriptPath: "", autoCloseCmd: false, targetDrive: "D:\\" };
+const defaultSettings = { 
+    customScriptLoc: "", 
+    autoCloseCmd: false, 
+    targetDrive: `${APP_CNF.defDrv}:\\` 
+};
 
 const SetSvc = {
+    // --- EXISTING CORE METHODS ---
+
     get() {
         try {
             if (fs.existsSync(settingsPath)) {
-                const data = fs.readFileSync(settingsPath, 'utf8');
+                const data = fs.readFileSync(settingsPath, APP_CNF.encoding);
                 return JSON.parse(data || JSON.stringify(defaultSettings));
             }
         } catch (e) {
@@ -33,6 +42,31 @@ const SetSvc = {
         settings[key] = value;
         this.save(settings);
         return value;
+    },
+
+    // --- NEW METHODS (Migrated from setting.ipc.js) ---
+
+    /**
+     * Triggers the OS folder selection dialog and updates the config.
+     * Keeps UI/OS logic strictly inside the Service, not the IPC router.
+     */
+    async selectCustomDir() {
+        // Pops open the Windows folder picker
+        const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+        
+        if (!result.canceled && result.filePaths.length > 0) {
+            const selectedPath = result.filePaths[0];
+            this.update('customScriptLoc', selectedPath); // Saves it immediately
+            return selectedPath;
+        }
+        return null;
+    },
+
+    /**
+     * Wipes the custom script location back to its default state.
+     */
+    resetCustomDir() {
+        this.update('customScriptLoc', "");
     }
 };
 

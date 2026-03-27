@@ -1,26 +1,28 @@
-const path = require('node:path');
-const fs = require('node:fs');
+/**
+ * =============================================================================
+ * UI IPC HANDLERS
+ * =============================================================================
+ * Handles requests specific to the user interface, like view loading and versions.
+ */
+const { FsUtil } = require('#utils/index.js');
 
 module.exports = function setUiIPC(ipcMain, app) {
     
-    // Send the current version from package.json to the UI
+    // Sends the current application version
     ipcMain.handle('get-app-version', () => {
         return app.getVersion();
     });
 
-    // Handle the SPA view loading
-    ipcMain.handle('load-view', (event, viewName) => {
-        try {
-            // Since this file is in src/main/ipc, we go up twice to reach src/ui/views
-            const viewPath = path.join(__dirname, '..', '..', 'ui', 'views', `${viewName}.html`);
-            return fs.readFileSync(viewPath, 'utf8');
-        } catch (error) {
-            console.error(`Failed to load view ${viewName}:`, error);
-            // Return a safe fallback UI component if the file is missing
-            return `<div class="p-5 text-center text-danger">
-                        <h4>Error 404: View Not Found</h4>
-                        <p>Could not locate ${viewName}.html</p>
-                    </div>`;
+    // Handles Single Page Application (SPA) view loading
+    ipcMain.handle('load-view', (_, viewName) => {
+        const htmlContent = FsUtil.readView(viewName);
+        
+        if (!htmlContent) {
+            // We throw a standard error here.
+            // The frontend (preload/ui.js) should catch this and render the 404 HTML.
+            throw new Error(`View not found: ${viewName}`); 
         }
+        
+        return htmlContent;
     });
 };

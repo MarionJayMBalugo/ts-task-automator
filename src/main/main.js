@@ -10,7 +10,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 // Configuration and IPC Module Imports
-const { APP_CNF } = require('../cnf/app'); // Centralized window/app constants
+const { APP_CNF } = require('#cnf/app.js'); // Centralized window/app constants
 const setupIPC = require('./ipc/index');     // Bootstrapper for all IPC listeners
 
 /**

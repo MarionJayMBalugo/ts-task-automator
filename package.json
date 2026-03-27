@@ -14,7 +14,7 @@
     "#src": "./src/*",
     "#cnf/*": "./src/cnf/*",
     "#svc/*": "./src/main/svc/*",
-    "#helpers/*": "./src/helpers/*"
+    "#utils/*": "./src/utils/*"
   },
   "devDependencies": {
     "@electron/fuses": "^1.8.0",

@@ -10,7 +10,7 @@
 const { shell } = require('electron');          // Electron module for desktop integration (File Explorer)
 const { exec } = require('child_process');      // Node.js module to spawn shell processes (CLI/CMD)
 const { ToolCmds } = require('#cnf/tools.js');   // Registry of command definitions (the 'c' and 's' mappings)
-const { getDrv } = require('#helpers/fsHelper.js'); // Helper to sanitize and validate drive letters
+const { getDrv } = require('#utils/fs.util.js'); // Helper to sanitize and validate drive letters
 const SetSvc = require('#svc/settings.svc.js');  // Access to user preferences (like targetDrive)
 const { DF_DRV } = require('#cnf/const.js');    // System-wide default drive constant (usually 'D')
 
