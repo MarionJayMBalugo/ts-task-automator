@@ -53,6 +53,20 @@ Comments are stripped out by the build tool during minification (`npm run build`
 If you do it twice, abstract it. 
 * Example: Instead of writing `child_process.exec` logic in every single button handler, we route all tool executions through a central `ToolSvc.runTool()` engine.
 
+### 4. The "Pulse" Shorthand (Naming Conventions)
+We prioritize brevity to keep HTML attributes clean and file searching fast. **Strictly adhere to these abbreviations:**
+
+| Term | Shorthand | Context / Example |
+| :--- | :--- | :--- |
+| **Configuration** | `cnf` | `#cnf/index.js`, `APP_CNF` |
+| **Directory** | `dir` | `uiDir`, `TMS_DIR` |
+| **Folder** | `Fldr` | `resourcesFldr` |
+| **Location** | `loc` | `customScriptLoc` |
+| **Drive** | `drv` | `defDrv` (Default Target), `targetDrv` |
+| **Toggle** | `tog` | `tog-exit` (IPC handle for toggling window behavior) |
+| **Ghost** | `ghst` | CSS selector for `display: contents` (invisible layout wrapper) |
+| **Partials** | `partials` | Reusable HTML fragments located in `/ui/views/partials/` |
+
 ## 📦 Build Instructions
 
 To package the application for production (creates the `.exe` installer):
