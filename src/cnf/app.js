@@ -6,27 +6,27 @@
  * window dimensions, and critical system paths.
  */
 
+const { app } = require('electron'); // <-- FIXED: Required to use app.getAppPath()
 const path = require('node:path');
 
-/** * Dynamically resolve the path to package.json.
- * We move up two levels ('..', '..') from this config file's location 
- * to reach the project root.
+// When unbundled, this is your project root. When packaged, it is the app.asar archive.
+const rootDir = app.getAppPath();
+
+/** * esbuild will automatically resolve and inline this package.json at build time,
+ * so we don't have to worry about the path breaking in production!
  */
-const packageJsonPath = path.join(__dirname, '..', '..', 'package.json');
-const packageJson = require(packageJsonPath);
+const packageJson = require('../../package.json');
 
 const APP_CNF = {
     // --- UI & Appearance ---
     title: "TMS Pulse",          // The text displayed in the OS Title Bar
     width: 950,                  // Default window width in pixels
     height: 750,                 // Default window height in pixels
-    bgColor: '#f0f2f5',          // Background color shown while the UI is loading (prevents white flash)
+    bgColor: '#f0f2f5',          // Background color shown while UI loads
     defDrv: 'D',
     devDefDrv: 'C',
     encoding: 'utf8',
-    resourcesFldr: 'resources',
-    unpackKey: 'app.asar.unpacked',
-    uiDir: path.join(__dirname, '..', 'ui'),
+    
     /**
      * Application ID (UAMID)
      * Prioritizes the ID defined in electron-builder config, 
@@ -34,20 +34,27 @@ const APP_CNF = {
      */
     appId: packageJson.build?.appId || `com.tsautomation.${packageJson.name}`,
 
-    // --- File System Paths ---
-    // All paths are absolute to ensure reliability across different OS environments.
+    // --- File System Paths (ESBUILD BUNDLE-PROOF) ---
+    // All paths now point to the 'dist' folder where esbuild copies our static assets.
+    
+    uiDir: path.join(rootDir, 'dist', 'ui'),
     
     /** Path to the application icon used in the taskbar and window frame */
-    icon: path.join(__dirname, '..', 'assets', 'icon.ico'),
+    icon: path.join(rootDir, 'dist', 'assets', 'icon.ico'),
     
     /** The main entry point for the frontend (the HTML "Shell") */
-    uiPath: path.join(__dirname, '..', 'ui', 'index.html'),
+    uiPath: path.join(rootDir, 'dist', 'ui', 'index.html'),
     
     /** The bridge script that connects the Renderer process to the Main process */
-    preload: path.join(__dirname, '..', 'preload', 'preload.js'),
+    preload: path.join(rootDir, 'dist', 'preload.js'),
+
+    // --- External Resources ---
+    // The unpackKey tells electron-builder NOT to compress these files so Windows can run them.
+    resourcesFldr: path.join('dist', 'resources'),
+    unpackKey: 'app.asar.unpacked',
 
     // --- OS Detection Flags ---
-    // Used throughout the app to handle platform-specific logic (like window closing or shortcuts).
+    // Used throughout the app to handle platform-specific logic
     platform: {
         isMac: process.platform === 'darwin',
         isWindows: process.platform === 'win32',
@@ -59,5 +66,5 @@ const APP_CNF = {
  * Export the configuration object for use in main.js and other services.
  */
 module.exports = {
-  APP_CNF
+    APP_CNF
 };

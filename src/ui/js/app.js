@@ -137,4 +137,8 @@ const App = {
 window.App = App;
 window.UI = UI; 
 
-document.addEventListener('DOMContentLoaded', () => App.init());
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => App.init());
+} else {
+    App.init(); // The DOM is already ready, so just run it immediately!
+}

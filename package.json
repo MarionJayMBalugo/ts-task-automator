@@ -3,15 +3,16 @@
   "productName": "TMS Pulse",
   "version": "1.0.0",
   "description": "Internal automation tool for Technical Specialists",
-  "main": "src/main/main.js",
+  "main": "dist/main.js",
   "author": "marion jay m balugo",
   "license": "ISC",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder --win"
+    "build:js": "node esbuild.config.js",
+    "start": "npm run build:js && electron .",
+    "build": "npm run build:js && electron-builder --win"
   },
   "imports": {
-    "#src": "./src/*",
+    "#src/*": "./src/*",
     "#cnf/*": "./src/cnf/*",
     "#svc/*": "./src/main/svc/*",
     "#utils/*": "./src/utils/*"
@@ -19,19 +20,27 @@
   "devDependencies": {
     "@electron/fuses": "^1.8.0",
     "electron": "^40.8.0",
-    "electron-builder": "^26.8.1"
+    "electron-builder": "^26.8.1",
+    "esbuild": "^0.27.4"
   },
   "dependencies": {
     "electron-store": "^8.2.0"
   },
   "build": {
     "appId": "com.tsautomation.tmspulse",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
     "asarUnpack": [
-      "resources/**/*"
+      "dist/resources/**/*"
     ],
     "win": {
       "target": "nsis",
-      "icon": "src/assets/icon.ico"
+      "icon": "dist/assets/icon.ico"
     },
     "nsis": {
       "oneClick": false,

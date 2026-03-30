@@ -9,5 +9,5 @@ export const API = {
     resetConfig: () => window.electronAPI.settings.resetConfig(),
     toggleAutoClose: (val) => window.electronAPI.settings.toggleAutoClose(val),
     setTargetDrive: (val) => window.electronAPI.settings.setTargetDrive(val),
-    copyScripts: () => window.electronAPI.settings.copyScripts(),
+    copyScripts: () => window.electronAPI.system.copyScripts(),
 };

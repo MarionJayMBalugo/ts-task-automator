@@ -54,7 +54,12 @@ const SysSvc = {
         const dest = SetSvc.get().customScriptLoc;
         if (!dest) return MSG.err.noDir;
         
-        const source = SysUtil.getResPath(app);
+        let source = SysUtil.getResPath(app); // <-- We change 'const' to 'let'
+        
+        // 🚨 CRITICAL FIX FOR PRODUCTION (ASAR TRAP) 🚨
+        if (source.includes('app.asar')) {
+            source = source.replace('app.asar', 'app.asar.unpacked');
+        }
             
         try {
             if (!fs.existsSync(source)) return MSG.err.noSrc(source);
@@ -72,7 +77,13 @@ const SysSvc = {
         return new Promise((resolve, reject) => {
             const settings = SetSvc.get();
             
-            const internalPath = SysUtil.getResPath(app, fileName);
+            let internalPath = SysUtil.getResPath(app, fileName); // <-- Change to 'let'
+            
+            // 🚨 CRITICAL FIX FOR PRODUCTION (ASAR TRAP) 🚨
+            if (internalPath.includes('app.asar')) {
+                internalPath = internalPath.replace('app.asar', 'app.asar.unpacked');
+            }
+
             const externalPath = settings.customScriptLoc ? path.join(settings.customScriptLoc, fileName) : null;
             
             const finalPath = (externalPath && fs.existsSync(externalPath)) ? externalPath : internalPath;
