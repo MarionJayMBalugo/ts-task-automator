@@ -62,7 +62,8 @@ const i18n = {
                 dxdiag: "DXDiag",
                 driveD: "Drive D:",
                 thisPc: "This PC",
-                aboutPc: "About PC"
+                aboutPc: "About PC",
+                taskMngr: "Task Manager"
             },
             hw: "Hardware & OS",
             hostname: "Hostname",
@@ -136,6 +137,7 @@ const i18n = {
             sysIpconfig: "Runs ipconfig /all in terminal",
             sysDxdiag: "Opens DirectX Diagnostic Tool",
             sysAbout: "Opens Windows About PC settings",
+            taskMngr: "Opens Windows Task Manager",
         },
         opentmsdos: "Open TMS-DOS",
         opencustomer: "Open Customers",

@@ -12,6 +12,7 @@ const ToolCmds = {
     'dxdiag':        () => ({ exec: 'dxdiag' }),
     'explorer':      () => ({ exec: 'explorer shell:MyComputerFolder' }), // Windows alias
     'about':         () => ({ exec: 'start ms-settings:about' }),
+    'taskmngr':      () => ({ exec: 'start taskmgr' }),
 
     // These are Folder Paths (run via Electron shell)
     'openDrv':       (d) => ({ shell: `${d}\\` }),
