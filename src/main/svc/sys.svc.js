@@ -129,11 +129,30 @@ const SysSvc = {
     },
 
     checkUrl: (urlStr) => new Promise(res => {
-        const req = https.get(urlStr, { timeout: 5000, rejectUnauthorized: false }, (response) => {
+        // 1. Add headers to masquerade as a real web browser
+        const options = {
+            timeout: 5000,
+            rejectUnauthorized: false,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml'
+            }
+        };
+
+        const req = https.get(urlStr, options, (response) => {
             response.resume(); 
-            res(response.statusCode >= 200 && response.statusCode < 400);
+            
+            // 2. Accept < 500. 
+            // If it returns 401 (Unauthorized) or 403 (Forbidden), the server IS reachable, 
+            // meaning the network firewall whitelisted it! It's only truly blocked if it times out or returns 500+.
+            res(response.statusCode >= 200 && response.statusCode < 500);
+            
         }).on('error', () => res(false));
-        req.setTimeout(5000, () => { req.destroy(); res(false); }); 
+        
+        req.setTimeout(5000, () => { 
+            req.destroy(); 
+            res(false); 
+        }); 
     }),
 
     checkAllUrls: async (monitorConfig) => {
