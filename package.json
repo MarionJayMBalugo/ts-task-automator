@@ -1,7 +1,7 @@
 {
   "name": "ts-automation-app",
   "productName": "TMS Pulse",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Internal automation tool for Technical Specialists",
   "main": "dist/main.js",
   "author": "marion jay m balugo",
@@ -40,7 +40,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "dist/assets/icon.ico"
+      "icon": "dist/assets/icon.png"
     },
     "nsis": {
       "oneClick": false,

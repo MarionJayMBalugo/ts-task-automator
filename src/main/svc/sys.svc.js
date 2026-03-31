@@ -57,7 +57,7 @@ const SysSvc = {
         let source = SysUtil.getResPath(app); // <-- We change 'const' to 'let'
         
         // 🚨 CRITICAL FIX FOR PRODUCTION (ASAR TRAP) 🚨
-        if (source.includes('app.asar')) {
+        if (source.includes('app.asar') && !source.includes('app.asar.unpacked')) {
             source = source.replace('app.asar', 'app.asar.unpacked');
         }
             
@@ -80,7 +80,7 @@ const SysSvc = {
             let internalPath = SysUtil.getResPath(app, fileName); // <-- Change to 'let'
             
             // 🚨 CRITICAL FIX FOR PRODUCTION (ASAR TRAP) 🚨
-            if (internalPath.includes('app.asar')) {
+            if (internalPath.includes('app.asar') && !internalPath.includes('app.asar.unpacked')) {
                 internalPath = internalPath.replace('app.asar', 'app.asar.unpacked');
             }
 
