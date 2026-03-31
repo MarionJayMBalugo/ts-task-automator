@@ -64,7 +64,6 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **Location** | `loc` | `customScriptLoc` |
 | **Drive** | `drv` | `defDrv` (Default Target), `targetDrv` |
 | **Toggle** | `tog` | `tog-exit` (IPC handle for toggling window behavior) |
-| **Ghost** | `ghst` | CSS selector for `display: contents` (invisible layout wrapper) |
 | **Partials** | `partials` | Reusable HTML fragments located in `/ui/views/partials/` |
 
 ## 📦 Build Instructions
