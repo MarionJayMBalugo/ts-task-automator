@@ -34,6 +34,48 @@ We follow a strict separation of concerns to keep the codebase secure and mainta
 
 ---
 
+## 📁 Project Structure
+
+This project follows a secure, modular Electron architecture, strictly separating the frontend (Renderer), backend (Main), and external execution scripts.
+
+```text
+ts-automation-app/
+├── resources/               # External Windows Batch Scripts & Configs (Unpacked in production)
+│   ├── config/              # Environment variables and spec configurations (.env)
+│   ├── lib/                 # Core batch script libraries (admin checks, sys-env variables)
+│   └── *.bat                # Task-specific batch scripts (db creation, folders, cleanup, etc.)
+│
+├── src/                     # Core Application Source Code
+│   ├── assets/              # Static files (Icons, Logos, custom CSS, local Bootstrap JS/CSS)
+│   │
+│   ├── cnf/                 # Global Configuration & Constants
+│   │   └── *.js             # App settings, network monitors, string messages, and constants
+│   │
+│   ├── main/                # Electron Main Process (Backend)
+│   │   ├── ipc/             # Inter-Process Communication (IPC) Listeners
+│   │   ├── svc/             # Service Layer (Business logic, OS interaction, PowerShell execution)
+│   │   └── main.js          # Electron app entry point and window initialization
+│   │
+│   ├── preload/             # Electron Preload Scripts
+│   │   └── preload.js       # Secure Context Bridge (exposes specific Node.js/IPC APIs to the UI)
+│   │
+│   ├── ui/                  # Electron Renderer Process (Frontend HTML/CSS/JS)
+│   │   ├── js/              # Frontend logic (State management, API calls, DOM manipulation)
+│   │   ├── views/           # Main HTML views (Dashboard, Settings, Server Validation, etc.)
+│   │   │   └── partials/    # Reusable HTML components injected dynamically
+│   │   ├── index.html       # Main application shell/layout
+│   │   └── style.css        # Global frontend overrides
+│   │
+│   └── utils/               # Shared Utility Functions
+│       ├── fs.util.js       # File system helpers
+│       └── sys.util.js      # System helpers (Path resolution for .asar unpacked resources)
+│
+├── esbuild.config.js        # Bundler configuration for compiling the app
+├── package.json             # App metadata, dependencies, and electron-builder configuration
+└── README.md                # Project documentation
+```
+---
+
 ## 🧠 Coding Standards & Philosophy
 
 To keep this codebase scalable and developer-friendly, we adhere to the following core rules:
