@@ -40,7 +40,7 @@ const APP_CNF = {
     uiDir: path.join(rootDir, 'dist', 'ui'),
     
     /** Path to the application icon used in the taskbar and window frame */
-    icon: path.join(rootDir, 'dist', 'assets', 'icon.ico'),
+    icon: path.join(rootDir, 'dist', 'assets', 'icon.png'),
     
     /** The main entry point for the frontend (the HTML "Shell") */
     uiPath: path.join(rootDir, 'dist', 'ui', 'index.html'),

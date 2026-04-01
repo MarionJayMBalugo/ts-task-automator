@@ -14,7 +14,7 @@ const SysUtil = {
         const base = app.isPackaged 
             ? path.join(process.resourcesPath, APP_CNF.unpackKey, APP_CNF.resourcesFldr) 
             : path.join(app.getAppPath(), APP_CNF.resourcesFldr);
-        console.log(path.join(process.resourcesPath, APP_CNF.unpackKey, APP_CNF.resourcesFldr) , path.join(app.getAppPath(), APP_CNF.resourcesFldr));
+
         return path.join(base, fileName);
     },
 

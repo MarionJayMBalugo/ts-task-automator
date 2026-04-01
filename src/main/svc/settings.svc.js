@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const { APP_CNF } = require('#cnf/index.js'); 
 
 const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+
 const defaultSettings = { 
     customScriptLoc: "", 
     autoCloseCmd: false, 
@@ -14,7 +15,6 @@ const defaultSettings = {
 
 const SetSvc = {
     // --- EXISTING CORE METHODS ---
-
     get() {
         try {
             if (fs.existsSync(settingsPath)) {
@@ -43,8 +43,6 @@ const SetSvc = {
         this.save(settings);
         return value;
     },
-
-    // --- NEW METHODS (Migrated from setting.ipc.js) ---
 
     /**
      * Triggers the OS folder selection dialog and updates the config.
