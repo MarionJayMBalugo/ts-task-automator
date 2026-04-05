@@ -107,6 +107,12 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **Drive** | `drv` | `defDrv` (Default Target), `targetDrv` |
 | **Toggle** | `tog` | `tog-exit` (IPC handle for toggling window behavior) |
 | **Partials** | `partials` | Reusable HTML fragments located in `/ui/views/partials/` |
+| **Modal** | `mdl` | `mdlCntnr`, `openMdl()` |
+| **Container** | `cntnr` | `mdlCntnr`, `.file-pckr-cntnr` |
+| **Pickers** | `pckrs` | `pckrs.forEach()`, `filePckr` |
+| **Hidden** | `hddn` | `hddnInpt` (Hidden File Input) |
+| **Input** | `inpt` | `visblInpt`, `hddnInpt` |
+| **Visible** | `visbl` | `visblInpt` (Visible Text Input) |
 
 ## 📦 Build Instructions
 
