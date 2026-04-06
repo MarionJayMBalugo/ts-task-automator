@@ -1,6 +1,16 @@
 # 🚀 TMS Pulse
 
-An Electron-based Windows desktop application designed for streamlined server setup, system maintenance, and automated operational workflows.
+An Electron-based Windows desktop application designed for streamlined server setup, system maintenance, and automated operational workflows. 
+
+TMS Pulse acts as a bridge between a modern, reactive user interface and low-level Windows OS operations, allowing technicians to validate environments and execute complex batch scripts with a single click.
+
+## ✨ Core Features
+
+* **🛡️ System Diagnostics:** Automatically scans local hardware (RAM, CPU, Drive Space) and bypasses network firewalls to validate required external URLs.
+* **⚡ Smart Application Discovery:** Uses partial-match directory scanning to locate required software (like the TMS-DOS installer) regardless of version numbers.
+* **🔐 Elevated Script Execution:** Securely breaks out of the Electron sandbox to execute native `.bat` and `.ps1` files with Administrator (UAC) privileges.
+* **🗄️ Database Management:** Provides GUI wrappers for complex SQL dumps, database initialization, and credential generation.
+* **🌍 Built-in Localization:** Powered by a custom, lightweight template engine that dynamically evaluates `{{ __('keys') }}` into translated strings without the bloat of a massive framework.
 
 ## ⚙️ Prerequisites
 
@@ -107,6 +117,15 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **Drive** | `drv` | `defDrv` (Default Target), `targetDrv` |
 | **Toggle** | `tog` | `tog-exit` (IPC handle for toggling window behavior) |
 | **Partials** | `partials` | Reusable HTML fragments located in `/ui/views/partials/` |
+| **Modal** | `mdl` | `mdlCntnr`, `openMdl()` |
+| **Container** | `cntnr` | `mdlCntnr`, `.file-pckr-cntnr` |
+| **Pickers** | `pckrs` | `pckrs.forEach()`, `filePckr` |
+| **Hidden** | `hddn` | `hddnInpt` (Hidden File Input) |
+| **Input** | `inpt` | `visblInpt`, `hddnInpt` |
+| **Visible** | `visbl` | `visblInpt` (Visible Text Input) |
+| **Card** | `crd` | `.radio-crd`, `installer-crd` |
+| **Path** | `pth` | `file-pth-inpt`, `targetPth` |
+| **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
 
 ## 📦 Build Instructions
 
