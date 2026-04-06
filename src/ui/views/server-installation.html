@@ -1,4 +1,4 @@
-<div id="server-installation-view" class="app-view">
+<div class="app-view">
     <div class="d-flex justify-content-between align-items-start mb-5">
         <div>
             <h2 class="h4 fw-bold mb-1" i18n="install.title"></h2>
@@ -13,7 +13,7 @@
             <div class="col">
                 <div class="action-card" 
                      i18n-desc="install.btns.init.desc"
-                     onclick="UI.openModal('setup-folders.bat', 'Initialize Folders', 'This will run setup-folders.bat to build the TMS directory tree.')">
+                     onclick="UI.openModal('setup-folders.bat', __('msg.init', {target: 'Default Folders'}), __('msg.setupFolderdesc'))">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
@@ -24,11 +24,22 @@
             <div class="col">
                 <div class="action-card card-accent" 
                      i18n-desc="install.btns.env.desc"
-                     onclick="UI.openModal('sys-env-setup.bat', 'Setup System ENV', 'This will configure Windows environment variables. A system restart may be required.')">
+                     onclick="UI.openModal('sys-env-setup.bat', __('setup', {name: 'System ENV'}), __('install.winEnv.desc'))">
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
                     <div class="action-label" i18n="install.btns.env.title"></div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="action-card" 
+                    i18n-desc="install.btns.instTmsDos.desc"
+                    onclick="UI.promptTmsDosInstaller()">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
+                        <svg width="20" height="20"><use href="#icon-gear"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.instTmsDos.title"></div>
                 </div>
             </div>
 

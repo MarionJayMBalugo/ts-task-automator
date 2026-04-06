@@ -1,0 +1,19 @@
+<div class="mb-3 file-pckr-cntnr">
+    <label class="form-label fw-bold" for="{{id}}">
+        {{label}}
+    </label>
+
+    <div class="input-group has-validation">
+        <input type="text" 
+               class="form-control file-pth-inpt border-start-0" 
+               id="{{id}}" 
+               name="{{id}}" 
+               placeholder="Select or paste a file path..." 
+               value="{{value}}"
+               required>
+        
+        <button class="btn btn-outline-primary browse-btn" type="button">__('browse')</button>
+
+        <div class="invalid-feedback">{{errMsg}}</div>
+    </div>
+</div>
