@@ -70,7 +70,7 @@ export const Flows = {
                     id: 'selectedInstaller', // Same ID groups them together
                     type: 'radio', 
                     url: 'views/partials/modals/installer-radio.html', 
-                    label: 'Installation Path', 
+                    label: inst, 
                     value: inst, 
                     index: index, 
                     required: true 
@@ -84,7 +84,7 @@ export const Flows = {
             components.push({ 
                 id: 'selectedInstaller', 
                 type: 'radio', 
-                label: 'Path', 
+                label: installers[0], 
                 value: installers[0], 
                 readonly: true, 
                 checked: true, 

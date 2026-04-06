@@ -37,10 +37,25 @@ export const ModalSvc = {
                             if(inputEl) inputEl.classList.remove('is-invalid');
                             executionData[field.id] = values; 
                         }
-                    } else {
+                    } else if (field.type === 'radio') {
+                        // Find the specific input in the group that is actually checked
+                        const checkedEl = document.querySelector(`input[name="${field.id}"]:checked`);
+                        const allRadios = document.querySelectorAll(`input[name="${field.id}"]`);
+
+                        if (field.required && !checkedEl) {
+                            // Apply a visual error to the parent cards for better visibility
+                            allRadios.forEach(r => r.closest('.radio-crd')?.classList.add('border-danger'));
+                            isValid = false;
+                        } else {
+                            // Clean up the error state and capture the value
+                            allRadios.forEach(r => r.closest('.radio-crd')?.classList.remove('border-danger'));
+                            executionData[field.id] = checkedEl ? checkedEl.value : null;
+                        }
+                    }
+                    else {
                         // Check for standard modal inputs OR custom partial IDs like your file picker
                         const el = document.getElementById(`modal-input-${field.id}`) || document.getElementById(field.id);
-                        console.log(field.id, el);
+
                         if (el) {
                             if (field.required && !el.value && field.type !== 'checkbox') {
                                 el.classList.add('is-invalid');
@@ -77,10 +92,6 @@ export const ModalSvc = {
             for (const field of fields) {
                 // If it's a custom partial, use its URL. Otherwise, load from the fields folder.
                 combinedHtml += await Template.load(ModalSvc.resolveTemplatePath(field), field);
-                console.log([
-                    ModalSvc.resolveTemplatePath(field),
-                    combinedHtml
-                ])
             }
 
             // 2. Inject the fully compiled HTML

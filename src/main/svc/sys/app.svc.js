@@ -97,7 +97,7 @@ const AppSvc = {
         
         // 2. Execute Search:
         //    Delegates to FsUtil to scan the directory for the partial match.
-        return await FsUtil.getPartialMatch(dir, flname, ext);
+        return (await FsUtil.getPartialMatch(dir, flname, ext)).map(file => path.join(dir, file));
     },
 
     // =========================================================================
