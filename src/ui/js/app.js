@@ -7,6 +7,8 @@
  * and handles all communication between the UI buttons and the Backend API.
  */
 
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import { API } from './api.js';
 import { I18n } from './i18n.js';
 import { TAB_CONFIG } from './cnf.js';

@@ -118,20 +118,20 @@ async function build() {
     console.log('⚙️ Minifying Shell Scripts & Envs...');
     minifyScripts(path.join(__dirname, 'resources'), path.join(__dirname, 'dist', 'resources'));
 
-    // 6. Bundle UI JavaScript (THE MAGIC HAPPENS HERE)
+    // 6. Bundle UI JavaScript
     console.log('📦 Bundling UI Modules into ONE file...');
     
-    // 🚨 Clean up the raw JS files that were copied over in Step 3 so they don't bloat the dist folder
+    // Clean up the raw JS files that were copied over in Step 3 so they don't bloat the dist folder
     fs.rmSync(path.join(__dirname, 'dist/ui/js'), { recursive: true, force: true });
 
     // Bundle the master controller (app.js) into a single file
     await esbuild.build({
         entryPoints: ['src/ui/js/app.js'],
-        bundle: true,          // 👈 This tells esbuild to merge all imports!
+        bundle: true,          // Merge all imports!
         outfile: 'dist/ui/js/app.js',
         platform: 'browser',
         minify: true,
-        sourcemap: false,      // Turns off the .map files
+        sourcemap: false,
     });
 
     // If text.js exists, minify it in place
@@ -146,21 +146,47 @@ async function build() {
         });
     }
 
-    // 7. Bundle Custom App CSS
-    console.log('🎨 Minifying Custom App CSS...');
+    // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file
+    console.log('🎨 Bundling Bootstrap and Custom CSS into one file...');
+    
+    // Gather all custom CSS files
     const cssFilesToMinify = getFiles(path.join(__dirname, 'src/assets/css/app'), '.css');
-    if (fs.existsSync(path.join(__dirname, 'src/ui/style.css'))) cssFilesToMinify.push('src/ui/style.css');
-
-    if (cssFilesToMinify.length > 0) {
-        await esbuild.build({
-            entryPoints: cssFilesToMinify,
-            outdir: 'dist',
-            outbase: 'src', 
-            allowOverwrite: true, 
-            minify: true,
-            sourcemap: false,     // Turns off the .map files
-        });
+    
+    // Add custom style.css to the front of our custom list
+    if (fs.existsSync(path.join(__dirname, 'src/ui/style.css'))) {
+        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/style.css')); 
     }
+    
+    // Put Bootstrap at the absolute top of the entire list
+    // Make sure you have run `npm install bootstrap`!
+    const bootstrapPath = path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css');
+    if (fs.existsSync(bootstrapPath)) {
+        cssFilesToMinify.unshift(bootstrapPath);
+    } else {
+        console.warn('⚠️ Warning: Bootstrap CSS not found in node_modules. Did you run npm install bootstrap?');
+    }
+
+    // Create a temporary CSS file that @imports everything
+    const tempCssPath = path.join(__dirname, 'src/ui/master-temp.css');
+    const masterCssContent = cssFilesToMinify
+        .map(file => `@import "${file.replace(/\\/g, '/')}";`)
+        .join('\n');
+    
+    fs.writeFileSync(tempCssPath, masterCssContent);
+
+    // Bundle it all into one final file
+    await esbuild.build({
+        entryPoints: [tempCssPath],
+        outfile: 'dist/ui/style.bundle.css', // The final output file name
+        bundle: true, 
+        minify: true,
+        sourcemap: false,
+    });
+
+    // Clean up the temporary file and leftover unbundled CSS directories
+    if (fs.existsSync(tempCssPath)) fs.unlinkSync(tempCssPath);
+    fs.rmSync(path.join(__dirname, 'dist/ui/style.css'), { force: true });
+    fs.rmSync(path.join(__dirname, 'dist/assets/css'), { recursive: true, force: true });
 
     console.log('✅ Build complete! App is ready in /dist');
 }
