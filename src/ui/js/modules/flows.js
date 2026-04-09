@@ -101,6 +101,7 @@ export const Flows = {
                 url: 'views/partials/file-pckr.html', 
                 label: 'Installation Path',
                 fldLbl: 'file path',
+                mode: 'file',
                 // Uses the global translation shortcut available in JS
                 errMsge: __('validation.errHint1', { fldLbl: 'file path' }),
                 
@@ -123,6 +124,37 @@ export const Flows = {
                 // We fallback (||) to whichever one actually contains data.
                 const pth = data.selectedInstaller || data.filepicker;
                 API.runBatch(script, [pth]);
+            }
+        );
+    },
+
+    // This is being called when installing Heidi
+    async promptHeidiInstaller() {
+        ModalSvc.openModal(
+            'run-heidi-install',
+            'Heidi Installation',
+            'Please select the installation directory and confirm.',
+            [{ 
+                id: 'folderpicker', 
+                type: 'partial', 
+                url: 'views/partials/fold-pckr.html', 
+                label: 'Installation Path',
+                fldLbl: 'directory',
+                mode: 'folder',
+                // Uses the global translation shortcut available in JS
+                errMsge: __('validation.errHint1', { fldLbl: 'directory' }),
+                
+                // 🚨 THE ON-RENDER HOOK 🚨
+                // Modals are injected into the DOM asynchronously. We cannot attach 
+                // event listeners to the File Picker until the HTML actually exists!
+                // ModalSvc calls this hook exactly when the HTML is safely in the DOM.
+                onRender: (container) => FilePckr.init(container) 
+            }],
+            (script, data) => {
+                // The user either used the radio buttons OR the file picker.
+                // We fallback (||) to whichever one actually contains data.
+                const pth = data.filepicker;
+                API.instHeidi(pth);
             }
         );
     },

@@ -50,7 +50,8 @@ const i18n = {
                 exportdb: "Export DBs",
                 importdb: "Import DBs",
                 createdbuser: "Create DB User",
-                instTmsDos: { title: "Install TMS-DOS", desc: "Starts the installation process only." }
+                instTmsDos: { title: "Install TMS-DOS", desc: "Starts the installation process only." },
+                instHeidi: { title: "Install Heidi", desc: "Installation of Heidi" }
             },
             winEnv: {
                 desc: "This will configure Windows environment variables. A system restart may be required."
@@ -93,7 +94,8 @@ const i18n = {
                 tmsDos: "TMS-DOS",
                 mirth: "Mirth",
                 bridgeLink: "BridgeLink",
-                vsCode: "VS Code"
+                vsCode: "VS Code",
+                heidiSQL: "HeidiSQL"
             },
             errHint1: "Please provide a valid {fldLbl}."
         },

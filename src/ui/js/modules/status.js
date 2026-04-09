@@ -121,5 +121,6 @@ export const Status = {
         setBadge('status-mirth', info.apps.mirth);
         setBadge('status-bridgelink', info.apps.bridgelink);
         setBadge('status-vscode', info.apps.vscode);
+        setBadge('status-heidi', info.apps.heidiSQL);
     }
 };
