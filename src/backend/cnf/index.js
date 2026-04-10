@@ -1,4 +1,4 @@
-// src/main/cnf/index.js
+// src/backend/cnf/index.js
 
 /**
  * CONFIGURATION BARREL FILE

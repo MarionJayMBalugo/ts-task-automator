@@ -13,9 +13,9 @@
   },
   "imports": {
     "#src/*": "./src/*",
-    "#cnf/*": "./src/cnf/*",
-    "#svc/*": "./src/main/svc/*",
-    "#utils/*": "./src/utils/*"
+    "#cnf/*": "./src/backend/cnf/*",
+    "#svc/*": "./src/backend/svc/*",
+    "#utils/*": "./src/backend/utils/*"
   },
   "devDependencies": {
     "@electron/fuses": "^1.8.0",
