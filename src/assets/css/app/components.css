@@ -111,6 +111,14 @@
     animation: sweep 1.2s ease-in-out infinite;
 }
 
+.heidi-install-card.disabled-state {
+    opacity: 0.5;
+    filter: grayscale(1);
+    cursor: not-allowed !important;
+    pointer-events: none; 
+    user-select: none;
+}
+
 @keyframes sweep {
     0% { left: -40%; }
     100% { left: 100%; }

@@ -2,32 +2,63 @@
  * =============================================================================
  * PRELOAD SCRIPT (The Bridge)
  * =============================================================================
- * Safely exposes specific IPC methods to the renderer process (app.js) 
- * under the global 'window.electronAPI' object.
+ * This is the ONLY file that can talk to both Node.js (Backend) and the DOM (Frontend).
+ * * WHY IT EXISTS: Electron's "Context Isolation" prevents the Renderer (app.js) 
+ * from directly accessing the OS/Node.js to prevent malicious code injections. 
+ * We use `contextBridge` to poke tiny, secure holes through that wall, exposing 
+ * only specific, strictly defined functions under `window.electronAPI`.
  */
+
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
     
-    // --- SYSTEM OPERATIONS (Maps to sys.ipc.js) ---
+    // =========================================================================
+    // --- SYSTEM OPERATIONS (Maps directly to sys.ipc.js) ---
+    // =========================================================================
     system: {
+        // [SEND - One-Way] 
+        // Used for tasks where we don't immediately need data back (fire-and-forget), 
+        // or tasks that take a long time and will stream data back via listeners later.
         runBatch: (file, data) => ipcRenderer.send('execute-batch', file, data),
         openTool: (toolKey) => ipcRenderer.send('open-sys-tool', toolKey),
-        getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
         
-        // MOVED: Copying files is a system operation!
+        // [INVOKE - Two-Way Promises] 
+        // Used when the UI needs to 'await' an immediate response from the backend.
+        getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
         copyScripts: () => ipcRenderer.invoke('copy-scripts'),
+        getTmsdInst: () => ipcRenderer.invoke('get-tmsdos-installer'),
+        openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
+        instHeidi: () => ipcRenderer.send('run-heidi-install'),
+        checkHeidiInstalled: () => ipcRenderer.invoke('check-heidi-installed'),
+        on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(...args)),
 
-        // MOVED: Batch listeners grouped with batch execution
+        // --- CONTINUOUS EVENT LISTENERS ---
+        
+        /**
+         * [ON - Listener Setup]
+         * Listens for replies from long-running tasks (like batch scripts).
+         * * WHY WE WRAP IT: We intercept the raw IPC event and only pass the actual 
+         * `message` string to the UI. This prevents the UI from accidentally 
+         * gaining access to the raw Electron `event` object.
+         * * @returns {Function} An "Unsubscribe" function so the UI can clean up 
+         * after itself to prevent memory leaks!
+         */
         onBatchReply: (callback) => {
             const subscription = (_event, message) => callback(message);
             ipcRenderer.on('batch-reply', subscription);
+            
+            // Returns a cleanup function that the UI can call when it's done listening
             return () => ipcRenderer.removeListener('batch-reply', subscription);
         },
+        
+        // Nuclear option to clear all listeners at once
         removeBatchListeners: () => ipcRenderer.removeAllListeners('batch-reply')
     },
 
-    // --- SETTINGS & CONFIGURATION (Maps to setting.ipc.js) ---
+    // =========================================================================
+    // --- SETTINGS & CONFIGURATION (Maps directly to setting.ipc.js) ---
+    // =========================================================================
     settings: {
         getSettings: () => ipcRenderer.invoke('get-settings'),
         setTargetDrive: (value) => ipcRenderer.invoke('set-drv', value),
@@ -37,7 +68,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
         getConfigPath: () => ipcRenderer.invoke('cfg-path')
     },
 
-    // --- UI & APPLICATION STATE (Maps to ui.ipc.js) ---
+    // =========================================================================
+    // --- UI & APPLICATION STATE (Maps directly to ui.ipc.js) ---
+    // =========================================================================
     ui: {
         loadView: (viewName) => ipcRenderer.invoke('load-view', viewName),
         getVersion: () => ipcRenderer.invoke('get-app-version')

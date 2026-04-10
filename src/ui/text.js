@@ -50,6 +50,14 @@ const i18n = {
                 exportdb: "Export DBs",
                 importdb: "Import DBs",
                 createdbuser: "Create DB User",
+                instTmsDos: { title: "Install TMS-DOS", desc: "Starts the installation process only." },
+                instHeidi: { title: "Install Heidi", desc: "Installation of Heidi" }
+            },
+            winEnv: {
+                desc: "This will configure Windows environment variables. A system restart may be required."
+            },
+            tmsdos: {
+                desc: "Confirm that you are going to start the installation process for the TMS-DOS application. Note that you will still be required to interact with the actual application."
             }
         },
         validation: {
@@ -86,8 +94,10 @@ const i18n = {
                 tmsDos: "TMS-DOS",
                 mirth: "Mirth",
                 bridgeLink: "BridgeLink",
-                vsCode: "VS Code"
-            }
+                vsCode: "VS Code",
+                heidiSQL: "HeidiSQL"
+            },
+            errHint1: "Please provide a valid {fldLbl}."
         },
         settings: {
             title: "Application Settings",
@@ -142,6 +152,11 @@ const i18n = {
         opentmsdos: "Open TMS-DOS",
         opencustomer: "Open Customers",
         opentmstool: "Open TMS-tools",
-        
+        setup: "Setup {name}",
+        browse: "browse",
+        msg: {
+            init: "Initialize {target}",
+            setupFolderdesc: "This will run setup-folders.bat to build the TMS directory tree."
+        }
     }
 };

@@ -6,7 +6,8 @@ const APP_SCAN = {
     tmsDos:     ['tms-dos', 'TMS-DOS', 'TMS DOS'],
     mirth:      ['Mirth Connect', 'mirth'],
     bridgelink: ['BridgeLink', 'BridgeLink Administrator Launcher'],
-    vscode:     ['Microsoft VS Code', 'Visual Studio Code', 'vscode']
+    vscode:     ['Microsoft VS Code', 'Visual Studio Code', 'vscode'],
+    heidiSQL:   ['HeidiSQL', 'Heidi'],
 };
 
 module.exports = { APP_SCAN };
