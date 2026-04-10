@@ -13,7 +13,7 @@
             <div class="col">
                 <div class="action-card" 
                      i18n-desc="install.btns.init.desc"
-                     onclick="UI.openModal('setup-folders.bat', __('msg.init', {target: 'Default Folders'}), __('msg.setupFolderdesc'))">
+                     onclick="UI.openModal('setup-folders.bat', __('msg.init', {target: 'Default Folders'}), `__('msg.setupFolderdesc')`)">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
@@ -24,7 +24,7 @@
             <div class="col">
                 <div class="action-card card-accent" 
                      i18n-desc="install.btns.env.desc"
-                     onclick="UI.openModal('sys-env-setup.bat', __('setup', {name: 'System ENV'}), __('install.winEnv.desc'))">
+                     onclick="UI.openModal('sys-env-setup.bat', __('setup', {name: 'System ENV'}), `__('install.winEnv.desc')`)">
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>

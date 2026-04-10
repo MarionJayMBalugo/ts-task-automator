@@ -15,7 +15,7 @@ const rootDir = app.getAppPath();
 /** * esbuild will automatically resolve and inline this package.json at build time,
  * so we don't have to worry about the path breaking in production!
  */
-const packageJson = require('../../package.json');
+const packageJson = require('../../../package.json');
 
 const APP_CNF = {
     // --- UI & Appearance ---

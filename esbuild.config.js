@@ -102,7 +102,7 @@ async function build() {
     const commonOpts = { bundle: true, platform: 'node', target: 'node18', external: ['electron'], minify: true, sourcemap: false };
 
     // 2. Bundle Main Process & Preload
-    await esbuild.build({ ...commonOpts, entryPoints: ['src/main/main.js'], outfile: 'dist/main.js' });
+    await esbuild.build({ ...commonOpts, entryPoints: ['src/backend/main.js'], outfile: 'dist/main.js' });
     await esbuild.build({ ...commonOpts, entryPoints: ['src/preload/preload.js'], outfile: 'dist/preload.js' });
 
     // 3. Copy Static Assets (HTML views, images) FIRST
@@ -134,36 +134,36 @@ async function build() {
         sourcemap: false,
     });
 
-    // If text.js exists, minify it in place
-    const textJsPath = path.join(__dirname, 'dist/ui/text.js');
-    if (fs.existsSync(textJsPath)) {
+    // CHECK THE SOURCE FOLDER, NOT THE DIST FOLDER!
+    const textJsSource = path.join(__dirname, 'src/ui/js/lang/text.js');
+    if (fs.existsSync(textJsSource)) {
         await esbuild.build({
-            entryPoints: ['src/ui/text.js'],
-            outfile: textJsPath,
-            allowOverwrite: true,
+            entryPoints: [textJsSource],
+            outfile: 'dist/ui/js/lang/text.js', // Output to the clean dist folder
             minify: true,
             sourcemap: false,
         });
+    } else {
+        console.warn('⚠️ Warning: Could not find src/ui/js/lang/text.js');
     }
 
     // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file
     console.log('🎨 Bundling Bootstrap and Custom CSS into one file...');
     
-    // Gather all custom CSS files
-    const cssFilesToMinify = getFiles(path.join(__dirname, 'src/assets/css/app'), '.css');
+    // Gather all custom CSS files (Using new UI path!)
+    const cssFilesToMinify = getFiles(path.join(__dirname, 'src/ui/css/app'), '.css');
     
     // Add custom style.css to the front of our custom list
-    if (fs.existsSync(path.join(__dirname, 'src/ui/style.css'))) {
-        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/style.css')); 
+    if (fs.existsSync(path.join(__dirname, 'src/ui/css/style.css'))) {
+        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/css/style.css')); 
     }
     
     // Put Bootstrap at the absolute top of the entire list
-    // Make sure you have run `npm install bootstrap`!
     const bootstrapPath = path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css');
     if (fs.existsSync(bootstrapPath)) {
         cssFilesToMinify.unshift(bootstrapPath);
     } else {
-        console.warn('⚠️ Warning: Bootstrap CSS not found in node_modules. Did you run npm install bootstrap?');
+        console.warn('⚠️ Warning: Bootstrap CSS not found in node_modules.');
     }
 
     // Create a temporary CSS file that @imports everything
@@ -185,8 +185,13 @@ async function build() {
 
     // Clean up the temporary file and leftover unbundled CSS directories
     if (fs.existsSync(tempCssPath)) fs.unlinkSync(tempCssPath);
-    fs.rmSync(path.join(__dirname, 'dist/ui/style.css'), { force: true });
-    fs.rmSync(path.join(__dirname, 'dist/assets/css'), { recursive: true, force: true });
+    
+    // Safely delete the unbundled CSS folders from the dist folder to keep the app size small!
+    const distUiCssFolder = path.join(__dirname, 'dist/ui/css');
+    const distAssetsCssFolder = path.join(__dirname, 'dist/assets/css');
+    
+    if (fs.existsSync(distUiCssFolder)) fs.rmSync(distUiCssFolder, { recursive: true, force: true });
+    if (fs.existsSync(distAssetsCssFolder)) fs.rmSync(distAssetsCssFolder, { recursive: true, force: true });
 
     console.log('✅ Build complete! App is ready in /dist');
 }
