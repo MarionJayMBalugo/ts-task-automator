@@ -26,7 +26,7 @@ Getting up and running is designed to be completely frictionless.
 1. Clone the repository
 2. Install dependencies:
    ```bash
-   npm install
+   npm install && npm run prepare
    ```
 3. Boot the application in development mode:
    ```bash
