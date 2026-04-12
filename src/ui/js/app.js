@@ -88,6 +88,10 @@ const App = {
                 window.closeModal(); 
             }
         });
+        // Will disable install heidi card after installation
+        API.on('heidi-inst-done', () => {
+            this.validateHeidiActionCard();
+        });
     },
 
     /**
@@ -106,6 +110,7 @@ const App = {
                 this[actionName]();
             }
         });
+        this.validateHeidiActionCard();
     },
 
     // =========================================================================
@@ -179,6 +184,29 @@ const App = {
             this.refreshSettings();
         }
     },
+
+    async validateHeidiActionCard() {
+        // Identify the card (Added the class 'heidi-install-card' as per your HTML)
+        const card = document.querySelector('.heidi-install-card');
+        if (!card) return;
+
+        // Ask the Main process if Heidi is installed
+        const isInstalled = await API.checkHeidiInstalled();
+
+        if (isInstalled) {
+            // Apply the 'shield' class
+            card.classList.add('disabled-state');
+            
+            // Strip the onclick attribute so the function can't be triggered
+            card.removeAttribute('onclick');
+            
+            // Update the label to give user feedback
+            const label = card.querySelector('.action-label');
+            if (label) {
+                label.innerText += " (Installed)";
+            }
+        }
+    }
 };
 
 // =============================================================================

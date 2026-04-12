@@ -9,6 +9,8 @@
  */
 
 const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc/index.js');
+const path = require('node:path');
+const { exec } = require('child_process');
 
 module.exports = function setSysIPC(ipcMain, app) {
 
@@ -76,6 +78,36 @@ module.exports = function setSysIPC(ipcMain, app) {
      */
     ipcMain.handle('get-tmsdos-installer', async () => {
         return await AppSvc.getInstallerTmsD();
+    });
+
+    /**
+     * [IPC: handle] Heidi Installer Path
+     * Bridge between UI and System Service to auto-locate the installer executable.
+     * Searches standard directories using wildcard matching.
+     * @returns {Promise<string|null>} Found absolute file pth or null.
+     */
+    ipcMain.on('run-heidi-install', (event, targetPath) => {
+        const scriptPath = path.join(__dirname, 'resources/install-heidi.bat');
+        exec(`start cmd /c "${scriptPath}"`, { targetPath }, (error, stdout, stderr) => {
+            if (error) return;
+            event.sender.send('heidi-inst-done');
+        });
+    });
+
+    /**
+     * [IPC: handle] Check if Heidi is installed
+     * Bridge between UI and System Service to auto-locate the installer executable.
+     * Searches standard directories using wildcard matching.
+     * @returns {Promise<string|null>} Found absolute file pth or null.
+     */
+    ipcMain.handle('check-heidi-installed', async () => {
+        return new Promise((resolve) => {
+            // Query both 64-bit and 32-bit registry paths for HeidiSQL
+            const cmd = 'reg query "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" /s /f "HeidiSQL"';
+            exec(cmd, (err, stdout) => {
+                resolve(!!(stdout && stdout.includes('HeidiSQL')));
+            });
+        });
     });
 
     /**

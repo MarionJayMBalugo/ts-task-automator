@@ -31,10 +31,17 @@ const FilePckr = {
             // Find the sub-elements (The "Browse" button and the readonly Text Input)
             const browseBtn = pckr.querySelector('.browse-btn');
             const visblInpt = pckr.querySelector('.file-pth-inpt');
+            const mode = pckr.getAttribute('data-mode') || 'folder';
 
             browseBtn.addEventListener('click', async () => {
-                // 1. Pause the UI and ask the backend to open a Windows Explorer window
-                const filePath = await API.openFileDialog(); 
+                // Pause the UI and ask the backend to open a Windows Explorer window
+                // Condition: Determine which API method to call based on the mode
+                let filePath = null;
+                if (mode === 'file') {
+                    filePath = await API.openFileDialog();
+                } else {
+                    filePath = await API.selectFolder();
+                }
                 
                 // 2. Process the Result
                 // If filePath is null, it means the user clicked 'Cancel' or the 'X'. 
