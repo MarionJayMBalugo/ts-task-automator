@@ -8,11 +8,13 @@ import { Shell }  from './shell.js';
 import { Status } from './status.js';
 import { Flows }  from './flows.js';
 import { Notify } from './notify.js';
+import { Validate } from './validate.js';
 
 // Exporting them as named objects
 export { 
     Shell, 
     Status, 
     Flows, 
-    Notify 
+    Notify,
+    Validate
 };

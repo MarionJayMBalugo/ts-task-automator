@@ -3,7 +3,7 @@
    ========================================= */
 .radio-crd {
     background-color: var(--tms-bg);
-    border: 2px solid var(--tms-border);
+    border: 0.125rem solid var(--tms-border); /* 2px */
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }
@@ -11,7 +11,7 @@
 .radio-crd .form-check-input {
     width: 1.25rem;
     height: 1.25rem;
-    border: 2px solid var(--tms-text-muted); 
+    border: 0.125rem solid var(--tms-text-muted); /* 2px */
     background-color: white;
     transition: inherit; /* Inherits the 0.2s from the card */
     cursor: pointer;
@@ -36,7 +36,7 @@
 .radio-crd:has(input:checked) {
     border-color: var(--tms-blue);
     background-color: color-mix(in srgb, var(--tms-bg), var(--tms-blue) 8%);
-    box-shadow: 0 0 0 1px var(--tms-blue);
+    box-shadow: 0 0 0 1px var(--tms-blue); /* Kept at 1px for crispness! */
     color: var(--tms-text-main);
 }
 

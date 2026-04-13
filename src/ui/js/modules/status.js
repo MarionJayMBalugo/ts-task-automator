@@ -8,7 +8,7 @@
  * animations, and then unpacks the giant payload from OsSvc to paint the UI.
  */
 
-import { I18n } from '../i18n.js';
+import { I18n } from '../core/i18n.js';
 
 export const Status = {
     // =========================================================================
@@ -21,8 +21,8 @@ export const Status = {
      */
     setValidationLoading(isLoading) {
         // 1. Find the Refresh Button 
-        // (Uses a fuzzy selector to find any button that starts with 'App.runValidation')
-        const btn = document.querySelector('button[onclick^="App.runValidation"]');
+        // (Uses a fuzzy selector to find any button that starts with 'UI.runValidation')
+        const btn = document.querySelector('button[onclick^="UI.runValidation"]');
         if (btn) {
             btn.disabled = isLoading; // Prevent double-clicking
             

@@ -1,8 +1,8 @@
-import { Template } from './template.js';
+import { Template } from '../core/template.js';
 
 export const ModalSvc = {
-    openModal: async function(scriptName, title, desc, fields = [], onExecuteCallback) {
-        ModalSvc.setModalHeadrs(title, desc);
+    openModal: async function(scriptName, data, fields = [], onExecuteCallback) {
+        ModalSvc.setModalDef(data);
 
         await ModalSvc.loadAllTemplates(fields);
 
@@ -80,7 +80,8 @@ export const ModalSvc = {
     },
 
     // If the field parameter is of type 'partial' (meaning a component) then use the field's url/path to retrieve the html file.
-    resolveTemplatePath: (field) => field.type === 'partial' ? field.url : `views/partials/fields/${field.type || 'text'}.html`,
+    resolveTemplatePath: (field) => field.type === 'partial' ? field.url : `partials/forms/${field.type || 'text'}.html`,
+    
     loadAllTemplates: async (fields) => {
         const dynamicZone = document.getElementById('modal-dynamic-content');
         dynamicZone.style.display = 'none';
@@ -106,8 +107,16 @@ export const ModalSvc = {
 
         if (dynamicZone.innerHTML != '') dynamicZone.style.display = 'block' 
     },
-    setModalHeadrs: (title, desc) => {
-        document.getElementById('modal-title').innerText = title;
-        document.getElementById('modal-body').innerText = desc;
+    
+    setModalDef: (data) => {
+        document.getElementById('modal-title').innerText = data.title;
+        document.getElementById('modal-body').innerText = data.desc;
+        // document.getElementById('modal-prev-btn').style.display = 'block';
+        
+        const mdlel = document.querySelector('.tms-modal');
+        // Clear any old size classes from previous clicks
+        mdlel.classList.remove('mdl-sm', 'mdl-md', 'mdl-lg', 'mdl-full');
+        // Apply the requested size
+        mdlel.classList.add(`mdl-${data.size}`);
     }
 };

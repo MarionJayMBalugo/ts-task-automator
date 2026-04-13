@@ -30,29 +30,6 @@ const FsUtil = {
     },
     
     /**
-     * [READER] Safely Fetch HTML View Component
-     * Reads local HTML files from the disk synchronously.
-     * * WHY SYNCHRONOUS?: Reading local text files is so fast that we don't need 
-     * the overhead of async/await here. 
-     * * WHY RETURN NULL?: If an HTML file is deleted or renamed, returning 'null' 
-     * lets the frontend UI handle the error state gracefully (showing a red warning) 
-     * instead of throwing a fatal Node.js error that crashes the whole app.
-     * * @param {string} viewName - The name of the HTML file without the extension.
-     */
-    readView: (viewName) => {
-        try {
-            const viewPath = path.join(APP_CNF.uiDir, 'views', `${viewName}.html`);
-            if (fs.existsSync(viewPath)) {
-                return fs.readFileSync(viewPath, 'utf8');
-            }
-            return null; // File missing, UI will handle it
-        } catch (error) {
-            console.error(`Error reading view ${viewName}:`, error.message);
-            return null;
-        }
-    },
-
-    /**
      * [SCANNER] Directory Partial Match Scanner
      * Scans a directory for any file that *starts* with a specific string.
      * * WHY PARTIAL MATCHES?: Downloaded software often appends version numbers 
@@ -94,7 +71,23 @@ const FsUtil = {
      * This safely normalizes all of them into ".exe".
      * * @param {string} ext - The raw extension string.
      */
-    clupExt: (ext) => ext.startsWith('.') ? ext.toLowerCase() : `.${ext.toLowerCase()}`
+    clupExt: (ext) => ext.startsWith('.') ? ext.toLowerCase() : `.${ext.toLowerCase()}`,
+
+    readHtml: (fpath) => {
+        try {
+            if (fs.existsSync(fpath)) {
+                return fs.readFileSync(fpath, 'utf8');
+            }
+
+            return null;
+        } catch (error) {
+            console.error(`Error reading view ${fpath}:`, error.message);
+
+            return null;
+        }
+    },
+
+    join: (...args) => path.join(...args),
 };
 
 module.exports = FsUtil;

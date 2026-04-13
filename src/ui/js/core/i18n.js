@@ -40,6 +40,12 @@ export const I18n = {
             const text = I18n.interpolate(rawText, el.dataset); 
             if (text) el.setAttribute('data-description', text);
         });
+
+        document.querySelectorAll('[data-title]').forEach(el => {
+            const rawText = I18n.getVal(el.getAttribute('data-title'));
+            const text = I18n.interpolate(rawText, el.dataset); 
+            if (text) el.setAttribute('data-description', text);
+        });
     },
 
     // =========================================================================

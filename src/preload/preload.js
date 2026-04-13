@@ -73,6 +73,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // =========================================================================
     ui: {
         loadView: (viewName) => ipcRenderer.invoke('load-view', viewName),
+        loadPartial: (prtlName) => ipcRenderer.invoke('load-partial', prtlName),
         getVersion: () => ipcRenderer.invoke('get-app-version')
     }
 });

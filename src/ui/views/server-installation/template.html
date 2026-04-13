@@ -13,7 +13,10 @@
             <div class="col">
                 <div class="action-card" 
                      i18n-desc="install.btns.init.desc"
-                     onclick="UI.openModal('setup-folders.bat', __('msg.init', {target: 'Default Folders'}), `__('msg.setupFolderdesc')`)">
+                     data-action="open-modal"
+                     data-script="setup-folders.bat"
+                     data-title="__('msg.init', {target: 'Default Folders'})"
+                     data-desc="__('msg.setupFolderdesc')">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
@@ -24,7 +27,10 @@
             <div class="col">
                 <div class="action-card card-accent" 
                      i18n-desc="install.btns.env.desc"
-                     onclick="UI.openModal('sys-env-setup.bat', __('setup', {name: 'System ENV'}), `__('install.winEnv.desc')`)">
+                     data-action="open-modal"
+                     data-script="sys-env-setup.bat"
+                     data-title="{{ __('setup', {name: 'System ENV'}) }}"
+                     data-desc="{{ __('install.winEnv.desc') }}">
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
@@ -35,7 +41,7 @@
             <div class="col">
                 <div class="action-card" 
                     i18n-desc="install.btns.instTmsDos.desc"
-                    onclick="UI.promptTmsDosInstaller()">
+                    data-action="prompt-tmsdos-installer">
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
@@ -53,7 +59,7 @@
             <div class="col">
                 <div class="action-card heidi-install-card"
                      i18n-desc="install.btns.instHeidi.desc"
-                     onclick="UI.promptHeidiInstaller()">
+                     data-action="prompt-heidi-installer">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
@@ -64,7 +70,10 @@
             <div class="col">
                 <div class="action-card" 
                      i18n-desc="install.btns.createDb.desc"
-                     onclick="UI.openModal('create-database.bat', 'Create DBs', 'This will run create-database.bat to initialize new database schemas.')">
+                     data-action="open-modal"
+                     data-script="create-database.bat"
+                     data-title="Create DBs"
+                     data-desc="This will run create-database.bat to initialize new database schemas.">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-plus"></use></svg>
                     </div>
@@ -75,7 +84,10 @@
             <div class="col">
                 <div class="action-card" 
                      i18n-desc="install.btns.createUser.desc"
-                     onclick="UI.openModal('create-db-user.bat', 'Create DB User', 'This will run create-db-user.bat to generate credentials from your .env file.')">
+                     data-action="open-modal"
+                     data-script="create-db-user.bat"
+                     data-title="Create DB User"
+                     data-desc="This will run create-db-user.bat to generate credentials from your .env file.">
                     <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
                         <svg width="20" height="20"><use href="#icon-user"></use></svg>
                     </div>

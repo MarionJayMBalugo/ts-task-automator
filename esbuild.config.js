@@ -126,9 +126,9 @@ async function build() {
 
     // Bundle the master controller (app.js) into a single file
     await esbuild.build({
-        entryPoints: ['src/ui/js/app.js'],
+        entryPoints: ['src/ui/js/core/app.js'],
         bundle: true,          // Merge all imports!
-        outfile: 'dist/ui/js/app.js',
+        outfile: 'dist/ui/js/core/app.js',
         platform: 'browser',
         minify: true,
         sourcemap: false,
@@ -154,8 +154,8 @@ async function build() {
     const cssFilesToMinify = getFiles(path.join(__dirname, 'src/ui/css/app'), '.css');
     
     // Add custom style.css to the front of our custom list
-    if (fs.existsSync(path.join(__dirname, 'src/ui/css/style.css'))) {
-        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/css/style.css')); 
+    if (fs.existsSync(path.join(__dirname, 'src/ui/css/bundle.css'))) {
+        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/css/bundle.css')); 
     }
     
     // Put Bootstrap at the absolute top of the entire list

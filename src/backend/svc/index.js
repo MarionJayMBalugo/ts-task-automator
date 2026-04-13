@@ -4,9 +4,11 @@
  */
 
 const SysSubSvcs = require('./sys/index.js');
+const UiSubSvcs = require('./ui/index.js');
 
 module.exports = {
     SetSvc:  require('./settings.svc.js'),
     ToolSvc: require('./tools.svc.js'),
-    ...SysSubSvcs
+    ...SysSubSvcs,
+    ...UiSubSvcs
 };

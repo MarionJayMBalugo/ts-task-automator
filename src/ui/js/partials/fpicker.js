@@ -12,7 +12,7 @@
  * and trigger a native OS dialog via our backend IPC Bridge.
  */
 
-import { API } from '../api.js';
+import { API } from '../core/api.js';
 
 const FilePckr = {
     /**
