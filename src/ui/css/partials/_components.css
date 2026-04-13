@@ -1,0 +1,142 @@
+/* --- ACTION CARDS --- */
+.action-card {
+    background: white; border: 1px solid var(--tms-border); 
+    border-radius: 0.75rem; /* 12px */
+    padding: 1.25rem; transition: all 0.2s ease; cursor: pointer; 
+    display: flex; align-items: center; gap: 0.75rem; 
+    position: relative; /* Required for z-index to work */
+    z-index: 1;         /* Keep them at base level normally */
+    gap: 1rem;
+}
+
+.action-card:hover { 
+    border-color: var(--tms-blue); 
+    transform: translateY(-0.125rem); /* -2px */
+    box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.05); /* 10px 15px -3px */
+    z-index: 10;        /* Pops the card to the front when hovered! */ 
+}
+
+/* --- ACTION CARD VARIANTS --- */
+
+/* 1. Accent Card (Used for System Hooks) */
+.action-card.card-accent {
+    background: var(--tms-sidebar);
+    border: none;
+}
+.action-card.card-accent .action-icon {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+.action-card.card-accent .action-label {
+    color: white;
+}
+
+/* 2. Dashed Card (Used for Placeholders/Adding items) */
+.action-card.card-dashed {
+    border-style: dashed;
+    background: transparent;
+    cursor: default;
+}
+.action-card.card-dashed .action-icon {
+    background: #f1f5f9;
+    color: #94a3b8;
+}
+.action-card.card-dashed .action-label {
+    color: #94a3b8;
+}
+
+/* Disable the hover "pop" effect for dashed cards since they are inactive */
+.action-card.card-dashed:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #94a3b8;
+}
+
+/* --- TOOLTIPS --- */
+.action-card::after {
+    content: attr(data-description); position: absolute; 
+    bottom: -2.1875rem; /* -35px */
+    left: 50%; transform: translateX(-50%);
+    background: #1e293b; color: white; 
+    padding: 0.25rem 0.625rem; /* 4px 10px */
+    border-radius: 0.25rem; /* 4px */
+    font-size: 0.7rem; 
+    white-space: nowrap; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 100;
+}
+.action-card:hover::after { opacity: 1; visibility: visible; }
+
+.action-icon {
+    width: 2.25rem; height: 2.25rem; /* 36px */
+    background: #eff6ff; color: var(--tms-blue);
+    border-radius: 0.5rem; /* 8px */
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.action-label { font-weight: 600; font-size: 0.85rem; color: var(--tms-text-main); }
+
+/* --- MISC UI TYPOGRAPHY --- */
+.path-strip { 
+    background: #fff; border: 1px solid var(--tms-border); 
+    border-radius: 0.625rem; /* 10px */
+    padding: 0.75rem 1rem; display: flex; align-items: center; gap: 1rem; 
+}
+.path-text { font-family: 'Consolas', monospace; font-size: 0.75rem; color: var(--tms-text-muted); flex-grow: 1; }
+.section-label { 
+    font-size: 0.65rem; text-transform: uppercase; 
+    letter-spacing: 0.09375rem; /* 1.5px */
+    color: #94a3b8; margin-bottom: 1rem; display: block; font-weight: 800; 
+}
+.version-tag { font-size: 0.7rem; color: #475569; display: block; }
+.env-status { font-size: 0.65rem; font-weight: 700; color: #10b981; }
+.btn-link-sm { font-size: 0.75rem; text-decoration: none; cursor: pointer; }
+
+/* Ensure long text doesn't break the layout */
+.info-value { word-break: break-word; line-height: 1.4; }
+.info-label { 
+    font-size: 0.7rem; letter-spacing: 0.05rem; 
+    margin-bottom: 0.125rem; /* 2px */
+}
+
+/* Adjust badges for tighter spaces */
+.badge { font-size: 0.7rem !important; font-weight: 700; }
+
+/* --- APP LOADER & PROGRESS BAR --- */
+.tms-loader-wrapper {
+    height: 60vh;
+}
+
+.tms-loader-text {
+    letter-spacing: 0.125rem; /* 2px */
+    font-size: 0.8rem;
+}
+
+.tms-loader-bar {
+    width: 12.5rem; height: 0.25rem; /* 200px width, 4px height */
+    background-color: #e2e8f0; 
+    border-radius: 0.25rem; /* 4px */
+    overflow: hidden; position: relative;
+}
+
+.tms-loader-progress {
+    width: 40%; height: 100%; background-color: #0d6efd; 
+    border-radius: 0.25rem; /* 4px */
+    position: absolute;
+    animation: sweep 1.2s ease-in-out infinite;
+}
+
+.heidi-install-card.disabled-state {
+    opacity: 0.5;
+    filter: grayscale(1);
+    cursor: not-allowed !important;
+    pointer-events: none; 
+    user-select: none;
+}
+
+/* Fix for dark mode loader bar background */
+[data-bs-theme="dark"] .tms-loader-bar {
+    background-color: #373b3e;
+}
+
+@keyframes sweep {
+    0% { left: -40%; }
+    100% { left: 100%; }
+}

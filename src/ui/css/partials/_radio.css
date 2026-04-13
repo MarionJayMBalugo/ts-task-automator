@@ -1,0 +1,46 @@
+/* =========================================
+   1. BASE STATES (Unselected)
+   ========================================= */
+.radio-crd {
+    background-color: var(--tms-bg);
+    border: 0.125rem solid var(--tms-border); /* 2px */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.radio-crd .form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 0.125rem solid var(--tms-text-muted); /* 2px */
+    background-color: white;
+    transition: inherit; /* Inherits the 0.2s from the card */
+    cursor: pointer;
+}
+
+/* =========================================
+   2. HOVER STATES (Only applies if NOT checked)
+   ========================================= */
+.radio-crd:hover:not(:has(input:checked)) {
+    border-color: color-mix(in srgb, var(--tms-border), var(--tms-blue) 40%);
+    background-color: color-mix(in srgb, var(--tms-bg), black 2%);
+}
+
+.radio-crd:hover:not(:has(input:checked)) .form-check-input {
+    border-color: var(--tms-blue);
+    /* Removed the inner background color change here. Just lighting up the border is cleaner! */
+}
+
+/* =========================================
+   3. SELECTED STATES
+   ========================================= */
+.radio-crd:has(input:checked) {
+    border-color: var(--tms-blue);
+    background-color: color-mix(in srgb, var(--tms-bg), var(--tms-blue) 8%);
+    box-shadow: 0 0 0 1px var(--tms-blue); /* Kept at 1px for crispness! */
+    color: var(--tms-text-main);
+}
+
+.radio-crd .form-check-input:checked {
+    background-color: var(--tms-blue);
+    border-color: var(--tms-blue);
+}

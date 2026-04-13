@@ -9,19 +9,23 @@
   "scripts": {
     "build:js": "node esbuild.config.js",
     "start": "npm run build:js && electron .",
-    "build": "npm run build:js && electron-builder --win"
+    "build": "npm run build:js && electron-builder --win",
+    "prepare": "husky && node ./node_modules/@balugoorg/git-convention/setup.js"
   },
   "imports": {
     "#src/*": "./src/*",
-    "#cnf/*": "./src/cnf/*",
-    "#svc/*": "./src/main/svc/*",
-    "#utils/*": "./src/utils/*"
+    "#cnf/*": "./src/backend/cnf/*",
+    "#svc/*": "./src/backend/svc/*",
+    "#utils/*": "./src/backend/utils/*"
   },
   "devDependencies": {
+    "@balugoorg/git-convention": "github:balugoOrg/git-convention#release/v1.0.8",
     "@electron/fuses": "^1.8.0",
+    "bootstrap": "^5.3.8",
     "electron": "^40.8.0",
     "electron-builder": "^26.8.1",
-    "esbuild": "^0.27.4"
+    "esbuild": "^0.27.4",
+    "husky": "^9.1.7"
   },
   "dependencies": {
     "electron-store": "^8.2.0"

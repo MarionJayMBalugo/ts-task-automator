@@ -1,0 +1,100 @@
+<div class="app-view">
+    <div class="d-flex justify-content-between align-items-start mb-5">
+        <div>
+            <h2 class="h4 fw-bold mb-1" i18n="install.title"></h2>
+            <p class="text-muted small" i18n="install.subtitle"></p>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label" i18n="install.sections.infra"></span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
+            
+            <div class="col">
+                <div class="action-card" 
+                     i18n-desc="install.btns.init.desc"
+                     data-action="open-modal"
+                     data-script="setup-folders.bat"
+                     data-title="__('msg.init', {target: 'Default Folders'})"
+                     data-desc="__('msg.setupFolderdesc')">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="20" height="20"><use href="#icon-folder"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.init.title"></div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="action-card card-accent" 
+                     i18n-desc="install.btns.env.desc"
+                     data-action="open-modal"
+                     data-script="sys-env-setup.bat"
+                     data-title="{{ __('setup', {name: 'System ENV'}) }}"
+                     data-desc="{{ __('install.winEnv.desc') }}">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
+                        <svg width="20" height="20"><use href="#icon-gear"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.env.title"></div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="action-card" 
+                    i18n-desc="install.btns.instTmsDos.desc"
+                    data-action="prompt-tmsdos-installer">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
+                        <svg width="20" height="20"><use href="#icon-gear"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.instTmsDos.title"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label" i18n="install.sections.db"></span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
+
+            <div class="col">
+                <div class="action-card heidi-install-card"
+                     i18n-desc="install.btns.instHeidi.desc"
+                     data-action="prompt-heidi-installer">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="20" height="20"><use href="#icon-gear"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.instHeidi.title"></div>
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="action-card" 
+                     i18n-desc="install.btns.createDb.desc"
+                     data-action="open-modal"
+                     data-script="create-database.bat"
+                     data-title="Create DBs"
+                     data-desc="This will run create-database.bat to initialize new database schemas.">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="20" height="20"><use href="#icon-plus"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.createDb.title"></div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="action-card" 
+                     i18n-desc="install.btns.createUser.desc"
+                     data-action="open-modal"
+                     data-script="create-db-user.bat"
+                     data-title="Create DB User"
+                     data-desc="This will run create-db-user.bat to generate credentials from your .env file.">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
+                        <svg width="20" height="20"><use href="#icon-user"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.createUser.title"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

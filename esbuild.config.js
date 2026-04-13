@@ -2,22 +2,59 @@ const esbuild = require('esbuild');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// 1. Clean the dist folder before building
+// =============================================================================
+// 1. CLEAN ENVIRONMENT
+// =============================================================================
 const distDir = path.join(__dirname, 'dist');
 if (fs.existsSync(distDir)) {
     fs.rmSync(distDir, { recursive: true, force: true });
 }
 fs.mkdirSync(distDir);
 
-/**
- * Safely minifies scripts by removing comments and crushing multiple empty newlines.
- * EXCLUDES .conf files from minification.
- */
-function minifyScripts(inputFolder, outputFolder) {
-    if (!fs.existsSync(outputFolder)) {
-        fs.mkdirSync(outputFolder, { recursive: true });
-    }
+// =============================================================================
+// --- UTILITY FUNCTIONS ---
+// =============================================================================
 
+function getFiles(dir, ext, fileList = []) {
+    if (!fs.existsSync(dir)) return fileList;
+    const files = fs.readdirSync(dir, { withFileTypes: true });
+
+    for (const file of files) {
+        const fullPath = path.join(dir, file.name);
+        if (file.isDirectory()) {
+            getFiles(fullPath, ext, fileList);
+        } else if (file.name.endsWith(ext)) {
+            fileList.push(fullPath);
+        }
+    }
+    return fileList;
+}
+
+function minifyHTML(dir) {
+    if (!fs.existsSync(dir)) return;
+    const files = fs.readdirSync(dir, { withFileTypes: true });
+
+    for (const file of files) {
+        const fullPath = path.join(dir, file.name);
+        
+        if (file.isDirectory()) {
+            minifyHTML(fullPath); 
+        } else if (file.name.endsWith('.html')) {
+            let content = fs.readFileSync(fullPath, 'utf8');
+
+            const commentPattern = new RegExp('<' + '!--[\\s\\S]*?--' + '>', 'g');
+            content = content.replace(commentPattern, '');
+            content = content.replace(/\r?\n|\r/g, ' ');
+            content = content.replace(/\s{2,}/g, ' ');
+            content = content.replace(/>\s+</g, '><');
+
+            fs.writeFileSync(fullPath, content.trim(), 'utf8');
+        }
+    }
+}
+
+function minifyScripts(inputFolder, outputFolder) {
+    if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder, { recursive: true });
     const files = fs.readdirSync(inputFolder, { withFileTypes: true });
 
     for (const file of files) {
@@ -29,13 +66,11 @@ function minifyScripts(inputFolder, outputFolder) {
         } else {
             let content = fs.readFileSync(inputPath, 'utf8');
 
-            // Skip minification entirely if it's a .conf file
             if (!file.name.endsWith('.conf')) {
                 const lines = content.split(/\r?\n/);
                 let processedLines = [];
                 let isModified = false;
 
-                // Rule 1: Batch Files (REM and ::)
                 if (file.name.endsWith('.bat') || file.name.endsWith('.cmd')) {
                     processedLines = lines.filter(line => {
                         const t = line.trim().toUpperCase();
@@ -43,109 +78,120 @@ function minifyScripts(inputFolder, outputFolder) {
                     });
                     isModified = true;
                 } 
-                // Rule 2: Env and PowerShell files (#)
                 else if (file.name.includes('.env') || file.name.endsWith('.ps1')) {
-                    processedLines = lines.filter(line => {
-                        return !line.trim().startsWith('#');
-                    });
+                    processedLines = lines.filter(line => !line.trim().startsWith('#'));
                     isModified = true;
                 }
 
                 if (isModified) {
-                    // Rejoin the remaining lines
-                    content = processedLines.join('\r\n');
-                    
-                    // Rule 3: Crush 2 or more consecutive newlines into exactly 1 newline
-                    content = content.replace(/(?:\r?\n){2,}/g, '\r\n');
-                    
-                    // Trim any lingering whitespace at the very start or end of the file
-                    content = content.trim();
+                    content = processedLines.join('\r\n').replace(/(?:\r?\n){2,}/g, '\r\n').trim();
                 }
             }
-
-            // Write the file (either the minified version or the raw .conf version)
             fs.writeFileSync(outputPath, content, 'utf8');
         }
     }
 }
 
+// =============================================================================
+// --- MAIN BUILD EXECUTION ---
+// =============================================================================
+
 async function build() {
-    console.log('🚀 Starting esbuild...');
+    console.log('🚀 Starting Pulse Build Engine...');
 
-    // 2. Bundle Main Process (Backend)
-    await esbuild.build({
-        entryPoints: ['src/main/main.js'],
-        bundle: true,
-        platform: 'node',
-        target: 'node18',
-        external: ['electron'], 
-        outfile: 'dist/main.js',
-        minify: true,
-    });
+    const commonOpts = { bundle: true, platform: 'node', target: 'node18', external: ['electron'], minify: true, sourcemap: false };
 
-    // 3. Bundle Preload Script
-    await esbuild.build({
-        entryPoints: ['src/preload/preload.js'],
-        bundle: true,
-        platform: 'node',
-        external: ['electron'],
-        outfile: 'dist/preload.js',
-        minify: true,
-    });
+    // 2. Bundle Main Process & Preload
+    await esbuild.build({ ...commonOpts, entryPoints: ['src/backend/main.js'], outfile: 'dist/main.js' });
+    await esbuild.build({ ...commonOpts, entryPoints: ['src/preload/preload.js'], outfile: 'dist/preload.js' });
 
-    // 4. Copy Static Assets (HTML, Vendor Bootstrap CSS/JS) FIRST
-    console.log('📂 Copying static assets...');
+    // 3. Copy Static Assets (HTML views, images) FIRST
+    console.log('📂 Syncing static assets...');
     fs.cpSync('src/ui', 'dist/ui', { recursive: true });
     fs.cpSync('src/assets', 'dist/assets', { recursive: true });
     
-    // Process Resources (Custom Minifier)
+    // 4. Minify HTML files in the dist folder
+    console.log('🗜️ Compressing HTML views...');
+    minifyHTML(path.join(__dirname, 'dist', 'ui'));
+
+    // 5. Minify Resources (Batch/Env)
     console.log('⚙️ Minifying Shell Scripts & Envs...');
     minifyScripts(path.join(__dirname, 'resources'), path.join(__dirname, 'dist', 'resources'));
 
-    // 5. Bundle UI JavaScript
-    console.log('📦 Bundling UI JavaScript...');
-    const uiJsDir = path.join(__dirname, 'src/ui/js');
-    const uiJsFiles = fs.readdirSync(uiJsDir)
-        .filter(file => file.endsWith('.js'))
-        .map(file => path.join('src/ui/js', file));
+    // 6. Bundle UI JavaScript
+    console.log('📦 Bundling UI Modules into ONE file...');
+    
+    // Clean up the raw JS files that were copied over in Step 3 so they don't bloat the dist folder
+    fs.rmSync(path.join(__dirname, 'dist/ui/js'), { recursive: true, force: true });
 
-    if (fs.existsSync(path.join(__dirname, 'src/ui/text.js'))) {
-        uiJsFiles.push('src/ui/text.js');
-    }
-
+    // Bundle the master controller (app.js) into a single file
     await esbuild.build({
-        entryPoints: uiJsFiles,
-        outdir: 'dist',
-        outbase: 'src',
+        entryPoints: ['src/ui/js/core/app.js'],
+        bundle: true,          // Merge all imports!
+        outfile: 'dist/ui/js/core/app.js',
         platform: 'browser',
-        allowOverwrite: true,
         minify: true,
+        sourcemap: false,
     });
 
-    // 6. Bundle Custom App CSS
-    console.log('🎨 Minifying Custom App CSS...');
-    const appCssDir = path.join(__dirname, 'src/assets/css/app');
-    let cssFilesToMinify = [];
-    
-    if (fs.existsSync(appCssDir)) {
-        cssFilesToMinify = fs.readdirSync(appCssDir)
-            .filter(file => file.endsWith('.css'))
-            .map(file => path.join('src/assets/css/app', file));
-    }
-
-    if (fs.existsSync(path.join(__dirname, 'src/ui/style.css'))) {
-        cssFilesToMinify.push('src/ui/style.css');
-    }
-
-    if (cssFilesToMinify.length > 0) {
+    // CHECK THE SOURCE FOLDER, NOT THE DIST FOLDER!
+    const textJsSource = path.join(__dirname, 'src/ui/js/lang/text.js');
+    if (fs.existsSync(textJsSource)) {
         await esbuild.build({
-            entryPoints: cssFilesToMinify,
-            outdir: 'dist',
-            outbase: 'src',
-            allowOverwrite: true, 
+            entryPoints: [textJsSource],
+            outfile: 'dist/ui/js/lang/text.js', // Output to the clean dist folder
             minify: true,
+            sourcemap: false,
         });
+    } else {
+        console.warn('⚠️ Warning: Could not find src/ui/js/lang/text.js');
     }
+
+    // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file
+    console.log('🎨 Bundling Bootstrap and Custom CSS into one file...');
+    
+    // Gather all custom CSS files (Using new UI path!)
+    const cssFilesToMinify = getFiles(path.join(__dirname, 'src/ui/css/app'), '.css');
+    
+    // Add custom style.css to the front of our custom list
+    if (fs.existsSync(path.join(__dirname, 'src/ui/css/bundle.css'))) {
+        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/css/bundle.css')); 
+    }
+    
+    // Put Bootstrap at the absolute top of the entire list
+    const bootstrapPath = path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css');
+    if (fs.existsSync(bootstrapPath)) {
+        cssFilesToMinify.unshift(bootstrapPath);
+    } else {
+        console.warn('⚠️ Warning: Bootstrap CSS not found in node_modules.');
+    }
+
+    // Create a temporary CSS file that @imports everything
+    const tempCssPath = path.join(__dirname, 'src/ui/master-temp.css');
+    const masterCssContent = cssFilesToMinify
+        .map(file => `@import "${file.replace(/\\/g, '/')}";`)
+        .join('\n');
+    
+    fs.writeFileSync(tempCssPath, masterCssContent);
+
+    // Bundle it all into one final file
+    await esbuild.build({
+        entryPoints: [tempCssPath],
+        outfile: 'dist/ui/style.bundle.css', // The final output file name
+        bundle: true, 
+        minify: true,
+        sourcemap: false,
+    });
+
+    // Clean up the temporary file and leftover unbundled CSS directories
+    if (fs.existsSync(tempCssPath)) fs.unlinkSync(tempCssPath);
+    
+    // Safely delete the unbundled CSS folders from the dist folder to keep the app size small!
+    const distUiCssFolder = path.join(__dirname, 'dist/ui/css');
+    const distAssetsCssFolder = path.join(__dirname, 'dist/assets/css');
+    
+    if (fs.existsSync(distUiCssFolder)) fs.rmSync(distUiCssFolder, { recursive: true, force: true });
+    if (fs.existsSync(distAssetsCssFolder)) fs.rmSync(distAssetsCssFolder, { recursive: true, force: true });
 
     console.log('✅ Build complete! App is ready in /dist');
 }

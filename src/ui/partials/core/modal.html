@@ -1,0 +1,15 @@
+<div id="modal-overlay" class="modal-backdrop" style="display: none;">
+    <div class="tms-modal">
+        <h3 id="modal-title" class="tms-modal-title"></h3>
+        <p id="modal-body" class="tms-modal-body"></p>
+        
+        <div id="modal-dynamic-content" class="mb-4 text-start" style="display: none;"></div>
+        
+        <div class="d-flex gap-2">
+            <button onclick="closeModal()" class="btn btn-light flex-grow-1 fw-bold text-muted tms-modal-btn" i18n="field.cancel"></button>
+            
+            <button id="modal-prev-btn" class="btn btn-outline-primary flex-grow-1 fw-bold tms-modal-btn" style="display: none;">Previous</button>
+            <button id="modal-confirm-btn" class="btn btn-primary flex-grow-1 fw-bold tms-modal-btn" i18n="field.execute"></button>
+        </div>
+    </div>
+</div>

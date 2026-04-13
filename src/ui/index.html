@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <title i18n="app.title"></title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.bundle.css">
 </head>
 <body>
 
@@ -17,7 +17,7 @@
             <img src="../assets/logo.png" alt="Logo" width="28" height="28" class="me-2" style="object-fit: contain;">
             <span><span i18n="app.titlesubone"></span> <span class="text-primary" i18n="app.titlesubtwo"></span></span>
         </div>
-        <button id="sidebar-toggle" class="btn btn-sm text-white border-0 p-0" onclick="UI.toggleSidebar()">
+        <button id="sidebar-toggle" class="btn btn-sm text-white border-0 p-0" data-action="toggle-sidebar">
             <div class="hamburger-icon" id="hamburger-icon">
                 <span></span>
                 <span></span>
@@ -26,22 +26,22 @@
         </button>
     </div>
 
-    <a href="#" id="nav-dashboard" class="nav-link active" onclick="App.loadTab('dashboard')">
+    <a href="#" id="nav-dashboard" class="nav-link active" data-action="navigate" data-view="dashboard/template">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-folder"></use></svg></span>
         <span class="nav-text" i18n="sidebar.dashboard"></span>
     </a>
 
-    <a href="#" id="nav-server-validation" class="nav-link" onclick="App.loadTab('server-validation')">
+    <a href="#" id="nav-server-validation" class="nav-link" data-action="navigate" data-view="server-validation/template">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-shield"></use></svg></span>
         <span class="nav-text" i18n="sidebar.servervalidation"></span>
     </a>
     
-    <a href="#" id="nav-server-installation" class="nav-link" onclick="App.loadTab('server-installation')">
+    <a href="#" id="nav-server-installation" class="nav-link" data-action="navigate" data-view="server-installation/template">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-package"></use></svg></span>
         <span class="nav-text" i18n="sidebar.serverinstall"></span>
     </a>
     
-    <a href="#" id="nav-settings" class="nav-link" onclick="App.loadTab('settings')">
+    <a href="#" id="nav-settings" class="nav-link" data-action="navigate" data-view="settings/template">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-gear"></use></svg></span>
         <span class="nav-text" i18n="sidebar.settings"></span>
     </a>
@@ -61,7 +61,7 @@
         </div>
     </div>
 </div>
-<script src="text.js"></script>
-<script type="module" src="./js/app.js"></script>
+<script src="./js/lang/text.js"></script>
+<script type="module" src="./js/core/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# The path to the temporary file containing the commit message
+COMMIT_MSG_FILE="$1"
+
+# Exit if the file does not exist
+test -f "$COMMIT_MSG_FILE" || exit 1
+
+# Read the commit message into a variable
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Check if the commit message begins with "Merge".
+# If it does, exit successfully (code 0) without further checks.
+# The `-q` flag for grep suppresses output.
+if echo "$COMMIT_MSG" | grep -qE "^Merge "; then
+  exit 0
+fi
+
+# The original format validation check.
+# This will only run if the commit is NOT a merge commit.
+if ! echo "$COMMIT_MSG" | grep -qE "^\[(ADD|FEAT|FIX|UPDATE|DELETE|REF)\]\s?:\s?.+"; then
+  echo "❌ ERROR: Commit message format is incorrect."
+  echo ""
+  echo "Expected format: [TYPE] : message"
+  echo "Example: [ADD] : Add new login feature"
+  echo "Valid TYPES : ADD, UPDATE, DELETE, FEAT, FIX, REF"
+  exit 1
+fi
