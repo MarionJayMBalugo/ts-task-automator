@@ -1,6 +1,38 @@
 @echo off
+setlocal enabledelayedexpansion
 
-set "targetDir=%~1"
+:: 1. Capture the input path
+set "rawPath=%~1"
+
+:: 2. Check if the base path even exists
+if not exist "%rawPath%" (
+    echo [ERROR] The selected path does not exist: "%rawPath%"
+    pause
+    exit /b
+)
+
+:: 3. Check if the path already ends with \HeidiSQL
+:: We use a temporary variable to check the last 8 characters
+set "endPart=%rawPath:~-8%"
+if /i "%endPart%"=="HeidiSQL" (
+    set "targetDir=%rawPath%"
+) else (
+    set "targetDir=%rawPath%\HeidiSQL"
+)
+
+:: 4. If the HeidiSQL folder doesn't exist, create it
+if not exist "%targetDir%\" (
+    echo Creating HeidiSQL folder at: "%targetDir%"
+    mkdir "%targetDir%"
+    if !ERRORLEVEL! NEQ 0 (
+        echo [ERROR] Failed to create directory. Check permissions.
+        pause
+        exit /b
+    )
+) else (
+    echo HeidiSQL folder found.
+)
+
 set "outfile=%~dp0Heidi_Setup.exe"
 echo Fetching latest HeidiSQL version from GitHub...
 
@@ -30,7 +62,7 @@ if not exist "%outfile%" (
     exit /b
 )
 
-echo Starting Installation...
+echo Starting Installation to: %targetDir%
 :: Run the installer
 start /wait "" "%~dp0Heidi_Setup.exe" /SILENT /DIR="%targetDir%"
 if %ERRORLEVEL% EQU 0 (

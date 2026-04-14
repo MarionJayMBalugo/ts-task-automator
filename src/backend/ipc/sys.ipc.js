@@ -87,9 +87,9 @@ module.exports = function setSysIPC(ipcMain, app) {
      * @returns {Promise<string|null>} Found absolute file pth or null.
      */
     ipcMain.on('run-heidi-install', (event, targetPath) => {
-        const scriptPath = path.join(__dirname, 'resources/install-heidi.bat');
-        exec(`start cmd /c "${scriptPath}"`, { targetPath }, (error, stdout, stderr) => {
-            if (error) return;
+        const scriptPath = path.resolve(app.getAppPath(), 'resources/install-heidi.bat');
+        exec(`start cmd /c ""${scriptPath}" "${targetPath}""`, (error, stdout, stderr) => {
+            if (error) return;  
             event.sender.send('heidi-inst-done');
         });
     });
