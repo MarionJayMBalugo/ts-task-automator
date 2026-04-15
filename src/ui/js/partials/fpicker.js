@@ -48,6 +48,10 @@ const FilePckr = {
                 // We only update the UI if they actually picked a file.
                 if (filePath) {
                     visblInpt.value = filePath; // Boom! The true Absolute path (C:\...)
+
+                    // Trigger events so the Modal UI recognizes the value update
+                    visblInpt.dispatchEvent(new Event('input', { bubbles: true }));
+                    visblInpt.dispatchEvent(new Event('change', { bubbles: true }));
                     
                     // Clear any red validation borders now that they have satisfied the requirement
                     visblInpt.classList.remove('is-invalid'); 

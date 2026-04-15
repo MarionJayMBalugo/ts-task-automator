@@ -29,7 +29,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         copyScripts: () => ipcRenderer.invoke('copy-scripts'),
         getTmsdInst: () => ipcRenderer.invoke('get-tmsdos-installer'),
         openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
-        instHeidi: () => ipcRenderer.send('run-heidi-install'),
+        instHeidi: (path) => ipcRenderer.send('run-heidi-install', path),
         checkHeidiInstalled: () => ipcRenderer.invoke('check-heidi-installed'),
         on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(...args)),
 
