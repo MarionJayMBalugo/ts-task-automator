@@ -2,7 +2,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const fsP = require('node:fs/promises');
 
-const { APP_CNF } = require('#cnf/index.js');
+const { APP_CNF } = require('#cnf');
 
 /**
  * =============================================================================

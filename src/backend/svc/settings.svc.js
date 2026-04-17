@@ -3,7 +3,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 
 // 1. Use your clean barrel import!
-const { APP_CNF } = require('#cnf/index.js'); 
+const { APP_CNF } = require('#cnf'); 
 
 const settingsPath = path.join(app.getPath('userData'), 'settings.json');
 

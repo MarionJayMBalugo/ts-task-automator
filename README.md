@@ -105,7 +105,7 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 
 | Term | Shorthand | Context / Example |
 | :--- | :--- | :--- |
-| **Configuration** | `cnf` | `#cnf/index.js`, `APP_CNF` |
+| **Configuration** | `cnf` | `#cnf`, `APP_CNF` |
 | **Directory** | `dir` | `uiDir`, `TMS_DIR` |
 | **Folder** | `Fldr` | `resourcesFldr` |
 | **Location** | `loc` | `customScriptLoc` |

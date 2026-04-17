@@ -8,11 +8,11 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import { API } from './api.js';
 import { I18n } from './i18n.js';
-import { PARTIALS, VIEWS } from '../cnf/index.js';
+import { PARTIALS, VIEWS } from '../cnf';
 import { Template } from './template.js';
 
 // DYNAMIC DOMAIN IMPORTS
-import { Shell, Status, Flows, Notify } from '../modules/index.js';
+import { Shell, Status, Flows, Notify } from '../modules';
 
 // THE NEW COMPONENT REGISTRY
 import { ActionMap } from './actions.js';

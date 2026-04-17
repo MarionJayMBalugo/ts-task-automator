@@ -10,8 +10,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 // 1. Core Config & IPC Routers
-const { APP_CNF } = require('#cnf/index.js'); // Centralized from the barrel file
-const setupIPC = require('./ipc/index.js');  // Bootstrapper for all IPC listeners
+const { APP_CNF } = require('#cnf'); // Centralized from the barrel file
+const setupIPC = require('./ipc');  // Bootstrapper for all IPC listeners
 
 /**
  * Set the Application User Model ID for Windows Taskbar/Notifications.

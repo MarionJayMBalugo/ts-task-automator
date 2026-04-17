@@ -15,8 +15,11 @@
   "imports": {
     "#src/*": "./src/*",
     "#cnf/*": "./src/backend/cnf/*",
+    "#cnf": "./src/backend/cnf/index.js",
     "#svc/*": "./src/backend/svc/*",
-    "#utils/*": "./src/backend/utils/*"
+    "#svc": "./src/backend/svc/index.js",
+    "#utils/*": "./src/backend/utils/*",
+    "#utils": "./src/backend/utils/index.js"
   },
   "devDependencies": {
     "@balugoorg/git-convention": "github:balugoOrg/git-convention#release/v1.0.8",

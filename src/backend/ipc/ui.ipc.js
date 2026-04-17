@@ -4,7 +4,7 @@
  * =============================================================================
  * Handles requests specific to the user interface, like view loading and versions.
  */
-const { ViewSvc } = require('#svc/index.js');
+const { ViewSvc } = require('#svc');
 
 module.exports = function setUiIPC(ipcMain, app) {
     

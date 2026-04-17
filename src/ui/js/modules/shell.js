@@ -11,8 +11,8 @@ import { API } from '../core/api.js';
 import { I18n } from '../core/i18n.js';
 import { ModalSvc } from '../partials/modal.js';
 import { Template } from '../core/template.js';
-import { TAB_CONFIG, VIEW_ROOT } from '../cnf/index.js';
-import { ComponentRegistry } from '../../views/index.js';
+import { TAB_CONFIG, VIEW_ROOT } from '../cnf';
+import { ComponentRegistry } from '../../views';
 import { Validate } from './validate.js';
 
 export const Shell = {

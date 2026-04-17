@@ -9,8 +9,8 @@
 const os = require('node:os');
 
 // Imports
-const { APP_CNF, NET_CNF, APP_SCAN } = require('#cnf/index.js');
-const { SysUtil } = require('#utils/index.js');
+const { APP_CNF, NET_CNF, APP_SCAN } = require('#cnf');
+const { SysUtil } = require('#utils');
 
 // Domain Services (Direct imports to avoid circular dependency loops on boot)
 const SetSvc = require('../settings.svc.js'); 

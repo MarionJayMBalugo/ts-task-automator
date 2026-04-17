@@ -8,7 +8,7 @@
  * * WHY: Keeping this file thin prevents "God Object" anti-patterns.
  */
 
-const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc/index.js');
+const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc');
 const path = require('node:path');
 const { exec } = require('child_process');
 

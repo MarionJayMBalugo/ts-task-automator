@@ -10,7 +10,6 @@
 
 import { API } from '../core/api.js';
 import { ModalSvc } from '../partials/modal.js';
-import { FilePckr } from '../partials/index.js';
 
 export const Flows = {
     // =========================================================================
