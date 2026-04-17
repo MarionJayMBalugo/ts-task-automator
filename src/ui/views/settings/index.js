@@ -5,9 +5,7 @@
 export const SettingsComponent = {
     _listeners: [],
 
-    mount(containerEl) {
-        console.log("[SettingsComponent] Mounted");
-
+    mount: (containerEl) => {
         // 1. Separate our interactive elements by their type
         const buttons = containerEl.querySelectorAll('button[data-action]');
         const inputs = containerEl.querySelectorAll('input[data-action], select[data-action]');
@@ -42,20 +40,19 @@ export const SettingsComponent = {
         // 4. Attach listeners and store them for memory cleanup
         buttons.forEach(btn => {
             btn.addEventListener('click', handleClick);
-            this._listeners.push({ el: btn, type: 'click', fn: handleClick });
+            SettingsComponent._listeners.push({ el: btn, type: 'click', fn: handleClick });
         });
 
         inputs.forEach(input => {
             input.addEventListener('change', handleChange);
-            this._listeners.push({ el: input, type: 'change', fn: handleChange });
+            SettingsComponent._listeners.push({ el: input, type: 'change', fn: handleChange });
         });
     },
 
-    unmount() {
-        console.log("[SettingsComponent] Unmounting and cleaning up...");
-        this._listeners.forEach(({ el, type, fn }) => {
+    unmount: () => {
+        SettingsComponent._listeners.forEach(({ el, type, fn }) => {
             el.removeEventListener(type, fn);
         });
-        this._listeners = [];
+        SettingsComponent._listeners = [];
     }
 };

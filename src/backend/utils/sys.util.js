@@ -1,5 +1,5 @@
 const path = require('node:path');
-const { APP_CNF } = require('#cnf/index.js');
+const { APP_CNF } = require('#cnf');
 
 /**
  * SYSTEM UTILITIES (SysUtil)

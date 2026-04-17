@@ -1,4 +1,4 @@
-import { Shell } from '../modules/index.js';
+import { Shell } from '../modules';
 
 /**
  * GLOBAL ACTION MAP

@@ -1,13 +1,11 @@
-export const DashboardComponent = {
+export const dashbrdVw = {
     // Array to store event listeners for memory cleanup
     _listeners: [],
 
     /**
      * Called by App.loadTab immediately after the dashboard HTML is injected
      */
-    mount(containerEl) {
-        console.log("[DashboardComponent] Mounted");
-
+    mount: (containerEl) => {
         // 1. Grab the specific buttons inside the dashboard
         const refreshBtn = containerEl.querySelector('[data-action="run-validation"]');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
@@ -29,27 +27,25 @@ export const DashboardComponent = {
         // 3. Attach listeners and store them so we can delete them later
         if (refreshBtn) {
             refreshBtn.addEventListener('click', handleRefresh);
-            this._listeners.push({ el: refreshBtn, type: 'click', fn: handleRefresh });
+            dashbrdVw._listeners.push({ el: refreshBtn, type: 'click', fn: handleRefresh });
         }
 
         toolBtns.forEach(btn => {
             btn.addEventListener('click', handleToolOpen);
-            this._listeners.push({ el: btn, type: 'click', fn: handleToolOpen });
+            dashbrdVw._listeners.push({ el: btn, type: 'click', fn: handleToolOpen });
         });
     },
 
     /**
      * Called by App.loadTab right before switching away from the dashboard
      */
-    unmount() {
-        console.log("[DashboardComponent] Unmounting and cleaning up listeners...");
-        
+    unmount: () => {
         // Remove every listener we attached to prevent ghost clicks
-        this._listeners.forEach(({ el, type, fn }) => {
+        dashbrdVw._listeners.forEach(({ el, type, fn }) => {
             el.removeEventListener(type, fn);
         });
         
         // Clear the array
-        this._listeners = [];
+        dashbrdVw._listeners = [];
     }
 };

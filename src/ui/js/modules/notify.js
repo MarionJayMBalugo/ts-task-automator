@@ -15,7 +15,7 @@ export const Notify = {
      * * @param {string} message - The text to display.
      * @param {boolean} isError - If true, paints the toast red. If false, green.
      */
-    showAlert(message, isError = false) {
+    showAlert: (message, isError = false) => {
         // 1. Create the Element Dynamically
         // WHY DYNAMIC?: Creating it via JS means we don't have to keep a hidden, 
         // empty <div id="toast"> cluttering up our index.html all the time.

@@ -11,9 +11,10 @@
 const os = require('node:os');
 const path = require('node:path');
 const fs = require('node:fs');
+const { exec } = require('child_process');
 
 const { dialog } = require('electron');
-const { FsUtil } = require('#utils/index.js');
+const { FsUtil } = require('#utils');
 const { DF_DRV, TMS_TOOLS, TMS_DOS } = require('#cnf/const.js');    // System-wide default drv constant (usually 'E')
 
 // Direct import to avoid circular dependency issues when the app first boots.
@@ -122,6 +123,15 @@ const AppSvc = {
         
         // Return null if the user clicked the 'X' or 'Cancel', otherwise return the string.
         return canceled ? null : filePaths[0];
+    },
+
+    chckAppInstalld: async (_, name) => {
+        return new Promise((resolve) => {
+            const cmd = `reg query "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" /s /f "${name}"`;
+            exec(cmd, (err, stdout) => {
+                resolve(!!(stdout && stdout.includes(name)));
+            });
+        });
     }
 }
 

@@ -1,32 +1,32 @@
 <div class="app-view">
     <div class="d-flex justify-content-between align-items-start mb-5">
         <div>
-            <h2 class="h4 fw-bold mb-1" i18n="install.title"></h2>
-            <p class="text-muted small" i18n="install.subtitle"></p>
+            <h2 class="h4 fw-bold mb-1">{{ __('install.title') }}</h2>
+            <p class="text-muted small">{{ __('install.subtitle') }}</p>
         </div>
     </div>
 
     <div class="mb-5">
-        <span class="section-label" i18n="install.sections.infra"></span>
+        <span class="section-label">{{ __('install.sections.infra') }}</span>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             
             <div class="col">
                 <div class="action-card" 
-                     i18n-desc="install.btns.init.desc"
+                     data-description="{{ __('install.btns.init.desc') }}"
                      data-action="open-modal"
                      data-script="setup-folders.bat"
-                     data-title="__('msg.init', {target: 'Default Folders'})"
-                     data-desc="__('msg.setupFolderdesc')">
+                     data-title="{{ __('msg.init', {target: 'Default Folders'}) }}"
+                     data-desc="{{ __('msg.setupFolderdesc') }}">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
-                    <div class="action-label" i18n="install.btns.init.title"></div>
+                    <div class="action-label">{{ __('install.btns.init.title') }}</div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="action-card card-accent" 
-                     i18n-desc="install.btns.env.desc"
+                     data-description="{{ __('install.btns.env.desc') }}"
                      data-action="open-modal"
                      data-script="sys-env-setup.bat"
                      data-title="{{ __('setup', {name: 'System ENV'}) }}"
@@ -34,42 +34,40 @@
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
-                    <div class="action-label" i18n="install.btns.env.title"></div>
+                    <div class="action-label">{{ __('install.btns.env.title') }}</div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="action-card" 
-                    i18n-desc="install.btns.instTmsDos.desc"
-                    data-action="prompt-tmsdos-installer">
+                     data-description="{{ __('install.btns.instTmsDos.desc') }}"
+                     data-action="prompt-tmsdos-installer">
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
-                    <div class="action-label" i18n="install.btns.instTmsDos.title"></div>
+                    <div class="action-label">{{ __('install.btns.instTmsDos.title') }}</div>
                 </div>
             </div>
 
-        </div>
-    </div>
-
-    <div class="mb-5">
-        <span class="section-label" i18n="install.sections.db"></span>
-        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
-
-            <div class="col">
+             <div class="col">
                 <div class="action-card heidi-install-card"
-                     i18n-desc="install.btns.instHeidi.desc"
+                     data-description="{{ __('install.btns.instHeidi.desc') }}"
                      data-action="prompt-heidi-installer">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
-                    <div class="action-label" i18n="install.btns.instHeidi.title"></div>
+                    <div class="action-label">{{ __('install.btns.instHeidi.title') }}</div>
                 </div>
             </div>
-            
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label">{{ __('install.sections.db') }}</span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
                 <div class="action-card" 
-                     i18n-desc="install.btns.createDb.desc"
+                     data-description="{{ __('install.btns.createDb.desc') }}"
                      data-action="open-modal"
                      data-script="create-database.bat"
                      data-title="Create DBs"
@@ -77,13 +75,13 @@
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-plus"></use></svg>
                     </div>
-                    <div class="action-label" i18n="install.btns.createDb.title"></div>
+                    <div class="action-label">{{ __('install.btns.createDb.title') }}</div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="action-card" 
-                     i18n-desc="install.btns.createUser.desc"
+                     data-description="{{ __('install.btns.createUser.desc') }}"
                      data-action="open-modal"
                      data-script="create-db-user.bat"
                      data-title="Create DB User"
@@ -91,7 +89,7 @@
                     <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
                         <svg width="20" height="20"><use href="#icon-user"></use></svg>
                     </div>
-                    <div class="action-label" i18n="install.btns.createUser.title"></div>
+                    <div class="action-label">{{ __('install.btns.createUser.title') }}</div>
                 </div>
             </div>
 

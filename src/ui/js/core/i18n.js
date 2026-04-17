@@ -21,7 +21,7 @@ export const I18n = {
      * * WHY IT MATTERS: This is called every time a new Tab or Component loads 
      * (via Shell.switchTab) to ensure the newly injected HTML gets translated.
      */
-    apply() {
+    apply: () => {
         // 1. Standard Text Replacement (e.g., <span i18n="btns.save"></span>)
         document.querySelectorAll('[i18n]').forEach(el => {
             const rawText = I18n.getVal(el.getAttribute('i18n'));
@@ -58,7 +58,7 @@ export const I18n = {
      * * @param {string} path - The dictionary key (e.g., 'dashboard.title')
      * @returns {string|null} The raw, un-interpolated string.
      */
-    getVal(path) {
+    getVal: (path) => {
         // 'i18n' is assumed to be a globally loaded variable from text.js
         if (typeof i18n === 'undefined') return console.warn("i18n dictionary missing");
         
@@ -78,7 +78,7 @@ export const I18n = {
      * @param {Object} dataset - The data to inject (e.g., { name: 'Admin' })
      * @returns {string|null} The formatted string.
      */
-    interpolate(text, dataset) {
+    interpolate: (text, dataset) => {
         if (!text) return null;
         
         // Looks for anything inside { } brackets.
@@ -98,7 +98,7 @@ export const I18n = {
      * * WHY IT MATTERS: This is the exact function that is bound to the `window.__()` 
      * shortcut in app.js, which allows the template engine to parse `{{ __('key') }}`!
      */
-    getText(key, dataset = []) {
+    getText: (key, dataset = []) => {
         return I18n.interpolate(I18n.getVal(key), dataset);
     }
 };

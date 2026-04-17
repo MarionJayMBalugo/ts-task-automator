@@ -16,8 +16,8 @@ const execAsync = util.promisify(require('node:child_process').exec);
 
 // Context & Utils
 const SetSvc = require('../settings.svc.js'); // Direct import to avoid circular dependency
-const { SysUtil } = require('#utils/index.js');
-const { APP_CNF, MSG, CMD_OPTS } = require('#cnf/index.js');
+const { SysUtil } = require('#utils');
+const { APP_CNF, MSG, CMD_OPTS } = require('#cnf');
 
 const ExecSvc = {
     // =========================================================================

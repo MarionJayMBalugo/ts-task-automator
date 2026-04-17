@@ -2,7 +2,9 @@ const i18n = {
     en: {
         field: {
             cancel: "Cancel",
-            execute: "Execute Task"
+            execute: "Execute Task",
+            next: "Next",
+            prev: "Previous"
         },
         app: {
             title: "TMS Pulse",

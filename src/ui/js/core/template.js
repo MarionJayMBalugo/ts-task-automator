@@ -21,13 +21,13 @@ export const Template = {
      * * @param {string} url - The path to the HTML file (e.g., 'views/modal.html').
      * @param {Object} data - The data object to inject (e.g., { id: 'btn-1' }).
      */
-    async load(url, data = {}) {
+    load: async (url, data = {}) => {
         // 1. Fetch and Cache the HTML
-        if (!this.cache[url]) {
+        if (!Template.cache[url]) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Not found');
-                this.cache[url] = await response.text();
+                Template.cache[url] = await response.text();
             } catch (err) {
                 console.error(`Failed to load template: ${url}`);
                 // Graceful failure: Instead of crashing the app, show a red error block in the UI.
@@ -36,7 +36,7 @@ export const Template = {
         }
         
         // 2. Send the fetched HTML through our standalone parser
-        return this.parse(this.cache[url], data);
+        return Template.parse(Template.cache[url], data);
     },
 
     // =========================================================================
@@ -49,7 +49,7 @@ export const Template = {
      * *any* HTML string through it (like when app.js loads main views), not just 
      * files fetched specifically through Template.load().
      */
-    parse(html, data = {}) {
+    parse: (html, data = {}) => {
         
         // 1. THE UNIFIED PARSER: Catches EVERYTHING inside {{ ... }} brackets.
         // /{{\s*([\s\S]+?)\s*}}/g  -> Looks for {{, then captures any character (even newlines), then }}

@@ -8,11 +8,11 @@
  * * WHY: Keeping this file thin prevents "God Object" anti-patterns.
  */
 
-const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc/index.js');
+const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc');
 const path = require('node:path');
 const { exec } = require('child_process');
 
-module.exports = function setSysIPC(ipcMain, app) {
+module.exports = (ipcMain, app) => {
 
     // =========================================================================
     // --- SCRIPTS & EXECUTION (Routed to ExecSvc) ---
@@ -109,6 +109,8 @@ module.exports = function setSysIPC(ipcMain, app) {
             });
         });
     });
+
+    ipcMain.handle('chck-app-installd', async (_, name) => await AppSvc.chckAppInstalld(_, name));
 
     /**
      * [DIALOG] Open File Picker

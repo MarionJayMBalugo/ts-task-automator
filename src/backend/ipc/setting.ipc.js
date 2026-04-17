@@ -4,10 +4,10 @@
  * =============================================================================
  * Acts strictly as a router for reading/writing user preferences.
  */
-const { SetSvc } = require('#svc/index.js');
-const { MSG } = require('#cnf/index.js');
+const { SetSvc } = require('#svc');
+const { MSG } = require('#cnf');
 
-module.exports = function setCfgIPC(ipcMain) {
+module.exports = (ipcMain) => {
     // Reads the entire settings object
     ipcMain.handle('get-settings', () => SetSvc.get());
 

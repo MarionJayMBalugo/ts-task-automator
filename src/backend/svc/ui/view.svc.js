@@ -1,5 +1,5 @@
-const { FsUtil } = require('#utils/index.js');
-const { APP_CNF } = require('#cnf/index.js');
+const { FsUtil } = require('#utils');
+const { APP_CNF } = require('#cnf');
 
 const ViewSvc = {
     loadHtml: (htmlPath) => FsUtil.readHtml(FsUtil.join(APP_CNF.uiDir, `${htmlPath}.html`))
