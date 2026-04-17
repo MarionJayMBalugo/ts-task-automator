@@ -122,6 +122,15 @@ const AppSvc = {
         
         // Return null if the user clicked the 'X' or 'Cancel', otherwise return the string.
         return canceled ? null : filePaths[0];
+    },
+
+    chckAppInstalld: async (_, name) => {
+        return new Promise((resolve) => {
+            const cmd = `reg query "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" /s /f "${name}"`;
+            exec(cmd, (err, stdout) => {
+                resolve(!!(stdout && stdout.includes(name)));
+            });
+        });
     }
 }
 

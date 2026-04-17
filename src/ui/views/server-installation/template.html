@@ -15,8 +15,8 @@
                      i18n-desc="install.btns.init.desc"
                      data-action="open-modal"
                      data-script="setup-folders.bat"
-                     data-title="__('msg.init', {target: 'Default Folders'})"
-                     data-desc="__('msg.setupFolderdesc')">
+                     data-title="{{ __('msg.init', {target: 'Default Folders'}) }}"
+                     data-desc="{{ __('msg.setupFolderdesc') }}">
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
@@ -49,14 +49,7 @@
                 </div>
             </div>
 
-        </div>
-    </div>
-
-    <div class="mb-5">
-        <span class="section-label" i18n="install.sections.db"></span>
-        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
-
-            <div class="col">
+             <div class="col">
                 <div class="action-card heidi-install-card"
                      i18n-desc="install.btns.instHeidi.desc"
                      data-action="prompt-heidi-installer">
@@ -66,7 +59,12 @@
                     <div class="action-label" i18n="install.btns.instHeidi.title"></div>
                 </div>
             </div>
-            
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <span class="section-label" i18n="install.sections.db"></span>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
                 <div class="action-card" 
                      i18n-desc="install.btns.createDb.desc"

@@ -110,6 +110,8 @@ module.exports = function setSysIPC(ipcMain, app) {
         });
     });
 
+    ipcMain.handle('chck-app-installd', async (_, name) => await AppSvc.chckAppInstalld(_, name));
+
     /**
      * [DIALOG] Open File Picker
      * Opens the native Windows File Explorer dialog.

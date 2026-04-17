@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
         instHeidi: (path) => ipcRenderer.send('run-heidi-install', path),
         checkHeidiInstalled: () => ipcRenderer.invoke('check-heidi-installed'),
+        chckappInstlled: (name) => ipcRenderer.invoke('chck-app-installd', name),
         on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(...args)),
 
         // --- CONTINUOUS EVENT LISTENERS ---

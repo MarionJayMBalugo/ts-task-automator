@@ -48,6 +48,52 @@
 .tms-modal.mdl-lg { width: 40.625rem; } /* 650px */
 .tms-modal.mdl-full { width: 95vw; max-width: 87.5rem; } /* 1400px */
 
+/* ==========================================================================
+   MINIMAL WIZARD STEPPER UI
+   ========================================================================== */
+
+/* The Circles */
+.tms-step-icon {
+    width: 28px; /* Slightly bumped up for better visibility */
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    flex-shrink: 0; 
+}
+
+/* Active Step */
+.tms-step-icon.active {
+    background-color: var(--bs-primary);
+    color: white;
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.15); 
+}
+
+/* Completed Step */
+.tms-step-icon.completed {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+/* The Connecting Lines */
+.tms-step-line {
+    height: 3px;
+    width: 100%; /* FIX: Forces the line to take up available space! */
+    background-color: var(--bs-secondary-bg);
+    transition: background-color 0.3s ease;
+    border-radius: 2px;
+}
+
+.tms-step-line.completed {
+    background-color: var(--bs-primary);
+}
+
 @keyframes modalFadeIn { 
     from { opacity: 0; transform: scale(0.95); } 
     to { opacity: 1; transform: scale(1); } 
