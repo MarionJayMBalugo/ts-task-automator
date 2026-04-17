@@ -121,6 +121,13 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **Card** | `crd` | `.radio-crd`, `installer-crd` |
 | **Path** | `pth` | `file-pth-inpt`, `targetPth` |
 | **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
+| **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
+| **Check** | `chk` | `chkBox`, `runChk()` |
+| **Dashboard** | `dashbrd` | `dashbrdVw`, `nav-dashbrd` |
+| **View** | `vw` | `vwCntnr`, `loadVw()` |
+| **Installation** | `instll` | `instllScript`, `svrInstll` |
+| **Server** | `svr` | `svrConfig`, `svrVldation` |
+| **Validation** | `vldation` | `runVldation()`, `vldationBadge` |
 
 ## 📦 Build Instructions
 

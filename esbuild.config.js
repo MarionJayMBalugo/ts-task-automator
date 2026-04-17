@@ -101,7 +101,8 @@ async function build() {
 
     const commonOpts = { bundle: true, platform: 'node', target: 'node18', external: ['electron'], minify: true, sourcemap: false };
 
-    // 2. Bundle Main Process & Preload
+    // 2. Bundle Main Process & Preload 
+    // (esbuild natively respects your package.json "#cnf" imports!)
     await esbuild.build({ ...commonOpts, entryPoints: ['src/backend/main.js'], outfile: 'dist/main.js' });
     await esbuild.build({ ...commonOpts, entryPoints: ['src/preload/preload.js'], outfile: 'dist/preload.js' });
 
@@ -121,25 +122,27 @@ async function build() {
     // 6. Bundle UI JavaScript
     console.log('Bundling UI Modules into ONE file...');
     
-    // Clean up the raw JS files that were copied over in Step 3 so they don't bloat the dist folder
-    fs.rmSync(path.join(__dirname, 'dist/ui/js'), { recursive: true, force: true });
+    // 🚨 CRITICAL FIX: Aggressively delete ALL raw .js files that were just copied into /dist/ui
+    // This ensures your new views/**/index.js components don't accidentally get left behind and bloat the app.
+    const allRawJsFiles = getFiles(path.join(__dirname, 'dist/ui'), '.js');
+    allRawJsFiles.forEach(file => fs.unlinkSync(file));
 
     // Bundle the master controller (app.js) into a single file
     await esbuild.build({
         entryPoints: ['src/ui/js/core/app.js'],
-        bundle: true,          // Merge all imports!
+        bundle: true,          // Merge all imports, including ComponentRegistry!
         outfile: 'dist/ui/js/core/app.js',
         platform: 'browser',
         minify: true,
         sourcemap: false,
     });
 
-    // CHECK THE SOURCE FOLDER, NOT THE DIST FOLDER!
+    // Standalone language dictionary
     const textJsSource = path.join(__dirname, 'src/ui/js/lang/text.js');
     if (fs.existsSync(textJsSource)) {
         await esbuild.build({
             entryPoints: [textJsSource],
-            outfile: 'dist/ui/js/lang/text.js', // Output to the clean dist folder
+            outfile: 'dist/ui/js/lang/text.js', 
             minify: true,
             sourcemap: false,
         });
@@ -150,48 +153,34 @@ async function build() {
     // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file
     console.log('Bundling Bootstrap and Custom CSS into one file...');
     
-    // Gather all custom CSS files (Using new UI path!)
-    const cssFilesToMinify = getFiles(path.join(__dirname, 'src/ui/css/app'), '.css');
-    
-    // Add custom style.css to the front of our custom list
-    if (fs.existsSync(path.join(__dirname, 'src/ui/css/bundle.css'))) {
-        cssFilesToMinify.unshift(path.join(__dirname, 'src/ui/css/bundle.css')); 
-    }
-    
-    // Put Bootstrap at the absolute top of the entire list
-    const bootstrapPath = path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css');
-    if (fs.existsSync(bootstrapPath)) {
-        cssFilesToMinify.unshift(bootstrapPath);
-    } else {
-        console.warn('Warning: Bootstrap CSS not found in node_modules.');
-    }
-
-    // Create a temporary CSS file that @imports everything
+    // 🚨 CRITICAL FIX: Generate a master temp file that correctly points to Bootstrap and your central bundle.css
     const tempCssPath = path.join(__dirname, 'src/ui/master-temp.css');
-    const masterCssContent = cssFilesToMinify
-        .map(file => `@import "${file.replace(/\\/g, '/')}";`)
-        .join('\n');
+    
+    const bootstrapPath = path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css').replace(/\\/g, '/');
+    const localBundlePath = path.join(__dirname, 'src/ui/css/bundle.css').replace(/\\/g, '/');
+    
+    // We orchestrate the imports so Bootstrap is always loaded first
+    const masterCssContent = `
+        @import "${bootstrapPath}";
+        @import "${localBundlePath}";
+    `;
     
     fs.writeFileSync(tempCssPath, masterCssContent);
 
     // Bundle it all into one final file
     await esbuild.build({
         entryPoints: [tempCssPath],
-        outfile: 'dist/ui/style.bundle.css', // The final output file name
+        outfile: 'dist/ui/style.bundle.css', // Matches the <link> in your index.html
         bundle: true, 
         minify: true,
         sourcemap: false,
     });
 
-    // Clean up the temporary file and leftover unbundled CSS directories
+    // Clean up the temporary file and unbundled CSS directories
     if (fs.existsSync(tempCssPath)) fs.unlinkSync(tempCssPath);
     
-    // Safely delete the unbundled CSS folders from the dist folder to keep the app size small!
     const distUiCssFolder = path.join(__dirname, 'dist/ui/css');
-    const distAssetsCssFolder = path.join(__dirname, 'dist/assets/css');
-    
     if (fs.existsSync(distUiCssFolder)) fs.rmSync(distUiCssFolder, { recursive: true, force: true });
-    if (fs.existsSync(distAssetsCssFolder)) fs.rmSync(distAssetsCssFolder, { recursive: true, force: true });
 
     console.log('Build complete! App is ready in /dist');
 }
