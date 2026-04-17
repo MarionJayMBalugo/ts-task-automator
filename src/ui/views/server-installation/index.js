@@ -4,13 +4,11 @@
 
 import { FilePckr } from "../../js/partials";
 
-export const ServerInstallationComponent = {
+export const svrInstllVw = {
     // Store event listeners for memory cleanup
     _listeners: [],
 
-    mount(containerEl) {
-        console.log("[ServerInstallationComponent] Mounted");
-
+    mount: (containerEl) => {
         // 1. Find all action cards that have a data-action attribute
         const actionCards = containerEl.querySelectorAll('[data-action]');
 
@@ -24,10 +22,10 @@ export const ServerInstallationComponent = {
 
             // Route to the correct legacy UI function
             if (action === 'prompt-tmsdos-installer') {
-                this.promptTmsDosInstaller();
+                svrInstllVw.promptTmsDosInstaller();
             } 
             else if (action === 'prompt-heidi-installer') {
-                this.promptHeidiInstaller();
+                svrInstllVw.promptHeidiInstaller();
             } 
             else if (action === 'open-modal') {
                 // Because Template.parse() processes your __('...') syntax 
@@ -47,25 +45,22 @@ export const ServerInstallationComponent = {
         // 3. Attach listeners and store them for memory cleanup
         actionCards.forEach(card => {
             card.addEventListener('click', handleAction);
-            this._listeners.push({ el: card, type: 'click', fn: handleAction });
+            svrInstllVw._listeners.push({ el: card, type: 'click', fn: handleAction });
         });
     },
 
-    unmount() {
-        console.log("[ServerInstallationComponent] Unmounting and cleaning up...");
-        
+    unmount: () => {
         // Remove every listener we attached to prevent memory leaks
-        this._listeners.forEach(({ el, type, fn }) => {
+        svrInstllVw._listeners.forEach(({ el, type, fn }) => {
             el.removeEventListener(type, fn);
         });
         
-        this._listeners = [];
+        svrInstllVw._listeners = [];
     },
 
-    async promptTmsDosInstaller() {
+    promptTmsDosInstaller: async () => {
         
         let tmsdosInstalled = await window.API.chckappInstlled('tms-dos');
-        console.log(tmsdosInstalled)
         const installers = await window.API.getTmsdInst();
         let title = 'TMS-DOS Installation';
         let desc = `Unable to find the installer in the path specified.`;
@@ -154,7 +149,7 @@ export const ServerInstallationComponent = {
         });
     },
 
-    async promptTmsDosInstallerLegacy() {
+    promptTmsDosInstallerLegacy: async () => {
         const installers = await window.API.getTmsdInst();
         
         let desc = `Unable to find the installer in the path specified.`;
@@ -230,7 +225,7 @@ export const ServerInstallationComponent = {
     },
 
     // This is being called when installing Heidi
-    async promptHeidiInstaller() {
+    promptHeidiInstaller: async () => {
         const data = {
             title: 'Heidi Installation',
             desc: 'Please select the installation directory and confirm.',

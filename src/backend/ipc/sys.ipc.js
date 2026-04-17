@@ -12,7 +12,7 @@ const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc');
 const path = require('node:path');
 const { exec } = require('child_process');
 
-module.exports = function setSysIPC(ipcMain, app) {
+module.exports = (ipcMain, app) => {
 
     // =========================================================================
     // --- SCRIPTS & EXECUTION (Routed to ExecSvc) ---

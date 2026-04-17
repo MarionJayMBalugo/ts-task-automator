@@ -19,17 +19,18 @@ export const Status = {
      * Toggles the loading animation on the Dashboard.
      * @param {boolean} isLoading - True to show spinners, false to restore normal UI.
      */
-    setValidationLoading(isLoading) {
+    setValidationLoading: (isLoading) => {
         // 1. Find the Refresh Button 
         // (Uses a fuzzy selector to find any button that starts with 'UI.runValidation')
-        const btn = document.querySelector('button[onclick^="UI.runValidation"]');
+        const btn = document.querySelector('[data-action="run-validation"]');
+
         if (btn) {
             btn.disabled = isLoading; // Prevent double-clicking
             
             // Swap the SVG icon with a Bootstrap spinner
             btn.innerHTML = isLoading 
                 ? `<span class="spinner-border spinner-border-sm"></span> Scanning...`
-                : `<svg width="18" height="18"><use href="#icon-refresh"></use></svg> <span i18n="validation.refresh"></span>`;
+                : `<svg width="18" height="18"><use href="#icon-refresh"></use></svg> <span>{{ __('validation.refresh') }}</span>`;
             
             // 🚨 CRITICAL FIX: Because we just overwrote the button's innerHTML, 
             // the <span i18n="validation.refresh"> is completely raw and untranslated!
@@ -63,7 +64,7 @@ export const Status = {
      * and maps the data to specific HTML IDs on the dashboard.
      * @param {Object} info - The aggregated system data.
      */
-    updateValidationBadges(info) {
+    updateValidationBadges: (info) => {
         // --- HELPER 1: Text Inserter ---
         const setVal = (id, val) => {
             const el = document.getElementById(id);

@@ -21,26 +21,29 @@ import { ActionMap } from './actions.js';
 // MAIN APP OBJECT
 // ==========================================
 const App = {
-    async init() {
-        await this.loadGlobalComponents([PARTIALS.icons.path, PARTIALS.modal.path]);
+    init: async () => {
+        await App.loadGlobalComponents([PARTIALS.icons.path, PARTIALS.modal.path]);
 
         Shell.init();
-        this.setupListeners();
-        this.setupEventDelegator(); // Boot the global click router
+        App.setupListeners();
+        App.setupEventDelegator(); // Boot the global click router
         Shell.setTheme();
-        Shell.setVersion();
+        
+        // Note: Check if you meant App.setVersion() here instead of Shell.setVersion()
+        Shell.setVersion(); 
+        
         I18n.apply();
-        this.loadTab(VIEWS.dashboard.path);
+        App.loadTab(VIEWS.dashboard.path);
     },
 
     /**
      * Handles navigation between the main sidebar tabs.
      */
-    async loadTab(tabName) {
+    loadTab: async (tabName) => {
         tabName = tabName.split('/')[0];
         await Shell.loadTab(tabName);
 
-        this.validateHeidiActionCard();
+        App.validateHeidiActionCard();
     },
 
     openTool: (key) => API.openTool(key),
@@ -48,9 +51,10 @@ const App = {
     toggleAutoClose: (val) => API.toggleAutoClose(val),
 
     changeTargetDrive: (val) => API.setTargetDrive(val),
+    
     runBatch: (script) => runBatch(script),
 
-    setupEventDelegator() {
+    setupEventDelegator: () => {
         document.addEventListener('click', (event) => {
             const trigger = event.target.closest('[data-action]');
             if (!trigger) return;
@@ -64,7 +68,7 @@ const App = {
         });
     },
 
-    async loadGlobalComponents(components) {
+    loadGlobalComponents: async (components) => {
         try {
             const htmlStrings = await Promise.all(
                 components.map(comp => API.loadPartial(comp))
@@ -80,7 +84,7 @@ const App = {
         }
     },
 
-    setupListeners() {
+    setupListeners: () => {
         window.addEventListener('click', (e) => {
             const overlay = document.getElementById('modal-overlay');
             if (e.target === overlay && typeof window.closeModal === 'function') {
@@ -89,20 +93,20 @@ const App = {
         });
 
         API.on('heidi-inst-done', () => {
-            this.validateHeidiActionCard();
+            App.validateHeidiActionCard();
         });
     },
 
-    async exportScripts() {
+    exportScripts: async () => {
         const result = await API.exportScripts();
         if (result && result.success) Shell.refreshSettings();
     },
     
-    async changeFolder() {
+    changeFolder: async () => {
         if (await API.selectFolder()) Shell.refreshSettings();
     },
 
-    async resetConfig() {
+    resetConfig: async () => {
         const result = await API.resetConfig();
         if (result) {
             const isError = result.includes('❌');
@@ -111,7 +115,7 @@ const App = {
         }
     },
 
-    async copyScripts() {
+    copyScripts: async () => {
         const result = await API.copyScripts();
         if (result) {
             const isError = result.includes('❌');
@@ -120,7 +124,7 @@ const App = {
         }
     },
 
-    async validateHeidiActionCard() {
+    validateHeidiActionCard: async () => {
         const card = document.querySelector('.heidi-install-card');
         if (!card) return;
         const isInstalled = await API.checkHeidiInstalled();
@@ -133,7 +137,7 @@ const App = {
         }
     },
 
-    async setVersion() {
+    setVersion: async () => {
         try {
             const version = await API.getVersion();
             if (Shell.el.versionDisplay) Shell.el.versionDisplay.innerText = `v${version}`;

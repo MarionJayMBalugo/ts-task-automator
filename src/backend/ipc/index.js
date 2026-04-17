@@ -20,7 +20,7 @@ const setUiIPC  = require('./ui.ipc');
  * * @param {Object} ipcMain - The Electron IPC main module for receiving messages.
  * @param {Object} app - The Electron app instance (used for path/version context).
  */
-module.exports = function setupIPC(ipcMain, app) {
+module.exports = (ipcMain, app) => {
     
     /** * 1. CONFIGURATION HANDLERS
      * Manages settings.json, target drive selection, and folder exports.
@@ -38,7 +38,4 @@ module.exports = function setupIPC(ipcMain, app) {
      * view partials into the main window and providing app metadata.
      */
     setUiIPC(ipcMain, app);
-    
-    // Developer feedback to confirm the bridge is active during startup
-    console.log("✅ All IPC Handlers Registered Successfully");
 };

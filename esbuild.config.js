@@ -97,7 +97,7 @@ function minifyScripts(inputFolder, outputFolder) {
 // =============================================================================
 
 async function build() {
-    console.log('🚀 Starting Pulse Build Engine...');
+    console.log('Starting Pulse Build Engine...');
 
     const commonOpts = { bundle: true, platform: 'node', target: 'node18', external: ['electron'], minify: true, sourcemap: false };
 
@@ -106,20 +106,20 @@ async function build() {
     await esbuild.build({ ...commonOpts, entryPoints: ['src/preload/preload.js'], outfile: 'dist/preload.js' });
 
     // 3. Copy Static Assets (HTML views, images) FIRST
-    console.log('📂 Syncing static assets...');
+    console.log('Syncing static assets...');
     fs.cpSync('src/ui', 'dist/ui', { recursive: true });
     fs.cpSync('src/assets', 'dist/assets', { recursive: true });
     
     // 4. Minify HTML files in the dist folder
-    console.log('🗜️ Compressing HTML views...');
+    console.log('Compressing HTML views...');
     minifyHTML(path.join(__dirname, 'dist', 'ui'));
 
     // 5. Minify Resources (Batch/Env)
-    console.log('⚙️ Minifying Shell Scripts & Envs...');
+    console.log('Minifying Shell Scripts & Envs...');
     minifyScripts(path.join(__dirname, 'resources'), path.join(__dirname, 'dist', 'resources'));
 
     // 6. Bundle UI JavaScript
-    console.log('📦 Bundling UI Modules into ONE file...');
+    console.log('Bundling UI Modules into ONE file...');
     
     // Clean up the raw JS files that were copied over in Step 3 so they don't bloat the dist folder
     fs.rmSync(path.join(__dirname, 'dist/ui/js'), { recursive: true, force: true });
@@ -144,11 +144,11 @@ async function build() {
             sourcemap: false,
         });
     } else {
-        console.warn('⚠️ Warning: Could not find src/ui/js/lang/text.js');
+        console.warn('Warning: Could not find src/ui/js/lang/text.js');
     }
 
     // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file
-    console.log('🎨 Bundling Bootstrap and Custom CSS into one file...');
+    console.log('Bundling Bootstrap and Custom CSS into one file...');
     
     // Gather all custom CSS files (Using new UI path!)
     const cssFilesToMinify = getFiles(path.join(__dirname, 'src/ui/css/app'), '.css');
@@ -163,7 +163,7 @@ async function build() {
     if (fs.existsSync(bootstrapPath)) {
         cssFilesToMinify.unshift(bootstrapPath);
     } else {
-        console.warn('⚠️ Warning: Bootstrap CSS not found in node_modules.');
+        console.warn('Warning: Bootstrap CSS not found in node_modules.');
     }
 
     // Create a temporary CSS file that @imports everything
@@ -193,7 +193,7 @@ async function build() {
     if (fs.existsSync(distUiCssFolder)) fs.rmSync(distUiCssFolder, { recursive: true, force: true });
     if (fs.existsSync(distAssetsCssFolder)) fs.rmSync(distAssetsCssFolder, { recursive: true, force: true });
 
-    console.log('✅ Build complete! App is ready in /dist');
+    console.log('Build complete! App is ready in /dist');
 }
 
 build().catch((err) => {

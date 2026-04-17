@@ -20,7 +20,7 @@ export const Flows = {
      * [FLOW] Prompt: Create Database
      * Opens a modal asking the user for a list of database names to initialize.
      */
-    promptCreateDB() {
+    promptCreateDB: () => {
         const data = {
             title: 'Run Create Databases?',
             desc: 'Enter the target database names to initialize the core schemas.',

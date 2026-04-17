@@ -12,7 +12,7 @@ import { I18n } from '../core/i18n.js';
 import { ModalSvc } from '../partials/modal.js';
 import { Template } from '../core/template.js';
 import { TAB_CONFIG, VIEW_ROOT } from '../cnf';
-import { ComponentRegistry } from '../../views';
+import { VwRegistry } from '../../views';
 import { Validate } from './validate.js';
 
 export const Shell = {
@@ -28,11 +28,11 @@ export const Shell = {
     /**
      * Bootstraps the UI skeleton. Called exactly once by App.init().
      */
-    init() {
-        this.el.sidebar = document.getElementById('sidebar');
-        this.el.appContainer = document.getElementById('app-container');
-        this.el.versionDisplay = document.getElementById('app-version-display');
-        this.el.pathInfo = document.getElementById('path-info');
+    init: () => {
+        Shell.el.sidebar = document.getElementById('sidebar');
+        Shell.el.appContainer = document.getElementById('app-container');
+        Shell.el.versionDisplay = document.getElementById('app-version-display');
+        Shell.el.pathInfo = document.getElementById('path-info');
         
         // [GLOBAL BRIDGE] 
         // Exposes ModalSvc.closeModal to the global window.
@@ -44,8 +44,8 @@ export const Shell = {
     /**
      * Toggles the collapsed state of the sidebar for smaller screens.
      */
-    toggleSidebar() {
-        this.el.sidebar?.classList.toggle('collapsed');
+    toggleSidebar: () => {
+        Shell.el.sidebar?.classList.toggle('collapsed');
     },
 
     // =========================================================================
@@ -56,7 +56,7 @@ export const Shell = {
      * Handles the heavy lifting of swapping views when a user clicks a Sidebar Tab.
      * * @param {string} tabName - The ID/Name of the view to load (e.g., 'dashboard')
      */
-    async switchTab(tabName) {
+    switchTab: async (tabName) => {
         // 1. Visual Update: Remove 'active' class from all links, add to the clicked one.
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         const active = document.getElementById(`nav-${tabName}`);
@@ -65,14 +65,13 @@ export const Shell = {
         // 2. Fetch & Parse the Main View
         // 🚨 WE MUST PARSE BEFORE INJECTING to ensure {{ __('translations') }} are evaluated!
         let rawHtml = await API.loadView(tabName);
-        console.log(rawHtml, tabName)
-        this.el.appContainer.innerHTML = Template.parse(rawHtml);
+        Shell.el.appContainer.innerHTML = Template.parse(rawHtml);
 
         // 3. Micro-Component Auto-Loader
         // * WHY: Instead of putting huge chunks of HTML inside a single file, you 
         // can use <div data-component="partials/sys-hw"></div>. This loops through 
         // the newly injected view, finds those placeholders, and fetches them concurrently.
-        const components = Array.from(this.el.appContainer.querySelectorAll('[data-component]'));
+        const components = Array.from(Shell.el.appContainer.querySelectorAll('[data-component]'));
         
         await Promise.all(components.map(async (mount) => {
             const compName = mount.getAttribute('data-component');
@@ -96,10 +95,10 @@ export const Shell = {
      * the physical HTML toggles and text inputs actually reflect the Backend state.
      * * @param {Object} settings - The settings object returned from the Backend API.
      */
-    updateSettingsUI(settings) {
+    updateSettingsUI: (settings) => {
         // 1. Update Path Labels
         const displayPath = settings.customScriptLoc || "Default: /resources/";
-        if (this.el.pathInfo) this.el.pathInfo.innerText = displayPath; // Global footer path
+        if (Shell.el.pathInfo) Shell.el.pathInfo.innerText = displayPath; // Global footer path
         
         const sPath = document.getElementById('settings-path-info');    // Settings view specific
         if (sPath) sPath.innerText = displayPath;
@@ -118,73 +117,73 @@ export const Shell = {
         }
     },
 
-    async loadTab(tabName) {
+    loadTab: async (tabName) => {
         tabName = tabName.split('/')[0];
 
-        this.unmountPrtlScript();
+        Shell.unmountPrtlScript();
 
-        await this.switchTab(tabName);
+        await Shell.switchTab(tabName);
 
-        this.mountPrtlScript(tabName);
-        this.runDefTabFunc(tabName);
+        Shell.mountPrtlScript(tabName);
+        Shell.runDefTabFunc(tabName);
     },
 
-    unmountPrtlScript() {
-        if (this.activePartial && this.activePartial.unmount) {
-            this.activePartial.unmount();
-            this.activePartial = null;
+    unmountPrtlScript: () => {
+        if (Shell.activePartial && Shell.activePartial.unmount) {
+            Shell.activePartial.unmount();
+            Shell.activePartial = null;
         }
     },
 
-    mountPrtlScript(tabName) {
+    mountPrtlScript: (tabName) => {
         // 3. DYNAMICALLY MOUNT the new component
         const container = document.getElementById(VIEW_ROOT);
 
-        const ComponentToMount = ComponentRegistry[tabName];
+        const ComponentToMount = VwRegistry[tabName];
         
         if (ComponentToMount) {
-            this.activeComponent = ComponentToMount;
-            this.activeComponent.mount(container);
+            Shell.activePartial = ComponentToMount;
+            Shell.activePartial.mount(container);
         } else {
             console.log(`[Router] No JS component found for '${tabName}'. Running in HTML-only mode.`);
         }
     },
 
-    async refreshSettings() {
+    refreshSettings: async () => {
         const settings = await API.getSettings();
-        this.updateSettingsUI(settings);
+        Shell.updateSettingsUI(settings);
     },
 
-    async runValidation(force = false) {
+    runValidation: async (force = false) => {
         Validate.run(force);
     },
 
-    runDefTabFunc (tabName) {
+    runDefTabFunc: (tabName) => {
         const actions = TAB_CONFIG[tabName] || [];
         actions.forEach(actionName => {
-            if (typeof this[actionName] === 'function') {
-                this[actionName]();
+            if (typeof Shell[actionName] === 'function') {
+                Shell[actionName]();
             }
         });
     },
 
-    toggleDarkMode(isDark) {
+    toggleDarkMode: (isDark) => {
         const theme = isDark ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', theme);
         localStorage.setItem('tms-theme', theme); 
     },
 
-    setTheme() {
+    setTheme: () => {
         const savedTheme = localStorage.getItem('tms-theme') || 'light';
         document.documentElement.setAttribute('data-bs-theme', savedTheme);
         const themeSwitch = document.getElementById('dark-mode-switch');
         if (themeSwitch) themeSwitch.checked = (savedTheme === 'dark');
     },
 
-    async setVersion() {
+    setVersion: async () => {
         try {
             const version = await API.getVersion();
-            if (this.el.versionDisplay) this.el.versionDisplay.innerText = `v${version}`;
+            if (Shell.el.versionDisplay) Shell.el.versionDisplay.innerText = `v${version}`;
         } catch (e) { console.error("Version load failed"); }
     }
 };

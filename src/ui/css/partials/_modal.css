@@ -94,6 +94,10 @@
     background-color: var(--bs-primary);
 }
 
+.modal-backdrop, #modal-stepper-containe, #modal-dynamic-content, #modal-prev-btn {
+    display: none;
+}
+
 @keyframes modalFadeIn { 
     from { opacity: 0; transform: scale(0.95); } 
     to { opacity: 1; transform: scale(1); } 

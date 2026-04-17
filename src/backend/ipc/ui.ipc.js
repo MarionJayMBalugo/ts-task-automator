@@ -6,7 +6,7 @@
  */
 const { ViewSvc } = require('#svc');
 
-module.exports = function setUiIPC(ipcMain, app) {
+module.exports = (ipcMain, app) => {
     
     // Sends the current application version
     ipcMain.handle('get-app-version', () => {

@@ -181,6 +181,14 @@ h2, .h4, .fw-bold {
     font-weight: 700 !important;
 }
 
+.brand-logo {
+    object-fit: contain;
+}
+
+#global-icon-sprite {
+    display: none;
+}
+
 /* Specific overrides for Dark Mode text visibility */
 [data-bs-theme="dark"] .text-muted,
 [data-bs-theme="dark"] .section-label,

@@ -3,12 +3,12 @@
  * Maps layout names (tabs) to their specific Vanilla JS component logic.
  */
 
-import { DashboardComponent } from './dashboard';
-import { ServerInstallationComponent } from './server-installation';
-import { ServerValidationComponent } from './server-validation';
+import { dashbrdVw } from './dashboard';
+import { svrInstllVw } from './server-installation';
+import { svrVldationVw } from './server-validation';
 
-export const ComponentRegistry = {
-    'dashboard': DashboardComponent,
-    'server-installation': ServerInstallationComponent,
-    'server-validation': ServerValidationComponent
+export const VwRegistry = {
+    'dashboard': dashbrdVw,
+    'server-installation': svrInstllVw,
+    'server-validation': svrVldationVw
 };

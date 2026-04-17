@@ -11,6 +11,7 @@
 const os = require('node:os');
 const path = require('node:path');
 const fs = require('node:fs');
+const { exec } = require('child_process');
 
 const { dialog } = require('electron');
 const { FsUtil } = require('#utils');

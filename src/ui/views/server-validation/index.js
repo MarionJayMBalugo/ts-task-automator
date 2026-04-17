@@ -2,13 +2,11 @@
  * Component Logic for the Server Validation view.
  */
 
-export const ServerValidationComponent = {
+export const svrVldationVw = {
     // Store event listeners for memory cleanup
     _listeners: [],
 
-    mount(containerEl) {
-        console.log("[ServerValidationComponent] Mounted");
-
+    mount: (containerEl) => {
         // 1. Grab the specific buttons inside this view
         const refreshBtn = containerEl.querySelector('[data-action="run-validation"]');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
@@ -30,23 +28,21 @@ export const ServerValidationComponent = {
         // 3. Attach listeners and store them for memory cleanup
         if (refreshBtn) {
             refreshBtn.addEventListener('click', handleRefresh);
-            this._listeners.push({ el: refreshBtn, type: 'click', fn: handleRefresh });
+            svrVldationVw._listeners.push({ el: refreshBtn, type: 'click', fn: handleRefresh });
         }
 
         toolBtns.forEach(btn => {
             btn.addEventListener('click', handleToolOpen);
-            this._listeners.push({ el: btn, type: 'click', fn: handleToolOpen });
+            svrVldationVw._listeners.push({ el: btn, type: 'click', fn: handleToolOpen });
         });
     },
 
-    unmount() {
-        console.log("[ServerValidationComponent] Unmounting and cleaning up...");
-        
+    unmount: () => {
         // Remove every listener we attached to prevent memory leaks
-        this._listeners.forEach(({ el, type, fn }) => {
+        svrVldationVw._listeners.forEach(({ el, type, fn }) => {
             el.removeEventListener(type, fn);
         });
         
-        this._listeners = [];
+        svrVldationVw._listeners = [];
     }
 };
