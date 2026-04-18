@@ -7,10 +7,8 @@
  * views and toggling CSS classes) separate from the heavy business logic in Flows.
  */
 
-import { API } from '../core/api.js';
-import { I18n } from '../core/i18n.js';
+import { API , I18n, Template } from '@jsui/core';
 import { ModalSvc } from '../partials/modal.js';
-import { Template } from '../core/template.js';
 import { TAB_CONFIG, VIEW_ROOT } from '../cnf';
 import { VwRegistry } from '../../views';
 import { Validate } from './validate.js';

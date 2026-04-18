@@ -112,9 +112,9 @@ export const ModalSvc = {
         // Handle Next / Execute Button Text
         const isLastStep = ModalSvc._currentStep === ModalSvc._steps.length - 1;
         if (isLastStep) {
-            confirmBtn.innerText = window.__ ? window.__('field.execute') : 'Execute';
+            confirmBtn.innerText = __ ? __('field.execute') : 'Execute';
         } else {
-            confirmBtn.innerText = window.__ ? window.__('field.next') : 'Next';
+            confirmBtn.innerText = __ ? __('field.next') : 'Next';
         }
 
         ModalSvc._attachButtonListeners();
@@ -166,6 +166,67 @@ export const ModalSvc = {
                 ModalSvc._renderStep();
             }
         });
+    },
+
+    _bindListField: (field) => {
+        const inputEl = document.getElementById(`modal-input-${field.id}`);
+        const addBtn = document.getElementById(`modal-btn-add-${field.id}`);
+        const listContainer = document.getElementById(`modal-list-${field.id}`);
+        
+        // Initialize the dataset to an empty array
+        listContainer.dataset.values = JSON.stringify([]);
+
+        // Function to redraw the pills
+        const renderPills = () => {
+            const values = JSON.parse(listContainer.dataset.values || '[]');
+            listContainer.innerHTML = ''; // Clear current pills
+            
+            values.forEach((val, index) => {
+                const pill = document.createElement('span');
+                // Use Bootstrap classes for a nice pill with a delete button
+                pill.className = 'badge bg-primary bg-opacity-10 text-primary border border-primary d-flex align-items-center px-2 py-1';
+                pill.innerHTML = `
+                    <span class="me-2">${val}</span>
+                    <button type="button" class="btn-close" style="font-size: 0.5rem;" data-index="${index}"></button>
+                `;
+                
+                // Add event listener to the tiny 'x' to remove the item
+                pill.querySelector('.btn-close').addEventListener('click', (e) => {
+                    const idx = parseInt(e.target.dataset.index, 10);
+                    values.splice(idx, 1); 
+                    listContainer.dataset.values = JSON.stringify(values);
+                    renderPills();
+                });
+                
+                listContainer.appendChild(pill);
+            });
+        };
+
+        const addItem = () => {
+            const val = inputEl.value.trim();
+            if (val) {
+                const values = JSON.parse(listContainer.dataset.values || '[]');
+                // Prevent duplicate entries
+                if (!values.includes(val)) {
+                    values.push(val);
+                    listContainer.dataset.values = JSON.stringify(values);
+                    renderPills();
+                }
+                inputEl.value = ''; // Clear the input box
+                inputEl.focus();    // Keep cursor in the box for rapid typing
+            }
+        };
+
+        // Bind 'Enter' key press
+        inputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Stop modal from submitting
+                addItem();
+            }
+        });
+
+        // Bind 'Add/Select' button click
+        addBtn.addEventListener('click', addItem);
     },
 
     _validateAndExtractData: (fields) => {
@@ -235,6 +296,11 @@ export const ModalSvc = {
             dynamicZone.innerHTML = combinedHtml;
 
             fields.forEach(field => {
+                // FIX: Only bind the pill logic if explicitly requested
+                if (field.type === 'list' && field.pills === true) {
+                    ModalSvc._bindListField(field);
+                }
+
                 if (typeof field.onRender === 'function') field.onRender(dynamicZone, field); 
             });
         }

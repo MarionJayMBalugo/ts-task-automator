@@ -2,6 +2,9 @@
  * Component Logic for the Settings view.
  */
 
+import { API } from '@jsui/core';
+import { Shell, Notify } from '@jsui/modules';
+
 export const SettingsComponent = {
     _listeners: [],
 
@@ -16,9 +19,9 @@ export const SettingsComponent = {
             const trigger = e.target.closest('[data-action]');
             const action = trigger.dataset.action;
 
-            if (action === 'change-folder') window.App.changeFolder();
-            else if (action === 'copy-scripts') window.App.copyScripts();
-            else if (action === 'reset-config') window.App.resetConfig();
+            if (action === 'change-folder') SettingsComponent.changeFolder();
+            else if (action === 'copy-scripts') SettingsComponent.copyScripts();
+            else if (action === 'reset-config') SettingsComponent.resetConfig();
         };
 
         // 3. Define the Change Handler (for toggles and dropdowns)
@@ -27,13 +30,13 @@ export const SettingsComponent = {
             const action = trigger.dataset.action;
 
             if (action === 'change-drive') {
-                window.App.changeTargetDrive(trigger.value);
+                API.setTargetDrive(trigger.value);
             } 
             else if (action === 'toggle-auto-close') {
-                window.App.toggleAutoClose(trigger.checked);
+                API.toggleAutoClose(trigger.checked);
             } 
             else if (action === 'toggle-dark-mode') {
-                window.UI.toggleDarkMode(trigger.checked);
+                Shell.toggleDarkMode(trigger.checked);
             }
         };
 
@@ -54,5 +57,27 @@ export const SettingsComponent = {
             el.removeEventListener(type, fn);
         });
         SettingsComponent._listeners = [];
+    },
+
+    changeFolder: async () => {
+        if (await API.selectFolder()) Shell.refreshSettings();
+    },
+
+    resetConfig: async () => {
+        const result = await API.resetConfig();
+        if (result) {
+            const isError = result.includes('❌');
+            Notify.showAlert(result, isError); 
+            Shell.refreshSettings();
+        }
+    },
+
+    copyScripts: async () => {
+        const result = await API.copyScripts();
+        if (result) {
+            const isError = result.includes('❌');
+            Notify.showAlert(result, isError);
+            Shell.refreshSettings();
+        }
     }
 };
