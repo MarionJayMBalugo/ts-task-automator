@@ -30,7 +30,7 @@ export const Status = {
             // Swap the SVG icon with a Bootstrap spinner
             btn.innerHTML = isLoading 
                 ? `<span class="spinner-border spinner-border-sm"></span> Scanning...`
-                : `<svg width="18" height="18"><use href="#icon-refresh"></use></svg> <span>${window.__('validation.refresh')}</span>`;
+                : `<svg width="18" height="18"><use href="#icon-refresh"></use></svg> <span>${__('validation.refresh')}</span>`;
             
             // 🚨 CRITICAL FIX: Because we just overwrote the button's innerHTML, 
             // the <span i18n="validation.refresh"> is completely raw and untranslated!

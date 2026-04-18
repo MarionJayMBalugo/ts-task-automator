@@ -12,7 +12,7 @@ import { PARTIALS, VIEWS } from '../cnf';
 import { Template } from './template.js';
 
 // DYNAMIC DOMAIN IMPORTS
-import { Shell, Status, Flows, Notify } from '../modules';
+import { Shell } from '@jsui/modules';
 
 // THE NEW COMPONENT REGISTRY
 import { ActionMap } from './actions.js';
@@ -29,30 +29,12 @@ const App = {
         App.setupEventDelegator(); // Boot the global click router
         Shell.setTheme();
         
-        // Note: Check if you meant App.setVersion() here instead of Shell.setVersion()
         Shell.setVersion(); 
         
         I18n.apply();
-        App.loadTab(VIEWS.dashboard.path);
-    },
-
-    /**
-     * Handles navigation between the main sidebar tabs.
-     */
-    loadTab: async (tabName) => {
-        tabName = tabName.split('/')[0];
-        await Shell.loadTab(tabName);
-
+        await Shell.loadTab(VIEWS.dashboard.path);
         App.validateHeidiActionCard();
     },
-
-    openTool: (key) => API.openTool(key),
-
-    toggleAutoClose: (val) => API.toggleAutoClose(val),
-
-    changeTargetDrive: (val) => API.setTargetDrive(val),
-    
-    runBatch: (script) => runBatch(script),
 
     setupEventDelegator: () => {
         document.addEventListener('click', (event) => {
@@ -96,34 +78,7 @@ const App = {
             App.validateHeidiActionCard();
         });
     },
-
-    exportScripts: async () => {
-        const result = await API.exportScripts();
-        if (result && result.success) Shell.refreshSettings();
-    },
     
-    changeFolder: async () => {
-        if (await API.selectFolder()) Shell.refreshSettings();
-    },
-
-    resetConfig: async () => {
-        const result = await API.resetConfig();
-        if (result) {
-            const isError = result.includes('❌');
-            Notify.showAlert(result, isError); 
-            Shell.refreshSettings();
-        }
-    },
-
-    copyScripts: async () => {
-        const result = await API.copyScripts();
-        if (result) {
-            const isError = result.includes('❌');
-            Notify.showAlert(result, isError);
-            Shell.refreshSettings();
-        }
-    },
-
     validateHeidiActionCard: async () => {
         const card = document.querySelector('.heidi-install-card');
         if (!card) return;
@@ -135,22 +90,12 @@ const App = {
             const label = card.querySelector('.action-label');
             if (label) label.innerText += " (Installed)";
         }
-    },
-
-    setVersion: async () => {
-        try {
-            const version = await API.getVersion();
-            if (Shell.el.versionDisplay) Shell.el.versionDisplay.innerText = `v${version}`;
-        } catch (e) { console.error("Version load failed"); }
     }
 };
 
 // =============================================================================
 // GLOBAL WINDOW BINDINGS (Legacy Support)
 // =============================================================================
-window.App = App;
-window.API = API;
-window.UI = { ...Shell, ...Status, ...Flows, ...Notify }; 
 window.__ = (key, params = {}) => I18n.getText(key, params);
 
 if (document.readyState === 'loading') {

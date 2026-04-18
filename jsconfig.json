@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@jsui/*": ["src/ui/js/*"],
+      "@jsui": ["src/ui/js/index.js*"],
+      "@jsvw/*": ["src/ui/views/*"],
+      "@jsvw*": ["src/ui/views/index.js*"],
+      "@jspartials/*": ["src/ui/js/partials/*"],
+      "@jspartials": ["src/ui/js/partials/index.js"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

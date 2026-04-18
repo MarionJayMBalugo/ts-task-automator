@@ -1,14 +1,13 @@
-import { Shell } from '../modules';
+import { Shell } from '@jsui/modules';
 
 /**
  * GLOBAL ACTION MAP
  * This handles all top-level UI clicks (Sidebar, Nav, etc.)
  */
 export const ActionMap = {
-    
     'navigate': (trigger, event) => {
         const viewName = trigger.dataset.view;
-        window.App.loadTab(viewName);
+        Shell.loadTab(viewName);
     },
     
     'toggle-sidebar': (trigger, event) => {

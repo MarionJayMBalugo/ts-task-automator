@@ -101,9 +101,11 @@ h2, .h4, .fw-bold {
 
 /* --- TEXT HIDING LOGIC --- */
 .brand-text, .nav-text, .sidebar-footer { transition: opacity 0.2s ease; opacity: 1; }
+
 .sidebar.collapsed .brand-text, .sidebar.collapsed .nav-text, .sidebar.collapsed .sidebar-footer {
     opacity: 0; pointer-events: none; visibility: hidden; display: none; width: 0;
 }
+
 .sidebar-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
 
 /* --- MAIN CONTENT --- */
@@ -139,6 +141,30 @@ h2, .h4, .fw-bold {
     margin-left: 0;
 }
 
+.section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em; /* Spaced out for a "Pro" dashboard look */
+    color: var(--tms-text-muted);
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.text-muted.small.text-uppercase {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.05em;
+    font-weight: 700 !important;
+}
+
+.brand-logo {
+    object-fit: contain;
+}
+
+#global-icon-sprite {
+    display: none;
+}
+
 [data-bs-theme="dark"] body {
     background-color: #121212; 
     color: #e0e0e0;
@@ -163,30 +189,6 @@ h2, .h4, .fw-bold {
     background-color: #212529; 
     border-color: #373b3e; 
     color: #f8f9fa; 
-}
-
-.section-label {
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em; /* Spaced out for a "Pro" dashboard look */
-    color: var(--tms-text-muted);
-    margin-bottom: 0.75rem;
-    display: block;
-}
-
-.text-muted.small.text-uppercase {
-    font-size: 0.65rem !important;
-    letter-spacing: 0.05em;
-    font-weight: 700 !important;
-}
-
-.brand-logo {
-    object-fit: contain;
-}
-
-#global-icon-sprite {
-    display: none;
 }
 
 /* Specific overrides for Dark Mode text visibility */
@@ -240,6 +242,7 @@ h2, .h4, .fw-bold {
     background: rgba(255,255,255,0.05) !important; 
     color: #6c757d !important;
 }
+
 [data-bs-theme="dark"] .action-card.card-dashed .action-label {
     color: #6c757d !important;
 }
@@ -278,6 +281,7 @@ h2, .h4, .fw-bold {
 [data-bs-theme="dark"] .action-icon.text-primary {
     color: #6ea8fe !important; 
 }
+
 [data-bs-theme="dark"] .action-icon.text-info {
     color: #6edff6 !important; 
 }

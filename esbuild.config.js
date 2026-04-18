@@ -135,6 +135,11 @@ async function build() {
         platform: 'browser',
         minify: true,
         sourcemap: false,
+        alias: {
+            '@jsui': path.resolve(__dirname, 'src/ui/js'),
+            '@jsvw': path.resolve(__dirname, 'src/ui/views'),
+            '@jspartials': path.resolve(__dirname, 'src/ui/js/partials'),
+        }
     });
 
     // Standalone language dictionary
