@@ -96,7 +96,6 @@ const App = {
 // =============================================================================
 // GLOBAL WINDOW BINDINGS (Legacy Support)
 // =============================================================================
-window.App = App;
 window.__ = (key, params = {}) => I18n.getText(key, params);
 
 if (document.readyState === 'loading') {
