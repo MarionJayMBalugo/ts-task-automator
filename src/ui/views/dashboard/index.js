@@ -10,7 +10,7 @@ export const dashbrdVw = {
      */
     mount: (containerEl) => {
         // 1. Grab the specific buttons inside the dashboard
-        const refreshBtn = containerEl.querySelector('[data-action="run-validation"]');
+        const refreshBtn = document.getElementById('header-btn-refresh');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
 
         // 2. Define the handler functions (Routing to legacy App logic for now)

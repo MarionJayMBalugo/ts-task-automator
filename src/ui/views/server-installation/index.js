@@ -4,7 +4,7 @@
 
 import * as Prmpts from './prompts';
 import { API } from '@jsui/core';
-import { Flows } from '@jsui/modules';
+import { Modal } from '@jspartials/core/modal';
 
 export const svrInstllVw = {
     // Store event listeners for memory cleanup
@@ -37,7 +37,7 @@ export const svrInstllVw = {
                     size: 'md'
                 };
                 
-                Flows.openModal(script, data, [], (script) => API.runBatch(script));
+                Modal.openModal(script, data, [], (script) => API.runBatch(script));
             } else {
                 //calls the same exact function as the one passed in the dataset
                 svrInstllVw[action]();

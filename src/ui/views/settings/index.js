@@ -5,7 +5,7 @@
 import { API } from '@jsui/core';
 import { Shell, Notify } from '@jsui/modules';
 
-export const SettingsComponent = {
+export const SettingsVw = {
     _listeners: [],
 
     mount: (containerEl) => {
@@ -19,9 +19,9 @@ export const SettingsComponent = {
             const trigger = e.target.closest('[data-action]');
             const action = trigger.dataset.action;
 
-            if (action === 'change-folder') SettingsComponent.changeFolder();
-            else if (action === 'copy-scripts') SettingsComponent.copyScripts();
-            else if (action === 'reset-config') SettingsComponent.resetConfig();
+            if (action === 'change-folder') SettingsVw.changeFolder();
+            else if (action === 'copy-scripts') SettingsVw.copyScripts();
+            else if (action === 'reset-config') SettingsVw.resetConfig();
         };
 
         // 3. Define the Change Handler (for toggles and dropdowns)
@@ -43,20 +43,20 @@ export const SettingsComponent = {
         // 4. Attach listeners and store them for memory cleanup
         buttons.forEach(btn => {
             btn.addEventListener('click', handleClick);
-            SettingsComponent._listeners.push({ el: btn, type: 'click', fn: handleClick });
+            SettingsVw._listeners.push({ el: btn, type: 'click', fn: handleClick });
         });
 
         inputs.forEach(input => {
             input.addEventListener('change', handleChange);
-            SettingsComponent._listeners.push({ el: input, type: 'change', fn: handleChange });
+            SettingsVw._listeners.push({ el: input, type: 'change', fn: handleChange });
         });
     },
 
     unmount: () => {
-        SettingsComponent._listeners.forEach(({ el, type, fn }) => {
+        SettingsVw._listeners.forEach(({ el, type, fn }) => {
             el.removeEventListener(type, fn);
         });
-        SettingsComponent._listeners = [];
+        SettingsVw._listeners = [];
     },
 
     changeFolder: async () => {

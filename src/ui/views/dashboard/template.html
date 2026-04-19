@@ -1,17 +1,5 @@
 <div id="dashboard-view" class="app-view">
-    <div class="d-flex justify-content-between align-items-start mb-5">
-        <div>
-            <h2 class="h4 fw-bold mb-1">{{__('dashboard.title')}}</h2>
-            <p class="text-muted small">{{__('dashboard.subtitle')}}</p>
-        </div>
-        <button class="btn btn-primary fw-bold shadow-sm px-4 py-2 d-flex align-items-center gap-2" data-action="run-validation">
-            <svg width="18" height="18"><use href="#icon-refresh"></use></svg>
-            <span>__('validation.refresh')</span>
-        </button>
-    </div>
-
-    <div class="mb-5">
-        <span class="section-label">__('dashboard.quickaccess')</span>
+    <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapseQuickAccess" data-title="{{ __('dashboard.quickaccess') }}">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
                 <div class="action-card" i18n-desc="desc.openDir" data-dir-name="TMS-DOS" data-action="open-tool" data-tool="opentmsdos">

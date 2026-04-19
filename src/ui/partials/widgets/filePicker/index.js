@@ -14,7 +14,7 @@
 
 import { API } from '@jsui/core';
 
-const FilePckr = {
+export const FilePckr = {
     /**
      * Binds the click listeners to the dynamically injected HTML.
      * * WHY IT TAKES A CONTAINER: This component is usually loaded inside a Modal. 
@@ -60,5 +60,3 @@ const FilePckr = {
         });
     }
 };
-
-export default FilePckr;

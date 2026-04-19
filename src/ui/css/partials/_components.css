@@ -2,7 +2,7 @@
 .action-card {
     background: white; border: 1px solid var(--tms-border); 
     border-radius: 0.75rem; /* 12px */
-    padding: 1.25rem; transition: all 0.2s ease; cursor: pointer; 
+    padding: .75rem; transition: all 0.2s ease; cursor: pointer; 
     display: flex; align-items: center; gap: 0.75rem; 
     position: relative; /* Required for z-index to work */
     z-index: 1;         /* Keep them at base level normally */
@@ -81,7 +81,7 @@
 }
 .path-text { font-family: 'Consolas', monospace; font-size: 0.75rem; color: var(--tms-text-muted); flex-grow: 1; }
 .section-label { 
-    font-size: 0.65rem; text-transform: uppercase; 
+    font-size: .75rem; text-transform: uppercase; 
     letter-spacing: 0.09375rem; /* 1.5px */
     color: #94a3b8; margin-bottom: 1rem; display: block; font-weight: 800; 
 }
@@ -129,6 +129,30 @@
     cursor: not-allowed !important;
     pointer-events: none; 
     user-select: none;
+}
+
+/* ==========================================================================
+   COLLAPSIBLE PANELS & CHEVRONS
+   ========================================================================== */
+
+/* The arrow icon that spins */
+.collapse-chevron {
+    transition: transform 0.3s ease, color 0.2s ease;
+    color: #94a3b8; /* Matches your section-label color */
+}
+
+/* When Bootstrap closes the container, it sets aria-expanded="false" */
+[aria-expanded="false"] .collapse-chevron {
+    transform: rotate(-90deg); /* Rotates arrow to point right */
+}
+
+/* Make it feel like a clickable button on hover */
+[data-bs-toggle="collapse"] {
+    user-select: none;
+}
+[data-bs-toggle="collapse"]:hover .section-label,
+[data-bs-toggle="collapse"]:hover .collapse-chevron {
+    color: var(--bs-drkblue); /* Highlights blue on hover */
 }
 
 /* Fix for dark mode loader bar background */

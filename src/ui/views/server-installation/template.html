@@ -1,15 +1,6 @@
 <div class="app-view">
-    <div class="d-flex justify-content-between align-items-start mb-5">
-        <div>
-            <h2 class="h4 fw-bold mb-1">{{ __('install.title') }}</h2>
-            <p class="text-muted small">{{ __('install.subtitle') }}</p>
-        </div>
-    </div>
-
-    <div class="mb-5">
-        <span class="section-label">{{ __('install.sections.infra') }}</span>
+    <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapsevInstInfra" data-title="{{ __('install.sections.infra') }}">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
-            
             <div class="col">
                 <div class="action-card" 
                      data-description="{{ __('install.btns.init.desc') }}"
@@ -61,9 +52,7 @@
             </div>
         </div>
     </div>
-
-    <div class="mb-5">
-        <span class="section-label">{{ __('install.sections.db') }}</span>
+    <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapsevInstDb" data-title="{{ __('install.sections.db') }}">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
                 <div class="action-card" 

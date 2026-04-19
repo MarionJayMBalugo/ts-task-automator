@@ -18,6 +18,12 @@ module.exports = (ipcMain, app) => {
     });
 
     ipcMain.handle('load-partial', (_, prtlName) => {
-        return ViewSvc.loadHtml(`partials/${prtlName}`);
+        let res =  ViewSvc.loadHtml(`partials/${prtlName}`);
+
+        if (res == null) {
+            res =  ViewSvc.loadHtml(`partials/${prtlName}/template`);
+        }
+
+        return res;
     });
 };

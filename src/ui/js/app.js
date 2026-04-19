@@ -4,18 +4,9 @@
  * =============================================================================
  */
 
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
-import { API } from './api.js';
-import { I18n } from './i18n.js';
-import { PARTIALS, VIEWS } from '../cnf';
-import { Template } from './template.js';
-
-// DYNAMIC DOMAIN IMPORTS
+import { API, I18n, Template, ActionMap } from '@jsui/core';
+import { PARTIALS, VIEWS } from '@jsui/cnf';
 import { Shell } from '@jsui/modules';
-
-// THE NEW COMPONENT REGISTRY
-import { ActionMap } from './actions.js';
 
 // ==========================================
 // MAIN APP OBJECT
@@ -33,7 +24,7 @@ const App = {
         
         I18n.apply();
         await Shell.loadTab(VIEWS.dashboard.path);
-        App.validateHeidiActionCard();
+        import('bootstrap/dist/js/bootstrap.bundle.min.js');
     },
 
     setupEventDelegator: () => {
@@ -75,26 +66,13 @@ const App = {
         });
 
         API.on('heidi-inst-done', () => {
-            App.validateHeidiActionCard();
+            Shell.validateHeidiActionCard();
         });
     },
-    
-    validateHeidiActionCard: async () => {
-        const card = document.querySelector('.heidi-install-card');
-        if (!card) return;
-        const isInstalled = await API.checkHeidiInstalled();
-        if (isInstalled) {
-            card.classList.add('disabled-state');
-            card.removeAttribute('onclick'); // For legacy protection
-            card.removeAttribute('data-action'); // New logic protection
-            const label = card.querySelector('.action-label');
-            if (label) label.innerText += " (Installed)";
-        }
-    }
 };
 
 // =============================================================================
-// GLOBAL WINDOW BINDINGS (Legacy Support)
+// GLOBAL WINDOW BINDINGS
 // =============================================================================
 window.__ = (key, params = {}) => I18n.getText(key, params);
 

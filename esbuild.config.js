@@ -129,16 +129,16 @@ async function build() {
 
     // Bundle the master controller (app.js) into a single file
     await esbuild.build({
-        entryPoints: ['src/ui/js/core/app.js'],
+        entryPoints: ['src/ui/js/app.js'],
         bundle: true,          // Merge all imports, including ComponentRegistry!
-        outfile: 'dist/ui/js/core/app.js',
+        outfile: 'dist/ui/js/app.js',
         platform: 'browser',
         minify: true,
         sourcemap: false,
         alias: {
             '@jsui': path.resolve(__dirname, 'src/ui/js'),
             '@jsvw': path.resolve(__dirname, 'src/ui/views'),
-            '@jspartials': path.resolve(__dirname, 'src/ui/js/partials'),
+            '@jspartials': path.resolve(__dirname, 'src/ui/partials')
         }
     });
 
@@ -161,13 +161,10 @@ async function build() {
     // 🚨 CRITICAL FIX: Generate a master temp file that correctly points to Bootstrap and your central bundle.css
     const tempCssPath = path.join(__dirname, 'src/ui/master-temp.css');
     
-    const bootstrapPath = path.join(__dirname, 'node_modules/bootstrap/dist/css/bootstrap.min.css').replace(/\\/g, '/');
-    const localBundlePath = path.join(__dirname, 'src/ui/css/bundle.css').replace(/\\/g, '/');
-    
     // We orchestrate the imports so Bootstrap is always loaded first
     const masterCssContent = `
-        @import "${bootstrapPath}";
-        @import "${localBundlePath}";
+        @import "bootstrap/dist/css/bootstrap.min.css";
+        @import "./css/bundle.css";
     `;
     
     fs.writeFileSync(tempCssPath, masterCssContent);

@@ -1,6 +1,6 @@
-import { FilePckr } from "@jspartials";
+import { FilePckr } from "@jspartials/widgets/filePicker";
 import { API } from '@jsui/core';
-import { Flows } from '@jsui/modules';
+import { Modal } from '@jspartials/core/modal';
 
 // This is being called when installing Heidi
 export const promptHeidiInstaller = async () => {
@@ -10,7 +10,7 @@ export const promptHeidiInstaller = async () => {
         size: 'md'
     };
 
-    Flows.openModal(
+    Modal.openModal(
         'run-heidi-install',
         data,
         [{ 

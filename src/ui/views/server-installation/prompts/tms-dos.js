@@ -1,6 +1,6 @@
-import { FilePckr } from "@jspartials";
+import { FilePckr } from "@jspartials/widgets/filePicker";
 import { API } from '@jsui/core';
-import { Flows } from '@jsui/modules';
+import { Modal } from '@jspartials/core/modal';
 
 export const prmptTmsdInstllr = async () => {
     let tmsdosInstalled = await API.chckappInstlled('tms-dos');
@@ -46,7 +46,7 @@ export const prmptTmsdInstllr = async () => {
         components.push({ 
             id: 'filepicker', 
             type: 'partial', 
-            url: 'partials/widgets/file-pckr.html', 
+            url: 'partials/widgets/filePicker/template.html', 
             label: 'Installation Path',
             fldLbl: 'file path',
             mode: 'file',
@@ -82,7 +82,7 @@ export const prmptTmsdInstllr = async () => {
         size: 'lg'
     };
 
-    Flows.openModal('install.bat', data, steps, (script, executionData) => {
+    Modal.openModal('install.bat', data, steps, (script, executionData) => {
         // Because it's a multi-step modal, `executionData` accumulates EVERYTHING!
         // It will look like: { step1_confirm: true, selectedInstaller: 'C:/inst.exe', final_confirm: true }
         

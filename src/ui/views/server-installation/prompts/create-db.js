@@ -1,5 +1,5 @@
 import { API } from '@jsui/core';
-import { Flows } from '@jsui/modules';
+import { Modal } from '@jspartials/core/modal';
 
 export const prmptCreatDB = () => {
     let title = 'Create DBs';
@@ -18,7 +18,7 @@ export const prmptCreatDB = () => {
     const steps = [{ title, desc, fields: components }];
     const data = { title, desc, size: 'lg' };
 
-    Flows.openModal('create-database.bat', data, steps, (script, data) => {
+    Modal.openModal('create-database.bat', data, steps, (script, data) => {
         API.runBatch(script, [data.dbNames.join(',')])
     });
 };
