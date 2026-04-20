@@ -128,6 +128,45 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **Installation** | `instll` | `instllScript`, `svrInstll` |
 | **Server** | `svr` | `svrConfig`, `svrVldation` |
 | **Validation** | `vldation` | `runVldation()`, `vldationBadge` |
+| **Prompt** | `prmpt` | `prmptCreatDB()`, `tmsdPrmpt` |
+| **Create** | `creat` | `creatDB`, `creatUser` |
+| **TMS-DOS** | `tmsd` | `tmsdInstllr`, `openTmsd` |
+| **Installer** | `instllr` | `runInstllr()`, `heidiInstllr` |
+| **Header** | `headr` | `headrTitle`, `headrSbtitle` |
+| **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
+| **Check** | `chk` | `chkBox`, `runChk()` |
+| **Dashboard** | `dashbrd` | `dashbrdVw`, `nav-dashbrd` |
+| **View** | `vw` | `vwCntnr`, `loadVw()` |
+| **Installation**| `instll` | `instllScript`, `svrInstll` |
+| **Server** | `svr` | `svrConfig`, `svrVldation` |
+| **Validation** | `vldation`| `runVldation()`, `vldationBadge` |
+
+
+## 🗺️ Path Aliases (Imports)
+
+To completely avoid "relative path hell" (e.g., `../../../../utils.js`), this project uses absolute path aliases. These are configured across `package.json` (for native Node.js backend resolution), `jsconfig.json` (for IDE IntelliSense), and `esbuild.config.js` (for frontend compilation).
+
+### Backend Aliases (Node.js Native)
+Backend aliases use the `#` prefix standard and route directly to the backend directories.
+
+| Alias | Target Directory / File | Example Import |
+| :--- | :--- | :--- |
+| **`#src/*`** | `./src/*` | `require('#src/backend/main.js')` |
+| **`#cnf`** | `./src/backend/cnf/index.js` | `const { APP_CNF } = require('#cnf');` |
+| **`#svc`** | `./src/backend/svc/index.js` | `const { SysSvc } = require('#svc');` |
+| **`#utils`** | `./src/backend/utils/index.js` | `const { FsUtil } = require('#utils');` |
+
+### 5. Frontend Aliases (Browser / ESBuild)
+Frontend aliases use the `@` prefix standard and route to the UI component and logic directories.
+
+| Alias | Target Directory / File | Example Import |
+| :--- | :--- | :--- |
+| **`@jsui`** | `src/ui/js/index.js` | `import { API, Template } from '@jsui';` |
+| **`@jsui/*`** | `src/ui/js/*` | `import { Shell } from '@jsui/modules/shell';` |
+| **`@jsvw`** | `src/ui/views/index.js` | `import { VwRegistry } from '@jsvw';` |
+| **`@jspartials/*`** | `src/ui/partials/*` | `import { Modal } from '@jspartials/core/modal';` |
+
+> **Note:** Whenever you add a new frontend alias, ensure it is updated in **both** `jsconfig.json` (so VS Code understands it) and `esbuild.config.js` (so the compiler can bundle it).
 
 ## 📦 Build Instructions
 

@@ -1,3 +1,6 @@
+import { Shell } from '@jsui/modules';
+import { API } from '@jsui/core';
+
 export const dashbrdVw = {
     // Array to store event listeners for memory cleanup
     _listeners: [],
@@ -7,13 +10,13 @@ export const dashbrdVw = {
      */
     mount: (containerEl) => {
         // 1. Grab the specific buttons inside the dashboard
-        const refreshBtn = containerEl.querySelector('[data-action="run-validation"]');
+        const refreshBtn = document.getElementById('header-btn-refresh');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
 
         // 2. Define the handler functions (Routing to legacy App logic for now)
         const handleRefresh = (e) => {
             e.preventDefault();
-            window.UI.runValidation(true);
+            Shell.runValidation(true);
         };
 
         const handleToolOpen = (e) => {
@@ -21,7 +24,7 @@ export const dashbrdVw = {
             // The tool name is stored in data-tool (e.g., data-tool="opentmsdos")
             const trigger = e.target.closest('[data-action]');
             const toolName = trigger.dataset.tool; 
-            window.App.openTool(toolName);
+            API.openTool(toolName);
         };
 
         // 3. Attach listeners and store them so we can delete them later

@@ -1,6 +1,6 @@
-import { Template } from '../core/template.js';
+import { Template } from '@jsui/core';
 
-export const ModalSvc = {
+export const Modal = {
     // --- STATE VARIABLES ---
     _currentStep: 0,
     _steps: [],
@@ -21,20 +21,20 @@ export const ModalSvc = {
      */
     openModal: async (scriptName, data, config = [], onExecuteCallback) => {
         // 1. Reset state
-        ModalSvc._scriptName = scriptName;
-        ModalSvc._modalData = data;
-        ModalSvc._onExecuteCallback = onExecuteCallback;
-        ModalSvc._currentStep = 0;
-        ModalSvc._executionData = {};
+        Modal._scriptName = scriptName;
+        Modal._modalData = data;
+        Modal._onExecuteCallback = onExecuteCallback;
+        Modal._currentStep = 0;
+        Modal._executionData = {};
 
         // 2. Backward Compatibility Check
         // If config[0] has a 'fields' property, it's a multi-step wizard.
         // Otherwise, it's a legacy simple modal, so we wrap the fields in a single step.
         const isMultiStep = config.length > 0 && config[0].fields !== undefined;
-        ModalSvc._steps = isMultiStep ? config : [{ fields: config }];
+        Modal._steps = isMultiStep ? config : [{ fields: config }];
 
         // 3. Render the first step
-        await ModalSvc._renderStep();
+        await Modal._renderStep();
         document.getElementById('modal-overlay').style.display = 'flex';
     },
 
@@ -47,29 +47,29 @@ export const ModalSvc = {
     // =========================================================================
 
     _renderStep: async () => {
-        const step = ModalSvc._steps[ModalSvc._currentStep];
+        const step = Modal._steps[Modal._currentStep];
         
         // 1. Update text and size (Step data overrides main modal data)
         const stepData = {
-            title: step.title || ModalSvc._modalData.title,
-            desc: step.desc || ModalSvc._modalData.desc,
-            size: step.size || ModalSvc._modalData.size || 'md'
+            title: step.title || Modal._modalData.title,
+            desc: step.desc || Modal._modalData.desc,
+            size: step.size || Modal._modalData.size || 'md'
         };
-        ModalSvc.setModalDef(stepData);
+        Modal.setModalDef(stepData);
 
         // 2. Load the HTML for the fields in this specific step
-        await ModalSvc.loadAllTemplates(step.fields || []);
+        await Modal.loadAllTemplates(step.fields || []);
 
         // 3. Update the button text and visibility
-        ModalSvc._updateButtons();
+        Modal._updateButtons();
 
-        ModalSvc._renderStepper();
+        Modal._renderStepper();
     },
 
     _renderStepper: () => {
         const container = document.getElementById('modal-stepper-container');
 
-        if (ModalSvc._steps.length <= 1) {
+        if (Modal._steps.length <= 1) {
             container.style.display = 'none';
             return;
         }
@@ -79,21 +79,21 @@ export const ModalSvc = {
         // FIX: Removed px-4 padding, added w-100 so it spans the whole width
         let html = `<div class="d-flex justify-content-between align-items-center w-100 mb-4 mt-1">`;
 
-        ModalSvc._steps.forEach((step, index) => {
+        Modal._steps.forEach((step, index) => {
             let statusClass = '';
-            if (index < ModalSvc._currentStep) statusClass = 'completed';
-            else if (index === ModalSvc._currentStep) statusClass = 'active';
+            if (index < Modal._currentStep) statusClass = 'completed';
+            else if (index === Modal._currentStep) statusClass = 'active';
 
             // Checkmark SVG for completed, Number for pending
-            const iconContent = index < ModalSvc._currentStep 
+            const iconContent = index < Modal._currentStep 
                 ? `<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg>` 
                 : (index + 1);
 
             html += `<div class="tms-step-icon ${statusClass}">${iconContent}</div>`;
             
             // FIX: Removed flex-grow-1 (handled by CSS now) and reduced mx to 1
-            if (index < ModalSvc._steps.length - 1) {
-                const lineClass = index < ModalSvc._currentStep ? 'completed' : '';
+            if (index < Modal._steps.length - 1) {
+                const lineClass = index < Modal._currentStep ? 'completed' : '';
                 html += `<div class="tms-step-line ${lineClass} mx-1"></div>`;
             }
         });
@@ -107,17 +107,17 @@ export const ModalSvc = {
         const prevBtn = document.getElementById('modal-prev-btn');
         
         // Handle Previous Button
-        prevBtn.style.display = ModalSvc._currentStep > 0 ? 'block' : 'none';
+        prevBtn.style.display = Modal._currentStep > 0 ? 'block' : 'none';
 
         // Handle Next / Execute Button Text
-        const isLastStep = ModalSvc._currentStep === ModalSvc._steps.length - 1;
+        const isLastStep = Modal._currentStep === Modal._steps.length - 1;
         if (isLastStep) {
-            confirmBtn.innerText = window.__ ? window.__('field.execute') : 'Execute';
+            confirmBtn.innerText = __ ? __('field.execute') : 'Execute';
         } else {
-            confirmBtn.innerText = window.__ ? window.__('field.next') : 'Next';
+            confirmBtn.innerText = __ ? __('field.next') : 'Next';
         }
 
-        ModalSvc._attachButtonListeners();
+        Modal._attachButtonListeners();
     },
 
     // =========================================================================
@@ -136,36 +136,97 @@ export const ModalSvc = {
 
         // --- PREVIOUS BUTTON ---
         newPrevBtn.addEventListener('click', () => {
-            if (ModalSvc._currentStep > 0) {
-                ModalSvc._currentStep--;
-                ModalSvc._renderStep();
+            if (Modal._currentStep > 0) {
+                Modal._currentStep--;
+                Modal._renderStep();
             }
         });
 
         // --- NEXT / EXECUTE BUTTON ---
         newConfirmBtn.addEventListener('click', () => {
-            const step = ModalSvc._steps[ModalSvc._currentStep];
+            const step = Modal._steps[Modal._currentStep];
             
             // 1. Validate the current screen
-            const validationResult = ModalSvc._validateAndExtractData(step.fields);
+            const validationResult = Modal._validateAndExtractData(step.fields);
             if (!validationResult.isValid) return;
 
             // 2. Save the data to the master state
-            ModalSvc._executionData = { ...ModalSvc._executionData, ...validationResult.data };
+            Modal._executionData = { ...Modal._executionData, ...validationResult.data };
 
             // 3. Decide what to do next
-            const isLastStep = ModalSvc._currentStep === ModalSvc._steps.length - 1;
+            const isLastStep = Modal._currentStep === Modal._steps.length - 1;
             
             if (isLastStep) {
-                if (typeof ModalSvc._onExecuteCallback === 'function') {
-                    ModalSvc._onExecuteCallback(ModalSvc._scriptName, ModalSvc._executionData);
+                if (typeof Modal._onExecuteCallback === 'function') {
+                    Modal._onExecuteCallback(Modal._scriptName, Modal._executionData);
                 }
-                ModalSvc.closeModal(); 
+                Modal.closeModal(); 
             } else {
-                ModalSvc._currentStep++;
-                ModalSvc._renderStep();
+                Modal._currentStep++;
+                Modal._renderStep();
             }
         });
+    },
+
+    _bindListField: (field) => {
+        const inputEl = document.getElementById(`modal-input-${field.id}`);
+        const addBtn = document.getElementById(`modal-btn-add-${field.id}`);
+        const listContainer = document.getElementById(`modal-list-${field.id}`);
+        
+        // Initialize the dataset to an empty array
+        listContainer.dataset.values = JSON.stringify([]);
+
+        // Function to redraw the pills
+        const renderPills = () => {
+            const values = JSON.parse(listContainer.dataset.values || '[]');
+            listContainer.innerHTML = ''; // Clear current pills
+            
+            values.forEach((val, index) => {
+                const pill = document.createElement('span');
+                // Use Bootstrap classes for a nice pill with a delete button
+                pill.className = 'badge bg-primary bg-opacity-10 text-primary border border-primary d-flex align-items-center px-2 py-1';
+                pill.innerHTML = `
+                    <span class="me-2">${val}</span>
+                    <button type="button" class="btn-close" style="font-size: 0.5rem;" data-index="${index}"></button>
+                `;
+                
+                // Add event listener to the tiny 'x' to remove the item
+                pill.querySelector('.btn-close').addEventListener('click', (e) => {
+                    const idx = parseInt(e.target.dataset.index, 10);
+                    values.splice(idx, 1); 
+                    listContainer.dataset.values = JSON.stringify(values);
+                    renderPills();
+                });
+                
+                listContainer.appendChild(pill);
+            });
+        };
+
+        const addItem = () => {
+            const val = inputEl.value.trim();
+            if (val) {
+                const values = JSON.parse(listContainer.dataset.values || '[]');
+                // Prevent duplicate entries
+                if (!values.includes(val)) {
+                    values.push(val);
+                    listContainer.dataset.values = JSON.stringify(values);
+                    renderPills();
+                }
+                inputEl.value = ''; // Clear the input box
+                inputEl.focus();    // Keep cursor in the box for rapid typing
+            }
+        };
+
+        // Bind 'Enter' key press
+        inputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Stop modal from submitting
+                addItem();
+            }
+        });
+
+        // Bind 'Add/Select' button click
+        addBtn.addEventListener('click', addItem);
     },
 
     _validateAndExtractData: (fields) => {
@@ -229,12 +290,17 @@ export const ModalSvc = {
         if (fields && fields.length > 0) {
             let combinedHtml = '';
             for (const field of fields) {
-                combinedHtml += await Template.load(ModalSvc.resolveTemplatePath(field), field);
+                combinedHtml += await Template.load(Modal.resolveTemplatePath(field), field);
             }
 
             dynamicZone.innerHTML = combinedHtml;
 
             fields.forEach(field => {
+                // FIX: Only bind the pill logic if explicitly requested
+                if (field.type === 'list' && field.pills === true) {
+                    Modal._bindListField(field);
+                }
+
                 if (typeof field.onRender === 'function') field.onRender(dynamicZone, field); 
             });
         }

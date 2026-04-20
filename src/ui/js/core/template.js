@@ -58,7 +58,7 @@ export const Template = {
 
             // CONDITION A: It's a dynamic translation (e.g., {{ __('key', {param}) }} )
             if (command.startsWith('__(')) {
-                if (typeof window.__ === 'function') {
+                if (typeof __ === 'function') {
                     try {
                         // 🚨 THE MAGIC TRICK: 
                         // Regex is terrible at parsing nested objects like {val: 'x'}. 
@@ -88,7 +88,7 @@ export const Template = {
         // * WHY THIS IS HERE: Before the unified parser, translations were written 
         // as raw __('key') without the {{ }} wrappers. This keeps older code from 
         // breaking until everything is transitioned to the new bracket format.
-        if (typeof window.__ === 'function') {
+        if (typeof __ === 'function') {
             html = html.replace(/__\(['"]([^'"]+)['"]\)/g, (match, transKey) => window.__(transKey));
         }
 

@@ -1,15 +1,6 @@
 <div class="app-view">
-    <div class="d-flex justify-content-between align-items-start mb-5">
-        <div>
-            <h2 class="h4 fw-bold mb-1">{{ __('install.title') }}</h2>
-            <p class="text-muted small">{{ __('install.subtitle') }}</p>
-        </div>
-    </div>
-
-    <div class="mb-5">
-        <span class="section-label">{{ __('install.sections.infra') }}</span>
+    <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapsevInstInfra" data-title="{{ __('install.sections.infra') }}">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
-            
             <div class="col">
                 <div class="action-card" 
                      data-description="{{ __('install.btns.init.desc') }}"
@@ -25,7 +16,7 @@
             </div>
 
             <div class="col">
-                <div class="action-card card-accent" 
+                <div class="action-card" 
                      data-description="{{ __('install.btns.env.desc') }}"
                      data-action="open-modal"
                      data-script="sys-env-setup.bat"
@@ -41,7 +32,7 @@
             <div class="col">
                 <div class="action-card" 
                      data-description="{{ __('install.btns.instTmsDos.desc') }}"
-                     data-action="prompt-tmsdos-installer">
+                     data-action="prmptTmsdInstllr">
                     <div class="action-icon d-flex align-items-center justify-content-center">
                         <svg width="20" height="20"><use href="#icon-gear"></use></svg>
                     </div>
@@ -61,17 +52,13 @@
             </div>
         </div>
     </div>
-
-    <div class="mb-5">
-        <span class="section-label">{{ __('install.sections.db') }}</span>
+    <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapsevInstDb" data-title="{{ __('install.sections.db') }}">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
             <div class="col">
                 <div class="action-card" 
+                    data-action="prmptCreatDB"
                      data-description="{{ __('install.btns.createDb.desc') }}"
-                     data-action="open-modal"
-                     data-script="create-database.bat"
-                     data-title="Create DBs"
-                     data-desc="This will run create-database.bat to initialize new database schemas.">
+                    >
                     <div class="action-icon d-flex align-items-center justify-content-center text-primary">
                         <svg width="20" height="20"><use href="#icon-plus"></use></svg>
                     </div>

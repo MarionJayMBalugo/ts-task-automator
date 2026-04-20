@@ -124,7 +124,9 @@ const i18n = {
             appInfo: "Application Information",
             version: "Version",
             engine: "Electron Engine",
-            developer: "Developer"
+            developer: "Developer",
+            darkModeTitle: "Dark Mode",
+            darkModeDesc: "This will switch the UI to Dark Mode",
         },
         sections: {
             db2: "Database-related Tasks",

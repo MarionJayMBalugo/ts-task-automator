@@ -1,4 +1,4 @@
-import { API } from '../core/api.js';
+import { API } from '@jsui/core';
 import { Status } from './status.js';
 
 export const Validate = {

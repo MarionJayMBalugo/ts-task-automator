@@ -1,6 +1,8 @@
 /**
  * Component Logic for the Server Validation view.
  */
+import { Shell } from '@jsui/modules';
+import { API } from '@jsui/core';
 
 export const svrVldationVw = {
     // Store event listeners for memory cleanup
@@ -8,21 +10,21 @@ export const svrVldationVw = {
 
     mount: (containerEl) => {
         // 1. Grab the specific buttons inside this view
-        const refreshBtn = containerEl.querySelector('[data-action="run-validation"]');
+        const refreshBtn = document.getElementById('header-btn-refresh');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
 
         // 2. Define the handler functions
         const handleRefresh = (e) => {
             e.preventDefault();
             // True forces a fresh scan instead of using the cache
-            window.UI.runValidation(true); 
+            Shell.runValidation(true); 
         };
 
         const handleToolOpen = (e) => {
             e.preventDefault();
             const trigger = e.target.closest('[data-action]');
             const toolName = trigger.dataset.tool; 
-            window.App.openTool(toolName);
+            API.openTool(toolName);
         };
 
         // 3. Attach listeners and store them for memory cleanup

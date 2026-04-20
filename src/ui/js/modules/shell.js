@@ -7,10 +7,8 @@
  * views and toggling CSS classes) separate from the heavy business logic in Flows.
  */
 
-import { API } from '../core/api.js';
-import { I18n } from '../core/i18n.js';
-import { ModalSvc } from '../partials/modal.js';
-import { Template } from '../core/template.js';
+import { API , I18n, Template } from '@jsui/core';
+import { Modal } from '@jspartials/core/modal';
 import { TAB_CONFIG, VIEW_ROOT } from '../cnf';
 import { VwRegistry } from '../../views';
 import { Validate } from './validate.js';
@@ -35,10 +33,10 @@ export const Shell = {
         Shell.el.pathInfo = document.getElementById('path-info');
         
         // [GLOBAL BRIDGE] 
-        // Exposes ModalSvc.closeModal to the global window.
+        // Exposes Modal.closeModal to the global window.
         // * WHY: So simple HTML buttons like <button onclick="closeModal()"> 
         // can close the active modal without needing complex event listeners.
-        window.closeModal = () => ModalSvc.closeModal();
+        window.closeModal = () => Modal.closeModal();
     },
 
     /**
@@ -63,23 +61,36 @@ export const Shell = {
         if (active) active.classList.add('active');
 
         // 2. Fetch & Parse the Main View
-        // 🚨 WE MUST PARSE BEFORE INJECTING to ensure {{ __('translations') }} are evaluated!
         let rawHtml = await API.loadView(tabName);
         Shell.el.appContainer.innerHTML = Template.parse(rawHtml);
 
-        // 3. Micro-Component Auto-Loader
-        // * WHY: Instead of putting huge chunks of HTML inside a single file, you 
-        // can use <div data-component="partials/sys-hw"></div>. This loops through 
-        // the newly injected view, finds those placeholders, and fetches them concurrently.
-        const components = Array.from(Shell.el.appContainer.querySelectorAll('[data-component]'));
+        // 3. RECURSIVE Micro-Component Auto-Loader
+        // Find initial components
+        let components = Array.from(Shell.el.appContainer.querySelectorAll('[data-component]'));
         
-        await Promise.all(components.map(async (mount) => {
-            const compName = mount.getAttribute('data-component');
-            let rawCompHtml = await API.loadPartial(compName);
-            
-            // Parse the component's HTML for translations too, then mount it!
-            mount.innerHTML = Template.parse(rawCompHtml);
-        }));
+        // Use a while loop! This ensures that if a newly injected component has 
+        // ANOTHER component inside of it, the engine will keep fetching until everything is built.
+        while (components.length > 0) {
+            await Promise.all(components.map(async (mount) => {
+                const compName = mount.getAttribute('data-component');
+                
+                // Extract Slot and Props
+                const slotContent = mount.innerHTML;
+                const props = { ...mount.dataset, slot: slotContent }; 
+                console.log(compName)
+                let rawCompHtml = await API.loadPartial(compName);
+                
+                // Parse and inject
+                mount.innerHTML = Template.parse(rawCompHtml, props);
+                
+                // 🚨 CRITICAL: Remove the attribute so we don't process this exact div again!
+                mount.removeAttribute('data-component'); 
+            }));
+
+            // Re-query the DOM! If the injected components had nested components, 
+            // they will be found here and trigger the next loop cycle.
+            components = Array.from(Shell.el.appContainer.querySelectorAll('[data-component]'));
+        }
         
         // 4. Final Sweep: Apply translations to standard attributes (i18n="key")
         I18n.apply(); 
@@ -119,13 +130,16 @@ export const Shell = {
 
     loadTab: async (tabName) => {
         tabName = tabName.split('/')[0];
-
+        
+        // UPDATE GLOBAL HEADER
+        Shell.updateHeader(tabName);
         Shell.unmountPrtlScript();
 
         await Shell.switchTab(tabName);
 
         Shell.mountPrtlScript(tabName);
         Shell.runDefTabFunc(tabName);
+        Shell.validateHeidiActionCard();
     },
 
     unmountPrtlScript: () => {
@@ -159,7 +173,10 @@ export const Shell = {
     },
 
     runDefTabFunc: (tabName) => {
-        const actions = TAB_CONFIG[tabName] || [];
+        const config = TAB_CONFIG[tabName] || {};
+        // Safely checks if config.actions exists, otherwise falls back to config array for legacy support
+        const actions = Array.isArray(config) ? config : (config.actions || []);
+        
         actions.forEach(actionName => {
             if (typeof Shell[actionName] === 'function') {
                 Shell[actionName]();
@@ -185,5 +202,51 @@ export const Shell = {
             const version = await API.getVersion();
             if (Shell.el.versionDisplay) Shell.el.versionDisplay.innerText = `v${version}`;
         } catch (e) { console.error("Version load failed"); }
+    },
+
+    validateHeidiActionCard: async () => {
+        const card = document.querySelector('.heidi-install-card');
+        if (!card) return;
+        const isInstalled = await API.checkHeidiInstalled();
+        if (isInstalled) {
+            card.classList.add('disabled-state');
+            card.removeAttribute('onclick'); // For legacy protection
+            card.removeAttribute('data-action'); // New logic protection
+            const label = card.querySelector('.action-label');
+            if (label) label.innerText += " (Installed)";
+        }
+    },
+
+    /**
+     * Translates and injects the title and subtitle into the top header
+     */
+    updateHeader: (tabName) => {
+        const config = TAB_CONFIG[tabName];
+        if (!config) return;
+
+        const titleEl = document.getElementById('headr-title');
+        const subtitleEl = document.getElementById('headr-sbtitle');
+        const refreshBtn = document.getElementById('header-btn-refresh');
+
+        // Translate the keys stored in the config using the global __() helper
+        if (titleEl && config.title) titleEl.innerText = window.__(config.title);
+        
+        if (subtitleEl && config.subtitle) {
+            subtitleEl.innerText = window.__(config.subtitle);
+            subtitleEl.style.display = 'block';
+        } else if (subtitleEl) {
+            // Hide the subtitle if the view doesn't have one!
+            subtitleEl.style.display = 'none'; 
+        }
+
+        if (refreshBtn) {
+            if (config.showRefresh) {
+                refreshBtn.classList.remove('d-none');
+                refreshBtn.classList.add('d-flex'); // Use d-flex to keep icon and text aligned
+            } else {
+                refreshBtn.classList.add('d-none');
+                refreshBtn.classList.remove('d-flex');
+            }
+        }
     }
 };

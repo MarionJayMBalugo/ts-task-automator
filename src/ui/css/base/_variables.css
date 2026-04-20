@@ -1,8 +1,9 @@
 :root {
     --tms-blue: #0d6efd;
     --tms-sidebar: #0f172a;
-    --tms-bg: #f8fafc;
+    --tms-drkblue: #0f172a;
+    --tms-bg: #e9eff4;
     --tms-border: #e2e8f0;
     --tms-text-main: #1e293b;
-    --tms-text-muted: #64748b;
+    --tms-text-muted: #222c3a;
 }

@@ -6,7 +6,6 @@
 
 import { Shell }  from './shell.js';
 import { Status } from './status.js';
-import { Flows }  from './flows.js';
 import { Notify } from './notify.js';
 import { Validate } from './validate.js';
 
@@ -14,7 +13,6 @@ import { Validate } from './validate.js';
 export { 
     Shell, 
     Status, 
-    Flows, 
     Notify,
     Validate
 };

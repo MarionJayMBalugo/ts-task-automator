@@ -49,52 +49,44 @@
 .tms-modal.mdl-full { width: 95vw; max-width: 87.5rem; } /* 1400px */
 
 /* ==========================================================================
-   MINIMAL WIZARD STEPPER UI
+   SUBTLE PROGRESS DOTS (Minimalist)
    ========================================================================== */
 
-/* The Circles */
+/* Centering the dots instead of stretching a line across the modal */
+#modal-stepper-container .d-flex {
+    justify-content: center !important;
+    gap: 10px;
+}
+
+/* The Dots */
 .tms-step-icon {
-    width: 28px; /* Slightly bumped up for better visibility */
-    height: 28px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background-color: var(--bs-secondary-bg);
-    color: var(--bs-secondary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 13px;
+    color: transparent; /* Hide the numbers! */
+    font-size: 0;
     transition: all 0.3s ease;
-    flex-shrink: 0; 
+    border: none;
+    flex-shrink: 0;
 }
 
-/* Active Step */
+/* Active Dot - Turns into a small pill */
 .tms-step-icon.active {
+    width: 28px;
+    border-radius: 5px;
     background-color: var(--bs-primary);
-    color: white;
-    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.15); 
+    box-shadow: none;
 }
 
-/* Completed Step */
+/* Completed Dot */
 .tms-step-icon.completed {
     background-color: var(--bs-primary);
-    color: white;
+    opacity: 0.5;
 }
 
-/* The Connecting Lines */
+/* Hide the connecting lines entirely - dots don't need them */
 .tms-step-line {
-    height: 3px;
-    width: 100%; /* FIX: Forces the line to take up available space! */
-    background-color: var(--bs-secondary-bg);
-    transition: background-color 0.3s ease;
-    border-radius: 2px;
-}
-
-.tms-step-line.completed {
-    background-color: var(--bs-primary);
-}
-
-.modal-backdrop, #modal-stepper-containe, #modal-dynamic-content, #modal-prev-btn {
     display: none;
 }
 

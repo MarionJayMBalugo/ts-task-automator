@@ -12,20 +12,6 @@
 <body>
 
 <nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand d-flex justify-content-between align-items-center">
-        <div class="brand-text d-flex align-items-center">
-            <img src="../assets/logo.png" alt="Logo" width="28" height="28" class="me-2 brand-logo">
-            <span><span i18n="app.titlesubone"></span> <span class="text-primary" i18n="app.titlesubtwo"></span></span>
-        </div>
-        <button id="sidebar-toggle" class="btn btn-sm text-white border-0 p-0" data-action="toggle-sidebar">
-            <div class="hamburger-icon" id="hamburger-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </button>
-    </div>
-
     <a href="#" id="nav-dashboard" class="nav-link active" data-action="navigate" data-view="dashboard/template">
         <span class="nav-icon"><svg width="16" height="16"><use href="#icon-folder"></use></svg></span>
         <span class="nav-text" i18n="sidebar.dashboard"></span>
@@ -51,9 +37,27 @@
     </div>
 </nav>
 
-<div class="main-content">
-    <div id="app-container">
-        <div class="d-flex flex-column justify-content-center align-items-center text-muted tms-loader-wrapper">
+<div class="main-content d-flex flex-column vh-100">
+
+    <div class="content-header d-flex align-items-center flex-shrink-0">
+        <button id="sidebar-toggle" class="btn btn-sm text-muted border-0 p-0 me-3 d-flex align-items-center" data-action="toggle-sidebar">
+            <svg width="20" height="20"><use href="#icon-menu"></use></svg>
+        </button>
+        <div>
+            <h2 id="headr-title" class="h4 fw-bold mb-1"></h2>
+            <p id="headr-sbtitle" class="text-muted small mb-0"></p>
+        </div>
+
+        <div class="ms-auto" id="header-actions">
+            <button id="header-btn-refresh" class="btn shadow-sm px-4 py-2 d-flex align-items-center gap-2 btn-runvalid" data-action="run-validation">
+                <svg width="14" height="14"><use href="#icon-refresh"></use></svg>
+                <span i18n="validation.refresh"></span>
+            </button>
+        </div>
+    </div>
+    
+    <div id="app-container" class="flex-grow-1 overflow-y-auto overflow-x-hidden position-relative">
+        <div class="d-flex flex-column justify-content-center align-items-center text-muted tms-loader-wrapper h-100">
             <h6 class="fw-bold mb-3 text-uppercase tms-loader-text" i18n="loader.description"></h6>
             <div class="tms-loader-bar">
                 <div class="tms-loader-progress"></div>
@@ -61,7 +65,8 @@
         </div>
     </div>
 </div>
+
 <script src="./js/lang/text.js"></script>
-<script type="module" src="./js/core/app.js"></script>
+<script type="module" src="./js/app.js"></script>
 </body>
 </html>

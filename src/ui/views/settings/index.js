@@ -2,7 +2,10 @@
  * Component Logic for the Settings view.
  */
 
-export const SettingsComponent = {
+import { API } from '@jsui/core';
+import { Shell, Notify } from '@jsui/modules';
+
+export const SettingsVw = {
     _listeners: [],
 
     mount: (containerEl) => {
@@ -16,9 +19,9 @@ export const SettingsComponent = {
             const trigger = e.target.closest('[data-action]');
             const action = trigger.dataset.action;
 
-            if (action === 'change-folder') window.App.changeFolder();
-            else if (action === 'copy-scripts') window.App.copyScripts();
-            else if (action === 'reset-config') window.App.resetConfig();
+            if (action === 'change-folder') SettingsVw.changeFolder();
+            else if (action === 'copy-scripts') SettingsVw.copyScripts();
+            else if (action === 'reset-config') SettingsVw.resetConfig();
         };
 
         // 3. Define the Change Handler (for toggles and dropdowns)
@@ -27,32 +30,54 @@ export const SettingsComponent = {
             const action = trigger.dataset.action;
 
             if (action === 'change-drive') {
-                window.App.changeTargetDrive(trigger.value);
+                API.setTargetDrive(trigger.value);
             } 
             else if (action === 'toggle-auto-close') {
-                window.App.toggleAutoClose(trigger.checked);
+                API.toggleAutoClose(trigger.checked);
             } 
             else if (action === 'toggle-dark-mode') {
-                window.UI.toggleDarkMode(trigger.checked);
+                Shell.toggleDarkMode(trigger.checked);
             }
         };
 
         // 4. Attach listeners and store them for memory cleanup
         buttons.forEach(btn => {
             btn.addEventListener('click', handleClick);
-            SettingsComponent._listeners.push({ el: btn, type: 'click', fn: handleClick });
+            SettingsVw._listeners.push({ el: btn, type: 'click', fn: handleClick });
         });
 
         inputs.forEach(input => {
             input.addEventListener('change', handleChange);
-            SettingsComponent._listeners.push({ el: input, type: 'change', fn: handleChange });
+            SettingsVw._listeners.push({ el: input, type: 'change', fn: handleChange });
         });
     },
 
     unmount: () => {
-        SettingsComponent._listeners.forEach(({ el, type, fn }) => {
+        SettingsVw._listeners.forEach(({ el, type, fn }) => {
             el.removeEventListener(type, fn);
         });
-        SettingsComponent._listeners = [];
+        SettingsVw._listeners = [];
+    },
+
+    changeFolder: async () => {
+        if (await API.selectFolder()) Shell.refreshSettings();
+    },
+
+    resetConfig: async () => {
+        const result = await API.resetConfig();
+        if (result) {
+            const isError = result.includes('❌');
+            Notify.showAlert(result, isError); 
+            Shell.refreshSettings();
+        }
+    },
+
+    copyScripts: async () => {
+        const result = await API.copyScripts();
+        if (result) {
+            const isError = result.includes('❌');
+            Notify.showAlert(result, isError);
+            Shell.refreshSettings();
+        }
     }
 };
