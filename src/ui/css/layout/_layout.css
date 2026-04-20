@@ -113,7 +113,7 @@ h2, .h4, .fw-bold {
 }
 
 .content-header { 
-    padding: 2rem 3rem; 
+    padding: 2rem 2rem; 
     /* NEW: Forces the header to reserve space for a scrollbar so it aligns perfectly with the container below! */
     scrollbar-gutter: stable; 
 }
