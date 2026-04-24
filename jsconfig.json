@@ -6,7 +6,9 @@
       "@jsui": ["src/ui/js/index.js*"],
       "@jsvw/*": ["src/ui/views/*"],
       "@jsvw*": ["src/ui/views/index.js*"],
-      "@jspartials/*": ["src/ui/partials/*"]
+      "@jspartials/*": ["src/ui/partials/*"],
+      "@jsutils/*": ["src/ui/utils/*"],
+      "@jsutils": ["src/ui/js/utils/index.js*"],
     }
   },
   "exclude": ["node_modules", "dist"]

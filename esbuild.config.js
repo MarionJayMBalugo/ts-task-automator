@@ -138,7 +138,8 @@ async function build() {
         alias: {
             '@jsui': path.resolve(__dirname, 'src/ui/js'),
             '@jsvw': path.resolve(__dirname, 'src/ui/views'),
-            '@jspartials': path.resolve(__dirname, 'src/ui/partials')
+            '@jspartials': path.resolve(__dirname, 'src/ui/partials'),
+            '@jsutils': path.resolve(__dirname, 'src/ui/js/utils')
         }
     });
 

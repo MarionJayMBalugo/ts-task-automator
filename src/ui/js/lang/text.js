@@ -157,10 +157,14 @@ const i18n = {
         opencustomer: "Open Customers",
         opentmstool: "Open TMS-tools",
         setup: "Setup {name}",
+        create: "Create {name}",
         browse: "browse",
         msg: {
             init: "Initialize {target}",
             setupFolderdesc: "This will run setup-folders.bat to build the TMS directory tree."
+        },
+        err: {
+            req: 'Field Required.'
         }
     }
 };

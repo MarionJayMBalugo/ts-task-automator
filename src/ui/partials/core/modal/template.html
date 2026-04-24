@@ -14,3 +14,20 @@
         </div>
     </div>
 </div>
+
+<template id="tpl-stepper-wrapper">
+    <div class="d-flex justify-content-between align-items-center w-100 mb-4 mt-1">{{content}}</div>
+</template>
+
+<template id="tpl-stepper-item">
+    <div class="tms-step-icon {{statusClass}}">{{iconContent}}</div>
+    {{lineContent}}
+</template>
+
+<template id="tpl-stepper-line">
+    <div class="tms-step-line {{lineClass}} mx-1"></div>
+</template>
+
+<template id="tpl-stepper-check">
+    <svg width="14" height="14"><use href="#icon-stepper-check"></use></svg>
+</template>

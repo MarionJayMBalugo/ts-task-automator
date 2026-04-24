@@ -99,6 +99,10 @@
 /* Adjust badges for tighter spaces */
 .badge { font-size: 0.7rem !important; font-weight: 700; }
 
+.list-badge {
+    font-size: 0.85rem
+}
+
 /* --- APP LOADER & PROGRESS BAR --- */
 .tms-loader-wrapper {
     height: 60vh;

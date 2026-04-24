@@ -1,18 +1,18 @@
 /* --- MODAL (HIGH Z-INDEX FIX) --- */
 .modal-backdrop {
     display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(15, 23, 42, 0.7); 
-    backdrop-filter: blur(0.25rem); /* 4px */
+    background: var(--tms-backdrop-bg); 
+    backdrop-filter: blur(0.25rem);
     z-index: 9999; 
     align-items: center; justify-content: center;
 }
 
 .tms-modal {
     background: white; 
-    width: 26.25rem; /* 420px */
-    border-radius: 1rem; /* 16px */
+    width: 26.25rem;
+    border-radius: 1rem;
     padding: 2rem;
-    box-shadow: 0 1.5625rem 3.125rem -0.75rem rgba(0, 0, 0, 0.25); /* 0 25px 50px -12px */
+    box-shadow: 0 1.5625rem 3.125rem -0.75rem var(--tms-shadow-color);
     border: 1px solid var(--tms-border);
     z-index: 10000; animation: modalFadeIn 0.3s ease;
 }
@@ -38,15 +38,15 @@
 .tms-modal .form-select:focus,
 .tms-modal .btn:focus {
     box-shadow: none;
-    border-color: #0d6efd; 
+    border-color: var(--tms-blue); 
     outline: none;
 }
 
 /* --- MODAL SIZES --- */
-.tms-modal.mdl-sm { width: 20rem; } /* 320px */
-.tms-modal.mdl-md { width: 26.25rem; } /* 420px */
-.tms-modal.mdl-lg { width: 40.625rem; } /* 650px */
-.tms-modal.mdl-full { width: 95vw; max-width: 87.5rem; } /* 1400px */
+.tms-modal.mdl-sm { width: 20rem; }
+.tms-modal.mdl-md { width: 30rem; }
+.tms-modal.mdl-lg { width: 45rem; }
+.tms-modal.mdl-full { width: 95vw; max-width: 87.5rem; } 
 
 /* ==========================================================================
    SUBTLE PROGRESS DOTS (Minimalist)
@@ -55,13 +55,13 @@
 /* Centering the dots instead of stretching a line across the modal */
 #modal-stepper-container .d-flex {
     justify-content: center !important;
-    gap: 10px;
+    gap: 0.625rem;
 }
 
 /* The Dots */
 .tms-step-icon {
-    width: 10px;
-    height: 10px;
+    width: 0.625rem;
+    height: 0.625rem;
     border-radius: 50%;
     background-color: var(--bs-secondary-bg);
     color: transparent; /* Hide the numbers! */
@@ -73,8 +73,8 @@
 
 /* Active Dot - Turns into a small pill */
 .tms-step-icon.active {
-    width: 28px;
-    border-radius: 5px;
+    width: 1.75rem;
+    border-radius: 0.3125rem;
     background-color: var(--bs-primary);
     box-shadow: none;
 }
