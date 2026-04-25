@@ -46,6 +46,9 @@ export const FormUtil = {
      * @param {any} savedVal - Data from Modal._executionData to restore.
      */
     bind: (field, zone, savedVal) => {
+
+        if (typeof field.onRender === 'function') field.onRender(zone, field);
+
         // 1. Restore the field's previous state
         FormUtil.restore(field.type, field.id, savedVal);
 
@@ -68,14 +71,46 @@ export const FormUtil = {
             // For standard inputs, clear error state on any input or change event
             const el = DOM.el(`modal-input-${field.id}`) || DOM.el(field.id);
             if (el) {
-                ['input', 'change'].forEach(ev => 
-                    el.addEventListener(ev, () => el.classList.remove('is-invalid'))
-                );
+                ['input', 'change'].forEach(ev => {
+                    // 🚨 NOTICE THE BRACES! Everything below must happen INSIDE the event listener!
+                    el.addEventListener(ev, () => {
+                        
+                        el.classList.remove('is-invalid');
+
+                        // 1. Clear the red border on the eye button for THIS field
+                        if (field.type === 'psswrd') {
+                            const eyeBtn = document.getElementById(`modal-btn-eye-${field.id}`);
+                            if (eyeBtn) eyeBtn.classList.remove('border-danger', 'text-danger');
+                        }
+
+                        // 2. If they type in the main password, clear the confirm box AND its eye too!
+                        if (field.id === 'password') {
+                            // Support for both 'confirm_password' and 'confirmpass' IDs
+                            const confirmId = document.getElementById('modal-input-confirmpass') ? 'confirmpass' : 'confirm_password';
+                            
+                            const confirmEl = document.getElementById(`modal-input-${confirmId}`);
+                            const confirmEye = document.getElementById(`modal-btn-eye-${confirmId}`);
+                            
+                            if (confirmEl) confirmEl.classList.remove('is-invalid');
+                            if (confirmEye) confirmEye.classList.remove('border-danger', 'text-danger');
+                        }
+
+                    }); // <-- End of event listener
+                });
             }
         }
+        if (field.type === 'psswrd') {
+            const eyeBtn = DOM.el(`modal-btn-eye-${field.id}`);
+            const inputEl = DOM.el(`modal-input-${field.id}`);
 
-        // 4. Trigger any custom onRender logic defined in the prompt config
-        if (typeof field.onRender === 'function') field.onRender(zone, field); 
+            if (eyeBtn && inputEl) {
+                eyeBtn.addEventListener('click', () => {
+                    const isPass = inputEl.type === 'password';
+                    inputEl.type = isPass ? 'text' : 'password';
+                    eyeBtn.style.opacity = isPass ? '1' : '0.6';
+                });
+            }
+        }
     },
 
     /**
@@ -107,14 +142,48 @@ export const FormUtil = {
                 );
 
             } else {
-                // Standard Input Handling (Text, Select, Checkbox)
+                // Standard Input Handling (Text, Select, Checkbox, Password)
                 const el = DOM.el(`modal-input-${f.id}`) || DOM.el(f.id);
                 val = f.type === 'checkbox' ? el?.checked : el?.value;
                 
-                // Checkboxes are rarely "required" in a way that blocks submission,
-                // so we primarily validate text-based values.
-                hasErr = f.required && !el?.value && f.type !== 'checkbox';
-                if (el) el.classList.toggle('is-invalid', hasErr);
+                let errorMsg = null;
+
+                // 1. Base check: Is it required but empty?
+                if (f.required && !el?.value && f.type !== 'checkbox') {
+                    // Try to grab translation, fallback to English
+                    errorMsg = typeof window.__ === 'function' 
+                        ? window.__('err.req', { field: f.label }) 
+                        : `${f.label} is required.`;
+                    console.log(errorMsg, f)
+                } 
+                // 2. Custom Validation Hook (e.g., matching passwords)
+                else if (typeof f.customValidate === 'function') {
+                    const customCheck = f.customValidate(val);
+                    // customValidate should return an error string if invalid, or true if valid
+                    if (customCheck !== true) {
+                        errorMsg = customCheck; 
+                    }
+                }
+
+                hasErr = errorMsg !== null;
+
+                // Apply UI Feedback and Error Text
+                if (el) {
+                    el.classList.toggle('is-invalid', hasErr);
+                    
+                    if (f.type === 'psswrd') {
+                        const eyeBtn = document.getElementById(`modal-btn-eye-${f.id}`);
+                        if (eyeBtn) {
+                            eyeBtn.classList.toggle('border-danger', hasErr);
+                            eyeBtn.classList.toggle('text-danger', hasErr);
+                        }
+                    }
+
+                    const errContainer = document.getElementById(`modal-err-${f.id}`);
+                    if (errContainer) {
+                        errContainer.innerText = errorMsg || '';
+                    }
+                }
             }
 
             // Track if the entire form is valid
