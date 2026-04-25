@@ -77,7 +77,6 @@ export const Shell = {
                 // Extract Slot and Props
                 const slotContent = mount.innerHTML;
                 const props = { ...mount.dataset, slot: slotContent }; 
-                console.log(compName)
                 let rawCompHtml = await API.loadPartial(compName);
                 
                 // Parse and inject

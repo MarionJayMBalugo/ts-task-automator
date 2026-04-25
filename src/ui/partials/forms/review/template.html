@@ -2,3 +2,10 @@
     <label class="form-label small fw-bold text-muted mb-2">{{label}}</label>
     <ul class="list-group shadow-sm" id="modal-review-{{id}}"></ul>
 </div>
+
+<template id="tpl-review-item">
+    <li class="list-group-item d-flex justify-content-between align-items-center px-3 py-2 {{extraClass}}">
+        <span class="text-muted small fw-bold">{{itemLabel}}</span>
+        <span class="{{valueClass}}">{{value}}</span>
+    </li>
+</template>

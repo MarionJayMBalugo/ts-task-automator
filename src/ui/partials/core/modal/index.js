@@ -63,9 +63,14 @@ export const Modal = {
         if (step.fields && step.fields.length > 0) {
             let html = '';
             for (const f of step.fields) {
+
+                // This condition allows to accept other text field type without creating new html file for it.
+                const templateFolder = ['email', 'number', 'tel'].includes(f.type) 
+                    ? 'txt' 
+                    : (f.type || 'txt');
                 const path = f.type === 'partial' 
                     ? f.url 
-                    : `partials/forms/${f.type || 'txt'}/template.html`;
+                    : `partials/forms/${templateFolder}/template.html`;
                 html += await Template.load(path, f);
             }
             

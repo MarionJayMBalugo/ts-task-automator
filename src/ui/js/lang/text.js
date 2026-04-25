@@ -1,4 +1,4 @@
-const i18n = {
+export default {
     en: {
         field: {
             cancel: "Cancel",
@@ -164,7 +164,7 @@ const i18n = {
             setupFolderdesc: "This will run setup-folders.bat to build the TMS directory tree."
         },
         err: {
-            req: 'Field Required.'
+            req: '{field} Required.'
         }
     }
 };

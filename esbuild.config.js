@@ -144,16 +144,18 @@ async function build() {
     });
 
     // Standalone language dictionary
-    const textJsSource = path.join(__dirname, 'src/ui/js/lang/text.js');
-    if (fs.existsSync(textJsSource)) {
+    const langSource = path.join(__dirname, 'src/ui/js/lang/index.js');
+    
+    if (fs.existsSync(langSource)) {
         await esbuild.build({
-            entryPoints: [textJsSource],
-            outfile: 'dist/ui/js/lang/text.js', 
+            entryPoints: [langSource],
+            outfile: 'dist/ui/js/lang/index.js', // Output as one index.js file
+            bundle: true, // 🚨 THIS IS THE MAGIC PROPERTY! It merges all imports into one file.
             minify: true,
             sourcemap: false,
         });
     } else {
-        console.warn('Warning: Could not find src/ui/js/lang/text.js');
+        console.warn('Warning: Could not find src/ui/js/lang/index.js');
     }
 
     // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file

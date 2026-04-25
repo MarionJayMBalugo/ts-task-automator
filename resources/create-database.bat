@@ -61,7 +61,7 @@ for %%D in (!CLEAN_LIST!) do (
         ) else (
             :: MODE: SYSTEM-WIDE MYSQL
             set "MYSQL_PWD=!PW!"
-            mysql -h !DB_HOST! -u !DB_USER! -e "!SQL!"
+            "!MARIA_BIN!\mysql" -h !DB_HOST! -u !DB_USER! -e "!SQL!"
         )
 
         if !ERRORLEVEL! EQU 0 (
