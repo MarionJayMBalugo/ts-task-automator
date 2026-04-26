@@ -3,7 +3,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 // =============================================================================
-// 1. CLEAN ENVIRONMENT
+// CLEANUP & INITIALIZATION
+// Wipe out the old dist folder to ensure a fresh build with no ghost files.
 // =============================================================================
 const distDir = path.join(__dirname, 'dist');
 if (fs.existsSync(distDir)) {
@@ -15,6 +16,9 @@ fs.mkdirSync(distDir);
 // --- UTILITY FUNCTIONS ---
 // =============================================================================
 
+/**
+ * Recursively scans a directory for files matching a specific extension.
+ */
 function getFiles(dir, ext, fileList = []) {
     if (!fs.existsSync(dir)) return fileList;
     const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -30,6 +34,9 @@ function getFiles(dir, ext, fileList = []) {
     return fileList;
 }
 
+/**
+ * Recursively strips comments and whitespace from all HTML files.
+ */
 function minifyHTML(dir) {
     if (!fs.existsSync(dir)) return;
     const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -42,6 +49,7 @@ function minifyHTML(dir) {
         } else if (file.name.endsWith('.html')) {
             let content = fs.readFileSync(fullPath, 'utf8');
 
+            // Regex removal of HTML comments and excessive spaces
             const commentPattern = new RegExp('<' + '!--[\\s\\S]*?--' + '>', 'g');
             content = content.replace(commentPattern, '');
             content = content.replace(/\r?\n|\r/g, ' ');
@@ -53,6 +61,10 @@ function minifyHTML(dir) {
     }
 }
 
+/**
+ * Processes shell scripts (stripping comments/empty lines) while safely copying
+ * complex encodings (like UTF-16LE XMLs) and binary files without corrupting them.
+ */
 function minifyScripts(inputFolder, outputFolder) {
     if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder, { recursive: true });
     const files = fs.readdirSync(inputFolder, { withFileTypes: true });
@@ -64,30 +76,30 @@ function minifyScripts(inputFolder, outputFolder) {
         if (file.isDirectory()) {
             minifyScripts(inputPath, outputPath);
         } else {
-            let content = fs.readFileSync(inputPath, 'utf8');
-
-            if (!file.name.endsWith('.conf')) {
+            // SAFE TEXT PROCESSING: Only run UTF-8 regex operations on known shell scripts.
+            if (file.name.match(/\.(bat|cmd|ps1)$/i) || file.name.includes('.env')) {
+                let content = fs.readFileSync(inputPath, 'utf8');
                 const lines = content.split(/\r?\n/);
                 let processedLines = [];
-                let isModified = false;
 
                 if (file.name.endsWith('.bat') || file.name.endsWith('.cmd')) {
                     processedLines = lines.filter(line => {
                         const t = line.trim().toUpperCase();
                         return !(t.startsWith('REM') || t.startsWith('::'));
                     });
-                    isModified = true;
-                } 
-                else if (file.name.includes('.env') || file.name.endsWith('.ps1')) {
+                } else if (file.name.includes('.env') || file.name.endsWith('.ps1')) {
                     processedLines = lines.filter(line => !line.trim().startsWith('#'));
-                    isModified = true;
                 }
 
-                if (isModified) {
-                    content = processedLines.join('\r\n').replace(/(?:\r?\n){2,}/g, '\r\n').trim();
-                }
+                // Compress multiple blank lines into a single newline and write back
+                content = processedLines.join('\r\n').replace(/(?:\r?\n){2,}/g, '\r\n').trim();
+                fs.writeFileSync(outputPath, content, 'utf8');
+                
+            } else {
+                // EXEMPTION COPY: Raw binary transfer.
+                // This prevents Node from accidentally corrupting UTF-16LE XMLs, executables, or images.
+                fs.copyFileSync(inputPath, outputPath);
             }
-            fs.writeFileSync(outputPath, content, 'utf8');
         }
     }
 }
@@ -101,33 +113,35 @@ async function build() {
 
     const commonOpts = { bundle: true, platform: 'node', target: 'node18', external: ['electron'], minify: true, sourcemap: false };
 
-    // 2. Bundle Main Process & Preload 
-    // (esbuild natively respects your package.json "#cnf" imports!)
+    // --- BUNDLE ELECTRON BACKEND ---
+    // Compiles the main thread and preload scripts. Esbuild handles the "#cnf" package alias natively.
     await esbuild.build({ ...commonOpts, entryPoints: ['src/backend/main.js'], outfile: 'dist/main.js' });
     await esbuild.build({ ...commonOpts, entryPoints: ['src/preload/preload.js'], outfile: 'dist/preload.js' });
 
-    // 3. Copy Static Assets (HTML views, images) FIRST
+    // --- COPY STATIC ASSETS ---
+    // Move all HTML views and images over before we start minifying and bundling the UI.
     console.log('Syncing static assets...');
     fs.cpSync('src/ui', 'dist/ui', { recursive: true });
     fs.cpSync('src/assets', 'dist/assets', { recursive: true });
     
-    // 4. Minify HTML files in the dist folder
+    // --- COMPRESS HTML ---
     console.log('Compressing HTML views...');
     minifyHTML(path.join(__dirname, 'dist', 'ui'));
 
-    // 5. Minify Resources (Batch/Env)
+    // --- PROCESS RESOURCES ---
+    // Minifies batch files but perfectly duplicates XMLs and bins to prevent UTF-16 corruption.
     console.log('Minifying Shell Scripts & Envs...');
     minifyScripts(path.join(__dirname, 'resources'), path.join(__dirname, 'dist', 'resources'));
 
-    // 6. Bundle UI JavaScript
+    // --- BUNDLE FRONTEND JAVASCRIPT ---
     console.log('Bundling UI Modules into ONE file...');
     
-    // 🚨 CRITICAL FIX: Aggressively delete ALL raw .js files that were just copied into /dist/ui
-    // This ensures your new views/**/index.js components don't accidentally get left behind and bloat the app.
+    // Cleanup: Erase all the raw, unbundled JS files that fs.cpSync just copied over.
+    // This stops individual component scripts from bloating the final production folder.
     const allRawJsFiles = getFiles(path.join(__dirname, 'dist/ui'), '.js');
     allRawJsFiles.forEach(file => fs.unlinkSync(file));
 
-    // Bundle the master controller (app.js) into a single file
+    // Compile the master UI controller
     await esbuild.build({
         entryPoints: ['src/ui/js/app.js'],
         bundle: true,          // Merge all imports, including ComponentRegistry!
@@ -143,14 +157,14 @@ async function build() {
         }
     });
 
-    // Standalone language dictionary
+    // --- BUNDLE LANGUAGE DICTIONARY ---
     const langSource = path.join(__dirname, 'src/ui/js/lang/index.js');
     
     if (fs.existsSync(langSource)) {
         await esbuild.build({
             entryPoints: [langSource],
-            outfile: 'dist/ui/js/lang/index.js', // Output as one index.js file
-            bundle: true, // 🚨 THIS IS THE MAGIC PROPERTY! It merges all imports into one file.
+            outfile: 'dist/ui/js/lang/index.js',
+            bundle: true, // Merges all exported language chunks into one file
             minify: true,
             sourcemap: false,
         });
@@ -158,30 +172,27 @@ async function build() {
         console.warn('Warning: Could not find src/ui/js/lang/index.js');
     }
 
-    // 7. Bundle ALL CSS (Bootstrap + Custom) into ONE file
+    // --- BUNDLE STYLESHEETS ---
     console.log('Bundling Bootstrap and Custom CSS into one file...');
     
-    // 🚨 CRITICAL FIX: Generate a master temp file that correctly points to Bootstrap and your central bundle.css
+    // Create a temporary orchestrator file so Bootstrap always loads before our custom CSS overrides.
     const tempCssPath = path.join(__dirname, 'src/ui/master-temp.css');
-    
-    // We orchestrate the imports so Bootstrap is always loaded first
     const masterCssContent = `
         @import "bootstrap/dist/css/bootstrap.min.css";
         @import "./css/bundle.css";
     `;
-    
     fs.writeFileSync(tempCssPath, masterCssContent);
 
-    // Bundle it all into one final file
+    // Compile CSS into a single minified file
     await esbuild.build({
         entryPoints: [tempCssPath],
-        outfile: 'dist/ui/style.bundle.css', // Matches the <link> in your index.html
+        outfile: 'dist/ui/style.bundle.css', // Matches the <link> in index.html
         bundle: true, 
         minify: true,
         sourcemap: false,
     });
 
-    // Clean up the temporary file and unbundled CSS directories
+    // Clean up temporary orchestrator and the raw CSS directory
     if (fs.existsSync(tempCssPath)) fs.unlinkSync(tempCssPath);
     
     const distUiCssFolder = path.join(__dirname, 'dist/ui/css');

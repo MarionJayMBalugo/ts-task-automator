@@ -10,4 +10,20 @@ const APP_SCAN = {
     heidiSQL:   ['HeidiSQL', 'Heidi'],
 };
 
-module.exports = { APP_SCAN };
+const TSK_SCHEDLRS = [
+    {
+        name: 'Clean Expired Bottles',
+        desc: 'Scheduler that will cleanup expired containers in the db.'
+    },
+    {
+        name: 'Clean up Orders',
+        desc: 'Scheduler that will cleanup orders in the db.'
+    },
+    {
+        name: 'HL7 Transaction Clean Up',
+        desc: 'Scheduler that will HL7 records in the db.'
+    }
+];
+
+
+module.exports = { APP_SCAN, TSK_SCHEDLRS };

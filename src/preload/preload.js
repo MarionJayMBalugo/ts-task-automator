@@ -13,53 +13,61 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
     
-    // =========================================================================
-    // --- SYSTEM OPERATIONS (Maps directly to sys.ipc.js) ---
-    // =========================================================================
+    /** --- SYSTEM OPERATIONS ---
+     * Maps to: sys.ipc.js
+     * Handles low-level OS interaction, batch execution, and hardware discovery.
+     */
     system: {
         // [SEND - One-Way] 
-        // Used for tasks where we don't immediately need data back (fire-and-forget), 
-        // or tasks that take a long time and will stream data back via listeners later.
+        // Best for fire-and-forget tasks (e.g., launching a tool).
         runBatch: (file, data) => ipcRenderer.send('execute-batch', file, data),
         openTool: (toolKey) => ipcRenderer.send('open-sys-tool', toolKey),
-        
+        instHeidi: (path) => ipcRenderer.send('run-heidi-install', path),
+
         // [INVOKE - Two-Way Promises] 
-        // Used when the UI needs to 'await' an immediate response from the backend.
+        // Best for tasks where the UI must 'await' data (e.g., fetching hardware info).
         getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
         copyScripts: () => ipcRenderer.invoke('copy-scripts'),
         getTmsdInst: () => ipcRenderer.invoke('get-tmsdos-installer'),
         openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
-        instHeidi: (path) => ipcRenderer.send('run-heidi-install', path),
         checkHeidiInstalled: () => ipcRenderer.invoke('check-heidi-installed'),
         chckappInstlled: (name) => ipcRenderer.invoke('chck-app-installd', name),
+        
+        // [ON - Event Listeners]
+        // Intercepts streams of data from the backend.
         on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(...args)),
 
-        // --- CONTINUOUS EVENT LISTENERS ---
-        
         /**
-         * [ON - Listener Setup]
-         * Listens for replies from long-running tasks (like batch scripts).
-         * * WHY WE WRAP IT: We intercept the raw IPC event and only pass the actual 
-         * `message` string to the UI. This prevents the UI from accidentally 
-         * gaining access to the raw Electron `event` object.
-         * * @returns {Function} An "Unsubscribe" function so the UI can clean up 
-         * after itself to prevent memory leaks!
+         * [ON - Listener Setup with Cleanup]
+         * Listens for replies from batch scripts. 
+         * NOTE: Returning the removeListener function allows the UI component 
+         * to 'unmount' the listener, preventing memory leaks.
          */
         onBatchReply: (callback) => {
             const subscription = (_event, message) => callback(message);
             ipcRenderer.on('batch-reply', subscription);
-            
-            // Returns a cleanup function that the UI can call when it's done listening
             return () => ipcRenderer.removeListener('batch-reply', subscription);
         },
         
-        // Nuclear option to clear all listeners at once
         removeBatchListeners: () => ipcRenderer.removeAllListeners('batch-reply')
     },
 
-    // =========================================================================
-    // --- SETTINGS & CONFIGURATION (Maps directly to setting.ipc.js) ---
-    // =========================================================================
+    /** --- WINDOWS TASK SCHEDULER ---
+     * Maps to: schedlr.ipc.js
+     * Bridges UI-driven task verification and XML-based task deployment.
+     */
+    schedlr: {
+        // Verifies if specific tasks are already registered in Windows.
+        chckSchedlrsInstlled: (tskNams) => ipcRenderer.invoke('chck-schedlrs-installd', tskNams),
+        
+        // Triggers the deployment of XML tasks with dynamic drive-path replacement.
+        instllSchedlrs: (pendingTasks) => ipcRenderer.invoke('instll-schedlrs', pendingTasks)
+    },
+
+    /** --- SETTINGS & PERSISTENCE ---
+     * Maps to: setting.ipc.js
+     * Handles app configuration, target drive preferences, and folder selections.
+     */
     settings: {
         getSettings: () => ipcRenderer.invoke('get-settings'),
         setTargetDrive: (value) => ipcRenderer.invoke('set-drv', value),
@@ -69,9 +77,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
         getConfigPath: () => ipcRenderer.invoke('cfg-path')
     },
 
-    // =========================================================================
-    // --- UI & APPLICATION STATE (Maps directly to ui.ipc.js) ---
-    // =========================================================================
+    /** --- UI COMPONENT NAVIGATION ---
+     * Maps to: ui.ipc.js
+     * Powers the "SPA" architecture by fetching HTML partials and app metadata.
+     */
     ui: {
         loadView: (viewName) => ipcRenderer.invoke('load-view', viewName),
         loadPartial: (prtlName) => ipcRenderer.invoke('load-partial', prtlName),
