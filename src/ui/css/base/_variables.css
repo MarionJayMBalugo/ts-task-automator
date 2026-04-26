@@ -1,12 +1,46 @@
 :root {
-    --tms-blue: #0d6efd;
-    --tms-sidebar: #0f172a;
-    --tms-drkblue: #0f172a;
-    --tms-bg: #e9eff4;
-    --tms-border: #e2e8f0;
-    --tms-text-main: #1e293b;
-    --tms-text-muted: #222c3a;
+    /* --- BRAND PALETTE --- */
+    --tms-blue: #0066FF;
+    --tms-drkblue: #0F172A;
+    --tms-sidebar: #0B1120;
 
+    /* --- LIGHT THEME (DEFAULT) --- */
+    --tms-bg: #F4F7F9;
+    --tms-surface: #FFFFFF;
+    --tms-surface-alt: #F8FAFC;
+    --tms-border: #E2E8F0;
+    --tms-text-main: #1E293B;
+    --tms-text-muted: #64748B;
+    
     --tms-backdrop-bg: rgba(15, 23, 42, 0.7);
-    --tms-shadow-color: rgba(0, 0, 0, 0.25);
+    --tms-shadow-color: rgba(15, 23, 42, 0.05);
+
+    /* --- COMPONENT STANDARDS --- */
+    --tms-radius-sm: 6px;
+    --tms-radius-md: 10px;
+    --tms-radius-lg: 14px;
+    --tms-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* --- SPACING SCALE --- */
+    --tms-space-xs: 0.5rem;   
+    --tms-space-sm: 0.75rem;  
+    --tms-space-md: 1.25rem;  
+    --tms-space-lg: 2rem;
+}
+
+/* --- DARK THEME OVERRIDES --- */
+[data-bs-theme="dark"] {
+    --tms-bg: #0F172A;
+    --tms-surface: #1E293B;
+    --tms-surface-alt: #334155;
+    --tms-border: #334155;
+    --tms-text-main: #F8FAFC;
+    --tms-text-muted: #94A3B8;
+    
+    --tms-backdrop-bg: rgba(0, 0, 0, 0.85);
+    --tms-shadow-color: rgba(0, 0, 0, 0.4);
+    
+    /* Re-map Bootstrap primary colors for better dark contrast */
+    --bs-primary: #60A5FA;
+    --bs-info: #7DD3FC;
 }

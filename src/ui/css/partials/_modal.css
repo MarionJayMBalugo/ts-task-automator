@@ -8,9 +8,9 @@
 }
 
 .tms-modal {
-    background: white; 
+    background: var(--tms-surface); 
     width: 26.25rem;
-    border-radius: 1rem;
+    border-radius: var(--tms-radius-lg);
     padding: 2rem;
     box-shadow: 0 1.5625rem 3.125rem -0.75rem var(--tms-shadow-color);
     border: 1px solid var(--tms-border);
@@ -42,6 +42,38 @@
     outline: none;
 }
 
+/* --- DARK MODE MODAL FIXES --- */
+[data-bs-theme="dark"] .tms-modal .btn-light {
+    background-color: var(--tms-surface-alt);
+    border-color: var(--tms-border);
+    color: var(--tms-text-main) !important;
+}
+
+[data-bs-theme="dark"] .tms-modal .btn-light:hover {
+    background-color: var(--tms-border);
+}
+
+/* Make inputs look like inset wells in dark mode */
+[data-bs-theme="dark"] .tms-modal .form-control,
+[data-bs-theme="dark"] .tms-modal .form-select {
+    background-color: var(--tms-bg); 
+    border-color: var(--tms-border);
+    color: var(--tms-text-main);
+}
+
+[data-bs-theme="dark"] .tms-modal .form-control:focus,
+[data-bs-theme="dark"] .tms-modal .form-select:focus {
+    border-color: #60A5FA;
+    background-color: var(--tms-bg);
+}
+
+/* Give the review lists a raised "card" look in dark mode */
+[data-bs-theme="dark"] .tms-modal .list-group-item {
+    background-color: var(--tms-surface-alt);
+    border-color: var(--tms-border);
+    color: var(--tms-text-main);
+}
+
 /* --- MODAL SIZES --- */
 .tms-modal.mdl-sm { width: 20rem; }
 .tms-modal.mdl-md { width: 30rem; }
@@ -51,44 +83,24 @@
 /* ==========================================================================
    SUBTLE PROGRESS DOTS (Minimalist)
    ========================================================================== */
-
-/* Centering the dots instead of stretching a line across the modal */
 #modal-stepper-container .d-flex {
     justify-content: center !important;
     gap: 0.625rem;
 }
 
-/* The Dots */
 .tms-step-icon {
-    width: 0.625rem;
-    height: 0.625rem;
-    border-radius: 50%;
-    background-color: var(--bs-secondary-bg);
-    color: transparent; /* Hide the numbers! */
-    font-size: 0;
-    transition: all 0.3s ease;
-    border: none;
-    flex-shrink: 0;
+    width: 0.625rem; height: 0.625rem; border-radius: 50%;
+    background-color: var(--tms-border); color: transparent; 
+    font-size: 0; transition: var(--tms-transition); border: none; flex-shrink: 0;
 }
 
-/* Active Dot - Turns into a small pill */
 .tms-step-icon.active {
-    width: 1.75rem;
-    border-radius: 0.3125rem;
-    background-color: var(--bs-primary);
-    box-shadow: none;
+    width: 1.75rem; border-radius: var(--tms-radius-sm);
+    background-color: var(--bs-primary); box-shadow: none;
 }
 
-/* Completed Dot */
-.tms-step-icon.completed {
-    background-color: var(--bs-primary);
-    opacity: 0.5;
-}
-
-/* Hide the connecting lines entirely - dots don't need them */
-.tms-step-line {
-    display: none;
-}
+.tms-step-icon.completed { background-color: var(--bs-primary); opacity: 0.5; }
+.tms-step-line { display: none; }
 
 @keyframes modalFadeIn { 
     from { opacity: 0; transform: scale(0.95); } 

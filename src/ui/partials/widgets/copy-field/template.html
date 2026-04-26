@@ -1,15 +1,19 @@
-<div class="copy-field-wrapper">
-    <div class="text-muted small text-uppercase fw-bold mb-1">
-        {{ label }}
-    </div>
-    <div class="d-flex align-items-center gap-2">
-        <div class="{{ textClass || 'text-dark' }} fw-bold" id="{{ id }}">
-            {{ slot }}
+<div class="stat-tile">
+    <div class="d-flex align-items-center mb-2">
+        <div class="stat-icon me-2 d-flex align-items-center">
+            <svg width="16" height="16"><use href="{{ icon }}"></use></svg>
         </div>
-        <button class="btn btn-sm btn-link text-muted p-0 ms-1 btn-copy" 
-                data-copy="{{ id }}" 
-                title="Copy to clipboard">
-            <svg width="14" height="14"><use href="#icon-copy"></use></svg>
-        </button>
+        <div class="copy-label mb-0">
+            {{ label }}
+        </div>
     </div>
+    <div class="copy-value {{ textClass }}" id="{{ id }}">
+        {{ slot }}
+    </div>
+    
+    <button class="btn btn-sm btn-link p-1 btn-copy" 
+            data-copy="{{ id }}" 
+            title="Copy to clipboard">
+        <svg width="14" height="14"><use href="#icon-copy"></use></svg>
+    </button>
 </div>

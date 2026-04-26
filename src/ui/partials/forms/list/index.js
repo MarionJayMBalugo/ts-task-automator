@@ -23,10 +23,10 @@ export const ListField = {
             
             values.forEach((val, index) => {
                 const pill = document.createElement('span');
-                pill.className = 'badge bg-primary bg-opacity-10 text-primary border border-primary d-flex align-items-center px-3 py-3';
+                pill.className = 'badge bg-primary bg-opacity-10 text-primary border border-primary d-flex align-items-center px-3 py-2';
                 pill.innerHTML = `
-                    <span class="me-2 list-badge">${val}</span>
-                    <button type="button" class="btn-close" style="font-size: 0.5rem;" data-index="${index}"></button>
+                    <span class="me-2 fw-bold" style="font-size: 0.85rem; letter-spacing: 0.02em;">${val}</span>
+                    <button type="button" class="btn-close" style="font-size: 0.55rem; opacity: 0.8;" data-index="${index}"></button>
                 `;
                 
                 // Add event listener to remove the item

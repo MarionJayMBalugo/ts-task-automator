@@ -8,7 +8,7 @@ export const prmptCreateDbUser = () => {
     // Define Global Modal Configurations
     const modalData = { 
         title: __('crtdbacc'), 
-        size: 'md',
+        size: 'lg',
         execBtn: __('crtdbacc') 
     };
 

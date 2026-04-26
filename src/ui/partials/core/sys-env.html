@@ -1,66 +1,91 @@
 <div data-component="widgets/collapse-section/template" data-id="collapseEnv" data-title="{{ __('validation.envChecks') }}">
-    <div class="d-flex flex-column h-100">
-        <div class="mb-4">
-            <p class="text-muted small text-uppercase fw-bold mb-3">{{ __('validation.whitelist') }}</p>
+    <div class="d-flex flex-column gap-4">
+        
+        <div class="sub-section-card">
+            <div class="section-sub-label">{{ __('validation.whitelist') }}</div>
             <div class="d-flex flex-wrap gap-2">
-                <div class="d-flex align-items-center bg-light border rounded py-2 px-3">
-                    <span class="small fw-bold me-2">{{ __('validation.network.upload') }}</span>
-                    <span id="status-upload" class="badge bg-secondary py-1">...</span>
+                <div class="network-pill">
+                    <span class="fw-bold">{{ __('validation.network.upload') }}</span>
+                    <span id="status-upload" class="badge bg-secondary">...</span>
                 </div>
-                <div class="d-flex align-items-center bg-light border rounded py-2 px-3">
-                    <span class="small fw-bold me-2">{{ __('validation.network.deploy') }}</span>
+                <div class="network-pill">
+                    <span class="fw-bold">{{ __('validation.network.deploy') }}</span>
                     <span id="status-deploy" class="badge bg-secondary">...</span>
                 </div>
-                <div class="d-flex align-items-center bg-light border rounded py-2 px-3">
-                    <span class="small fw-bold me-2">{{ __('validation.network.google') }}</span>
+                <div class="network-pill">
+                    <span class="fw-bold">{{ __('validation.network.google') }}</span>
                     <span id="status-google" class="badge bg-secondary">...</span>
                 </div>
-                <div class="d-flex align-items-center bg-light border rounded py-2 px-3">
-                    <span class="small fw-bold me-2">{{ __('validation.network.innovar') }}</span>
+                <div class="network-pill">
+                    <span class="fw-bold">{{ __('validation.network.innovar') }}</span>
                     <span id="status-innovar" class="badge bg-secondary">...</span>
                 </div>
-                <div class="d-flex align-items-center bg-light border rounded py-2 px-3">
-                    <span class="small fw-bold me-2">{{ __('validation.network.nextgen') }}</span>
+                <div class="network-pill">
+                    <span class="fw-bold">{{ __('validation.network.nextgen') }}</span>
                     <span id="status-nextgen" class="badge bg-secondary">...</span>
                 </div>
             </div>
         </div>
 
-        <div>
-            <p class="text-muted small text-uppercase fw-bold mb-3">{{ __('validation.installations') }}</p>
+        <div class="sub-section-card">
+            <div class="section-sub-label">{{ __('validation.installations') }}</div>
             <div class="row g-2">
-                <div class="col-6">
-                    <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
-                        <span class="small fw-bold text-dark">{{ __('validation.apps.tmsDos') }}</span>
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon"><svg width="16" height="16"><use href="#icon-app"></use></svg></div>
+                            <span class="fw-bold text-truncate">{{ __('validation.apps.tmsDos') }}</span>
+                        </div>
                         <span id="status-tmsdos" class="badge bg-secondary">...</span>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
-                        <span class="small fw-bold text-dark">{{ __('validation.apps.mirth') }}</span>
+                
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon"><svg width="16" height="16"><use href="#icon-package"></use></svg></div>
+                            <span class="fw-bold text-truncate">{{ __('validation.apps.mirth') }}</span>
+                        </div>
                         <span id="status-mirth" class="badge bg-secondary">...</span>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
-                        <span class="small fw-bold text-dark">{{ __('validation.apps.bridgeLink') }}</span>
+                
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon"><svg width="16" height="16"><use href="#icon-shield"></use></svg></div>
+                            <span class="fw-bold text-truncate">{{ __('validation.apps.bridgeLink') }}</span>
+                        </div>
                         <span id="status-bridgelink" class="badge bg-secondary">...</span>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
-                        <span class="small fw-bold text-dark">{{ __('validation.apps.vsCode') }}</span>
+                
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon"><svg width="16" height="16"><use href="#icon-terminal"></use></svg></div>
+                            <span class="fw-bold text-truncate">{{ __('validation.apps.vsCode') }}</span>
+                        </div>
                         <span id="status-vscode" class="badge bg-secondary">...</span>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="border rounded p-3 d-flex justify-content-between align-items-center bg-light">
-                        <span class="small fw-bold text-dark">{{ __('validation.apps.heidiSQL') }}</span>
+                
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon"><svg width="16" height="16"><use href="#icon-dbvwr"></use></svg></div>
+                            <span class="fw-bold text-truncate">{{ __('validation.apps.heidiSQL') }}</span>
+                        </div>
                         <span id="status-heidi" class="badge bg-secondary">...</span>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="sub-section-card">
+            <div class="section-sub-label">{{ __('validation.installations') }}</div>
+            <div class="row g-2">
+            </div>
+        </div>
     </div>
 </div>
