@@ -127,7 +127,7 @@
     animation: sweep 1.2s ease-in-out infinite;
 }
 
-.heidi-install-card.disabled-state {
+.disabled-state {
     opacity: 0.5;
     filter: grayscale(1);
     cursor: not-allowed !important;

@@ -1,28 +1,51 @@
 <div data-component="widgets/collapse-section/template" data-id="collapseHw" data-title="{{ __('validation.hw') }}">
     <div class="row g-4">
         <div class="col-6 col-md-4">
-            <div class="text-muted small text-uppercase fw-bold mb-1">__('validation.hostname')</div>
-            <div class="fs-6 fw-bold text-dark" id="sys-hostname">---</div>
+            <div data-component="widgets/copy-field/template" 
+                 data-label="{{ __('validation.hostname') }}" 
+                 data-id="sys-hostname">
+            </div>
         </div>
+
         <div class="col-6 col-md-4">
-            <div class="text-muted small text-uppercase fw-bold mb-1">__('validation.ipv4')</div>
-            <div class="fs-6 fw-bold text-primary" id="sys-ip">---</div>
+            <div data-component="widgets/copy-field/template" 
+                 data-label="{{ __('validation.ipv4') }}" 
+                 data-id="sys-ip"
+                 class="fs-6 fw-bold text-primary" 
+                 >
+            </div>
         </div>
+
         <div class="col-6 col-md-4">
-            <div class="text-muted small text-uppercase fw-bold mb-1">__('validation.ram')</div>
-            <div class="fs-6 fw-bold text-dark" id="sys-ram">---</div>
+            <div data-component="widgets/copy-field/template" 
+                 data-label="{{ __('validation.ram') }}" 
+                 data-id="sys-ram"
+                 >
+            </div>
         </div>
-        <div class="col-12 col-md-8">
-            <div class="text-muted small text-uppercase fw-bold mb-1">__('validation.processor')</div>
-            <div class="small fw-bold text-dark" id="sys-cpu">---</div>
-        </div>
+
         <div class="col-6 col-md-4">
-            <div class="text-muted small text-uppercase fw-bold mb-1">__('validation.storage')</div>
-            <div class="fs-6 fw-bold text-success" id="sys-drive-d">---</div>
+            <div data-component="widgets/copy-field/template" 
+                 data-label="{{ __('validation.processor') }}" 
+                 data-id="sys-cpu"
+                 >
+            </div>
         </div>
-        <div class="col-12">
-            <div class="text-muted small text-uppercase fw-bold mb-1">__('validation.os')</div>
-            <div class="small fw-bold text-dark" id="sys-os">---</div>
+     
+        <div class="col-6 col-md-4">
+            <div data-component="widgets/copy-field/template" 
+                 data-label="{{ __('validation.storage') }}" 
+                 data-id="sys-drive-d"
+                 >
+            </div>
+        </div>
+
+        <div class="col-6 col-md-4">
+            <div data-component="widgets/copy-field/template" 
+                 data-label="{{ __('validation.os') }}" 
+                 data-id="sys-os"
+                 >
+            </div>
         </div>
     </div>
 </div>

@@ -1,0 +1,24 @@
+<div class="col">
+    <div class="card h-100 {{ cardBorder }} {{ cardBg }} shadow-sm transition-all">
+        <div class="card-body p-3 d-flex align-items-center gap-3">
+            
+            <div class="rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm" style="width: 48px; height: 48px; min-width: 48px;">
+                <div class="{{ iconColor }}">
+                    <svg width="24" height="24"><use href="#icon-tskschedlr"></use></svg>
+                </div>
+            </div>
+
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h6 class="mb-0 {{ titleColor }}">{{ name }}</h6>
+                    
+                    <span class="badge {{ badgeBg }}">
+                        <svg width="12" height="12" class="me-1"><use href="{{ badgeIcon }}"></use></svg>{{ badgeText }}
+                    </span>
+                </div>
+                <div class="small text-muted lh-sm">{{ desc }}</div>
+            </div>
+
+        </div>
+    </div>
+</div>
