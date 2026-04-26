@@ -43,42 +43,51 @@ We follow a strict separation of concerns to keep the codebase secure and mainta
 * `/resources/` - Contains the raw `.bat` and `.ps1` automation scripts.
 
 ---
+## 🏗️ Project Architecture
+
+We follow a strict separation of concerns to keep the codebase secure and maintainable:
+* `/src/main/` - The Node.js backend. Manages the window lifecycle and OS operations.
+* `/src/main/ipc/` - The "Traffic Controllers". Bridges the UI to system operations (`sys.ipc.js`, `set.ipc.js`, `ui.ipc.js`).
+* `/src/preload/` - The secure context bridge. Exposes specific, safe APIs to the frontend.
+* `/src/ui/` - The frontend UI. Built with vanilla JS and component-based HTML.
+* `/resources/` - Contains the raw `.bat` and `.ps1` automation scripts.
+
+---
 ## 📁 Project Structure
 
 This project follows a secure, modular Electron architecture, strictly separating the frontend (Renderer), backend (Main), and external execution scripts.
 
-```text
-ts-automation-app/
-├── resources/               # External Windows Batch Scripts & Configs (Unpacked in production)
-│   ├── config/              # Environment variables and spec configurations (.env)
-│   ├── lib/                 # Core batch script libraries (admin checks, sys-env variables)
-│   └── *.bat                # Task-specific batch scripts (db creation, folders, cleanup, etc.)
-│
-├── src/                     # Core Application Source Code
-│   │
-│   ├── backend/             # Electron Main Process (Node.js)
-│   │   ├── cnf/             # Global Configurations (App settings, network monitors, string messages)
-│   │   ├── ipc/             # Inter-Process Communication (IPC) Listeners
-│   │   ├── svc/             # Service Layer (Business logic, OS interaction, PowerShell execution)
-│   │   ├── utils/           # Shared Utility Functions (fs.util.js, sys.util.js)
-│   │   └── main.js          # Electron app entry point and window initialization
-│   │
-│   ├── bridge/              # Electron Preload Scripts
-│   │   └── preload.js       # Secure Context Bridge (exposes safe Node APIs to the UI)
-│   │
-│   └── frontend/            # Electron Renderer Process (Chromium / DOM)
-│       ├── assets/          # Static files (Icons, Logos, custom graphics)
-│       ├── css/             # Custom stylesheets (Bundled via esbuild with Bootstrap)
-│       ├── js/              # Frontend logic (State management, API calls, DOM manipulation)
-│       │   └── lang/        # Localization (I18n translations engine)
-│       ├── views/           # Main HTML views (Dashboard, Settings, Server Validation, etc.)
-│       │   └── partials/    # Reusable HTML components injected dynamically
-│       └── index.html       # Main application shell/layout
-│
-├── esbuild.config.js        # Custom Build Engine (Minifies HTML, JS, CSS, and Scripts)
-├── package.json             # App metadata, dependencies, and electron-builder configuration
-└── README.md                # Project documentation
-```
+    ts-automation-app/
+    ├── resources/               # External Windows Batch Scripts & Configs (Unpacked in production)
+    │   ├── config/              # Environment variables and spec configurations (.env)
+    │   ├── lib/                 # Core batch script libraries (admin checks, sys-env variables)
+    │   └── *.bat                # Task-specific batch scripts (db creation, folders, cleanup, etc.)
+    │
+    ├── src/                     # Core Application Source Code
+    │   │
+    │   ├── backend/             # Electron Main Process (Node.js)
+    │   │   ├── cnf/             # Global Configurations (App settings, network monitors, string messages)
+    │   │   ├── ipc/             # Inter-Process Communication (IPC) Listeners
+    │   │   ├── svc/             # Service Layer (Business logic, OS interaction, PowerShell execution)
+    │   │   ├── utils/           # Shared Utility Functions (fs.util.js, sys.util.js)
+    │   │   └── main.js          # Electron app entry point and window initialization
+    │   │
+    │   ├── bridge/              # Electron Preload Scripts
+    │   │   └── preload.js       # Secure Context Bridge (exposes safe Node APIs to the UI)
+    │   │
+    │   └── frontend/            # Electron Renderer Process (Chromium / DOM)
+    │       ├── assets/          # Static files (Icons, Logos, custom graphics)
+    │       ├── css/             # Custom stylesheets (Bundled via esbuild with Bootstrap)
+    │       ├── js/              # Frontend logic (State management, API calls, DOM manipulation)
+    │       │   └── lang/        # Localization (I18n translations engine)
+    │       ├── views/           # Main HTML views (Dashboard, Settings, Server Validation, etc.)
+    │       │   └── partials/    # Reusable HTML components injected dynamically
+    │       └── index.html       # Main application shell/layout
+    │
+    ├── esbuild.config.js        # Custom Build Engine (Minifies HTML, JS, CSS, and Scripts)
+    ├── package.json             # App metadata, dependencies, and electron-builder configuration
+    └── README.md                # Project documentation
+
 ---
 
 ## 🧠 Coding Standards & Philosophy
@@ -121,7 +130,6 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **Card** | `crd` | `.radio-crd`, `installer-crd` |
 | **Path** | `pth` | `file-pth-inpt`, `targetPth` |
 | **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
-| **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
 | **Check** | `chk` | `chkBox`, `runChk()` |
 | **Dashboard** | `dashbrd` | `dashbrdVw`, `nav-dashbrd` |
 | **View** | `vw` | `vwCntnr`, `loadVw()` |
@@ -133,14 +141,20 @@ We prioritize brevity to keep HTML attributes clean and file searching fast. **S
 | **TMS-DOS** | `tmsd` | `tmsdInstllr`, `openTmsd` |
 | **Installer** | `instllr` | `runInstllr()`, `heidiInstllr` |
 | **Header** | `headr` | `headrTitle`, `headrSbtitle` |
-| **Error** | `err` | `errMsge`, `errHint`, `logErr()` |
-| **Check** | `chk` | `chkBox`, `runChk()` |
-| **Dashboard** | `dashbrd` | `dashbrdVw`, `nav-dashbrd` |
-| **View** | `vw` | `vwCntnr`, `loadVw()` |
-| **Installation**| `instll` | `instllScript`, `svrInstll` |
-| **Server** | `svr` | `svrConfig`, `svrVldation` |
-| **Validation** | `vldation`| `runVldation()`, `vldationBadge` |
+| **Task Scheduler** | `tskschedlr` | `icon-tskschedlr`, `setup-tskschedlr` |
+| **DB Viewer** | `dbvwr` | `icon-dbvwr` |
+| **Cleanup** | `clnup` | `clnupTask` |
+| **Bottles** | `bottls` | `expirdBottls` |
+| **Expired** | `expird` | `expirdBottls` |
+| **Orders** | `ordrs` | `clnupOrdrs` |
+| **Record** | `rcord` | `hl7Rcord` |
+| **Task** | `tsk` | `tskConfigs` |
+| **Names** | `nams` | `tskNams` |
 
+## ⏱️ Dynamic Task Schedulers
+When deploying background tasks to the Windows Task Scheduler via XML files, the application uses a dynamic drive replacement engine. 
+
+Instead of hardcoding a literal drive letter (like `C:\` or `D:\`) into your XML definitions, use the `{{TARGET_DRIVE}}` placeholder tag within the file. During installation, the backend service (`SchedlrSvc`) reads the XML, detects the tag, and dynamically replaces it with the user's preferred target drive (configured in Settings) before writing the file with the strict UTF-16LE encoding required by Windows.
 
 ## 🗺️ Path Aliases (Imports)
 
@@ -172,7 +186,6 @@ Frontend aliases use the `@` prefix standard and route to the UI component and l
 
 To package the application for production (creates the `.exe` installer):
 
-```bash
-npm run build
-```
+    npm run build
+
 *(Note: Building will minify the code, strip comments, and bundle resources into an encrypted ASAR archive for distribution.)*
