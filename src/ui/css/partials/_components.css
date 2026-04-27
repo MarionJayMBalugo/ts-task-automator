@@ -106,7 +106,6 @@
     background-color: var(--tms-surface-alt);
     border: 1px solid var(--tms-border);
     box-shadow: 0 2px 5px var(--tms-shadow-color);
-    border-radius: var(--tms-radius-md);
     padding: 1rem; height: 100%; position: relative; transition: var(--tms-transition);
     display: flex; flex-direction: column;
 }
@@ -150,7 +149,8 @@
 .network-pill {
     display: inline-flex; align-items: center; gap: 0.6rem;
     background-color: var(--tms-surface); border: 1px solid var(--tms-border);
-    border-radius: 2rem; padding: 0.25rem 0.35rem 0.25rem 0.85rem; 
+    border-radius: 2rem; 
+    padding: 0.25rem 0.35rem 0.25rem 0.85rem; 
     font-size: 0.75rem; color: var(--tms-text-main); transition: var(--tms-transition);
 }
 .network-pill:hover {
@@ -161,13 +161,15 @@
 .app-status-tile {
     display: flex; align-items: center; justify-content: space-between;
     background-color: var(--tms-surface-alt); border: 1px solid var(--tms-border);
-    border-radius: var(--tms-radius-md); box-shadow: 0 2px 5px var(--tms-shadow-color);
+    /* border-radius: var(--tms-radius-md); */
+    box-shadow: 0 2px 5px var(--tms-shadow-color);
     padding: 0.75rem 1rem; transition: var(--tms-transition); height: 100%;
 }
 .app-status-tile:hover {
     background-color: var(--tms-surface); border-color: var(--tms-blue);
     box-shadow: 0 4px 12px var(--tms-shadow-color); transform: translateY(-2px);
 }
+
 .app-status-tile .app-icon {
     display: flex; align-items: center; justify-content: center;
     width: 2.25rem; height: 2.25rem; border-radius: var(--tms-radius-sm);
@@ -178,6 +180,20 @@
     color: var(--tms-blue); border-color: color-mix(in srgb, var(--tms-blue) 30%, transparent);
     background-color: color-mix(in srgb, var(--tms-blue) 8%, transparent);
 }
+
+/* ==========================================================================
+   WARNING (YELLOW) HIGH-CONTRAST OVERRIDES
+   ========================================================================== */
+
+/* Light Mode (Default) - Deeper Amber for perfect readability on white */
+.text-warning { color: #B45309 !important; }
+.border-warning { border-color: #D97706 !important; }
+.bg-warning.bg-opacity-10 { background-color: rgba(217, 119, 6, 0.1) !important; }
+
+/* Dark Mode - Bright, glowing Lemon-Yellow for readability on dark slate */
+[data-bs-theme="dark"] .text-warning { color: #FDE047 !important; }
+[data-bs-theme="dark"] .border-warning { border-color: #FACC15 !important; }
+[data-bs-theme="dark"] .bg-warning.bg-opacity-10 { background-color: rgba(250, 204, 21, 0.15) !important; }
 
 @keyframes sweep { 0% { left: -40%; } 100% { left: 100%; } }
 

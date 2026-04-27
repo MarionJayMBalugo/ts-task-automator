@@ -121,6 +121,70 @@ h2, .h4, .fw-bold { letter-spacing: -0.02em; }
     color: inherit; transition: var(--tms-transition);
 }
 
+/* ==========================================================================
+   SIDEBAR FOOTER
+   ========================================================================== */
+.sidebar-footer { 
+    margin-top: auto; 
+    padding-top: 1.25rem; 
+    border-top: 1px solid rgba(255, 255, 255, 0.08); /* Softer, premium divider */
+    overflow: hidden;
+}
+
+.tms-sys-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 0.5rem; /* Aligns visually with your nav links */
+    border-radius: var(--tms-radius-sm);
+    transition: var(--tms-transition);
+    cursor: default; 
+    user-select: none;
+}
+
+.tms-sys-footer:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* --- Footer Icon --- */
+.tms-footer-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(96, 165, 250, 0.12); /* Subtle blue tint */
+    color: #60A5FA; /* Sharp brand blue */
+    border-radius: var(--tms-radius-sm);
+    flex-shrink: 0;
+    transition: var(--tms-transition);
+}
+
+/* --- Footer Typography --- */
+.tms-footer-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tms-footer-title {
+    color: #F8FAFC; /* Bright white for primary text */
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+}
+
+.tms-footer-version {
+    color: #64748B; /* Muted slate for secondary text */
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+}
+
 /* --- SCROLLBAR --- */
 #app-container::-webkit-scrollbar { width: .3rem; }
 #app-container::-webkit-scrollbar-track { background-color: transparent; }

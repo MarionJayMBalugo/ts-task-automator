@@ -48,7 +48,7 @@ export const Status = {
             });
 
             // 3. Reset all Network/App Badges to neutral grey
-            document.querySelectorAll('#server-validation-view .badge').forEach(b => {
+            document.querySelectorAll('.network-pill .badge, .app-status-tile .badge').forEach(b => {
                 b.className = 'badge bg-secondary px-2 py-1';
                 b.innerText = '...';
             });

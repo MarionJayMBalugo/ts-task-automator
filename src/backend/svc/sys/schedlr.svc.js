@@ -19,8 +19,8 @@ const { TSK_SCHEDLRS, APP_CNF } = require('#cnf');
 const SchedlrSvc = {
     
     /** --- TASK VERIFICATION ---
-     * Queries the OS to check if predefined tasks currently exist.
-     * @returns {Promise<Array<Object>>} Resolves to the configuration array with an 'installed' boolean injected.
+     * Queries the OS to check if predefined tasks currently exist AND are enabled.
+     * @returns {Promise<Array<Object>>} Resolves to the configuration array with 'installed' and 'disabled' booleans injected.
      */
     chckSchedlrsInstalld: () => {
         return new Promise(async (resolve) => {
@@ -29,11 +29,16 @@ const SchedlrSvc = {
                     const fullTaskName = task.path ? `${task.path}\\${task.name}` : task.name;
 
                     // TARGETED QUERY
-                    // 'schtasks /query' is fast. We suppress stdout; if error is null, the task exists.
-                    exec(`schtasks /query /tn "${fullTaskName}"`, (error) => {
+                    // We request the output in CSV format (/fo CSV) so we can easily read the status column
+                    exec(`schtasks /query /tn "${fullTaskName}" /fo CSV`, (error, stdout) => {
+                        
+                        const isInstalled = !error;
+                        const isDisabled = isInstalled && stdout ? stdout.includes('"Disabled"') : false;
+
                         res({
                             ...task,
-                            installed: !error 
+                            installed: isInstalled,
+                            disabled: isDisabled
                         });
                     });
                 });

@@ -3,6 +3,7 @@
  */
 import { Shell } from '@jsui/modules';
 import { API } from '@jsui/core';
+import { ChckSchedlrsStatus } from './validate';
 
 export const svrVldationVw = {
     // Store event listeners for memory cleanup
@@ -12,12 +13,14 @@ export const svrVldationVw = {
         // 1. Grab the specific buttons inside this view
         const refreshBtn = document.getElementById('header-btn-refresh');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
-
+        ChckSchedlrsStatus();
+        
         // 2. Define the handler functions
         const handleRefresh = (e) => {
             e.preventDefault();
             // True forces a fresh scan instead of using the cache
             Shell.runValidation(true); 
+            ChckSchedlrsStatus();
         };
 
         const handleToolOpen = (e) => {

@@ -64,7 +64,7 @@ export default {
         },
         validation: {
             title: "Server Validation",
-            subtitle: "Live system resources and dependencies",
+            subtitle: "Verification of server compliance with baseline technical specifications.",
             refresh: "Refresh",
             quickAccess: "System Quick Access",
             btns: {

@@ -1,5 +1,6 @@
 import { Shell } from '@jsui/modules';
 import { API } from '@jsui/core';
+import { ChckSchedlrsStatus } from './validate';
 
 export const dashbrdVw = {
     // Array to store event listeners for memory cleanup
@@ -12,11 +13,13 @@ export const dashbrdVw = {
         // 1. Grab the specific buttons inside the dashboard
         const refreshBtn = document.getElementById('header-btn-refresh');
         const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
+        ChckSchedlrsStatus();
 
         // 2. Define the handler functions (Routing to legacy App logic for now)
         const handleRefresh = (e) => {
             e.preventDefault();
             Shell.runValidation(true);
+            ChckSchedlrsStatus();
         };
 
         const handleToolOpen = (e) => {

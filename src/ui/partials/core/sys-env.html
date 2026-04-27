@@ -83,8 +83,54 @@
         </div>
 
         <div class="sub-section-card">
-            <div class="section-sub-label">{{ __('validation.installations') }}</div>
+            <div class="section-sub-label">Scheduled Tasks</div>
             <div class="row g-2">
+                
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <span class="fw-bold text-truncate">Clean Expired Bottles</span>
+                        </div>
+                        <span id="status-task-clean-bottles" class="badge bg-secondary">...</span>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <span class="fw-bold text-truncate">Clean up Orders</span>
+                        </div>
+                        <span id="status-task-clean-orders" class="badge bg-secondary">...</span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="app-status-tile">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="app-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <span class="fw-bold text-truncate">HL7 Transaction Clean Up</span>
+                        </div>
+                        <span id="status-task-hl7" class="badge bg-secondary">...</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
