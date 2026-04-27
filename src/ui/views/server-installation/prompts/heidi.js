@@ -5,7 +5,7 @@ import { Modal } from '@jspartials/core/modal';
 // This is being called when installing Heidi
 export const promptHeidiInstaller = async () => {
     const data = {
-        title: 'Heidi Installation',
+        title: 'Application Installation',
         desc: 'Please select the installation directory and confirm.',
         size: 'md'
     };

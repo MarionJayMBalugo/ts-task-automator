@@ -50,7 +50,7 @@ export const svrInstllVw = {
             const trigger = e.target.closest('[data-action]');
             const action = trigger.dataset.action;
 
-            if (action === 'prompt-heidi-installer') {
+            if (action === 'prompt-app-installer') {
                 svrInstllVw.promptHeidiInstaller();
                 
             } else if (action === 'open-modal') {

@@ -53,7 +53,7 @@ export default {
                 importdb: "Import DBs",
                 createdbuser: "Create DB User",
                 instTmsDos: { title: "Install TMS-DOS", desc: "Starts the installation process only." },
-                instHeidi: { title: "Install Heidi", desc: "Installation of Heidi" }
+                bulkInstall: { title: "Install Application", desc: "Installation of Required Applications" }
             },
             winEnv: {
                 desc: "This will configure Windows environment variables. A system restart may be required."
