@@ -138,7 +138,7 @@ export const Shell = {
 
         Shell.mountPrtlScript(tabName);
         Shell.runDefTabFunc(tabName);
-        Shell.validateHeidiActionCard();
+        // Shell.validateHeidiActionCard(); //disable while app installation not complete
     },
 
     unmountPrtlScript: () => {
