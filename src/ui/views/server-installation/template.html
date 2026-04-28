@@ -65,6 +65,19 @@
                     </div>
                 </div>
             </div>
+            <div class="col">
+                <div class="action-card" 
+                     i18n-desc="install.btns.createEnv.desc"
+                     data-action="open-modal"
+                     data-script="create-env.bat"
+                     data-title="Generate ENV"
+                     data-desc="This will run create-env.bat to generate your .env file.">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-secondary">
+                        <svg width="20" height="20"><use href="#icon-gear"></use></svg>
+                    </div>
+                    <div class="action-label" i18n="install.btns.createEnv.title"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapsevInstDb" data-title="{{ __('install.sections.db') }}">

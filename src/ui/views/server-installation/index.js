@@ -58,14 +58,25 @@ export const svrInstllVw = {
                 // NOTE: Because Template.parse() processes your __('...') syntax 
                 // before the HTML is injected, these dataset strings are ALREADY translated!
                 const script = trigger.dataset.script;
-                const data = {
-                    title: trigger.dataset.title,
-                    desc: trigger.dataset.desc,
-                    size: 'md'
-                };
-                
-                Modal.openModal(script, data, [], (script) => API.runBatch(script));
-                
+                const checkEnv = API.checkEnv();
+                if (script === 'create-env.bat' && checkEnv) {
+                    const data = {
+                        title: 'ENV file found!',
+                        desc: 'Please make sure env variables are updated accordingly.\n\nDB_HOST = localhost\nDB_PORT = 3306\nDB_USERNAME = root\nDB_PASSWORD = T1m3l3ss@Nutr1t1on.PlatF0RM\nDB_NAME = tmnp+clientname\nDB_DATABASE = tmnp+clientname\nAPP_ENV = uat/production\nSPA_ENVIRONMENT = uat/production',
+                        size: 'md',
+                        execBtn: 'Okay',
+                        hideCancel: true
+                    };
+                    Modal.openModal('', data, [], (script) => {});
+                } else {
+                    const data = {
+                        title: trigger.dataset.title,
+                        desc: trigger.dataset.desc,
+                        size: 'md'
+                    };
+
+                    Modal.openModal(script, data, [], (script) => API.runBatch(script));
+                }
             } else {
                 // DYNAMIC FUNCTION INVOCATION
                 // This looks for a matching function name directly on this svrInstllVw object.
