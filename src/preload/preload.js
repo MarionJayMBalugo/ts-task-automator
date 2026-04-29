@@ -32,6 +32,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
         openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
         checkHeidiInstalled: () => ipcRenderer.invoke('check-heidi-installed'),
         chckappInstlled: (name) => ipcRenderer.invoke('chck-app-installd', name),
+        chckDepsStatus: () => ipcRenderer.invoke('chck-deps-status'),
+        runSilentInstall: (appId, executionData) => ipcRenderer.invoke('install-dependency', { appId, executionData }),
         
         // [ON - Event Listeners]
         // Intercepts streams of data from the backend.

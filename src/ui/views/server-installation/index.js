@@ -21,6 +21,7 @@ export const svrInstllVw = {
      */
     _listeners: [],
     schedlrs: [],
+    deps: [],
 
     /** --- LIFECYCLE: MOUNT ---
      * Triggered when the view is injected into the DOM. 
@@ -34,6 +35,10 @@ export const svrInstllVw = {
             svrInstllVw.schedlrs = results;
         }).catch((error) => {
             console.error("Install View: Failed to validate schedulers", error);
+        });
+
+        Validate.chckDepsInstalld().then((results) => {
+            svrInstllVw.deps = results;
         });
         
         // EVENT DELEGATION SETUP
@@ -107,5 +112,9 @@ export const svrInstllVw = {
     prmptSchedulrSetupWrappr: () => {
         // Passes the array we fetched in the 'mount' phase directly into the prompt
         svrInstllVw.prmptSchedulrSetup(svrInstllVw.schedlrs);
+    },
+
+    prmptInstallDepsWrapper: () => {
+        svrInstllVw.prmptInstallDeps(svrInstllVw.deps);
     }
 };

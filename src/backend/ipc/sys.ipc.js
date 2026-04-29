@@ -8,7 +8,7 @@
  * * WHY: Keeping this file thin prevents "God Object" anti-patterns.
  */
 
-const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc');
+const { ToolSvc, ExecSvc, OsSvc, AppSvc, InstallerSvc } = require('#svc');
 const path = require('node:path');
 const { exec } = require('child_process');
 
@@ -121,4 +121,13 @@ module.exports = (ipcMain, app) => {
      * * @returns {Promise<string|null>} The full system pth selected, or null if the user cancels.
      */
     ipcMain.handle('dialog:openFile', async () => await AppSvc.showOpenDialog('Select a File', ['openFile']));
+
+
+    ipcMain.handle('chck-deps-status', async () => {
+        return await InstallerSvc.checkDepsStatus();
+    });
+
+    ipcMain.handle('install-dependency', async (event, args) => {
+        return await InstallerSvc.runSilentInstall(app, args.appId, args.executionData);
+    });
 };

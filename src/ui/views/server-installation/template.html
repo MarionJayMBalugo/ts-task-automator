@@ -50,6 +50,7 @@
                     <div class="action-label">{{ __('install.btns.instHeidi.title') }}</div>
                 </div>
             </div>
+
             <div class="col">
                 <div class="action-card schedlr-install-card disabled-state" 
                     data-description="Add all necessary task schedulers to the server."
@@ -62,6 +63,22 @@
                             data-text="Checking Tasks..." 
                             data-color-class="text-primary">
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="action-card deps-install-card disabled-state" 
+                     data-description="Silently installs all required third-party software."
+                     data-action="prmptInstallDepsWrapper">
+                    <div class="action-icon d-flex align-items-center justify-content-center">
+                        <svg width="20" height="20"><use href="#icon-package"></use></svg>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="action-label">
+                            <div data-component="widgets/status-loadr/template" data-text="Checking Deps..." data-color-class="text-primary"></div>
+                        </span>
+                        <span class="text-muted mt-1" style="font-size: 0.65rem;">7-Zip, Chrome, VS Code, JDK...</span>
                     </div>
                 </div>
             </div>

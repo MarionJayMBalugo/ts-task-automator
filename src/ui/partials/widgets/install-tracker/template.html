@@ -1,0 +1,37 @@
+<div class="install-tracker-container">
+    <div class="text-center mb-4">
+        <h5 class="fw-bold mb-1">Installing Server Dependencies</h5>
+        <p class="text-muted small">Please do not close the application while background installations are running.</p>
+    </div>
+
+    <ul class="list-unstyled d-flex flex-column gap-2 m-0" id="live-install-list">
+        
+        <li class="d-flex justify-content-between align-items-center p-3 rounded border bg-white" id="tracker-7zip">
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-muted"><svg width="18" height="18"><use href="#icon-box"></use></svg></div>
+                <span class="fw-bold text-dark" style="font-size: 0.9rem;">7-Zip Extract Utility</span>
+            </div>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary status-badge">Pending</span>
+        </li>
+
+        <li class="d-flex justify-content-between align-items-center p-3 rounded border border-primary bg-primary bg-opacity-10" id="tracker-vscode">
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-primary"><svg width="18" height="18"><use href="#icon-box"></use></svg></div>
+                <span class="fw-bold text-primary" style="font-size: 0.9rem;">Visual Studio Code</span>
+            </div>
+            <span class="badge bg-primary d-flex align-items-center gap-2 status-badge">
+                <span class="spinner-border spinner-border-sm" style="width: 10px; height: 10px; border-width: 2px;"></span>
+                Installing...
+            </span>
+        </li>
+
+        <li class="d-flex justify-content-between align-items-center p-3 rounded border bg-white" id="tracker-openjdk">
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-success"><svg width="18" height="18"><use href="#icon-chck"></use></svg></div>
+                <span class="fw-bold text-dark" style="font-size: 0.9rem;">OpenJDK 25</span>
+            </div>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success status-badge">Done</span>
+        </li>
+
+    </ul>
+</div>

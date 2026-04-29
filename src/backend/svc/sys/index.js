@@ -12,6 +12,7 @@ const OsSvc = require('./os.svc.js');
 const NetSvc = require('./net.svc.js');
 const AppSvc = require('./app.svc.js');
 const SchedlrSvc = require('./schedlr.svc.js');
+const InstallerSvc = require('./installer.svc.js');
 
 module.exports = {
     /** --- NATIVE EXECUTION ---
@@ -37,5 +38,7 @@ module.exports = {
     /** --- WINDOWS TASK SCHEDULER ---
      * Handles task verification and XML-based deployment with drive-path mapping.
      */
-    SchedlrSvc
+    SchedlrSvc,
+
+    InstallerSvc
 };
