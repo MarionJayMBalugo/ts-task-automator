@@ -12,7 +12,7 @@ export const svrVldationVw = {
     mount: (containerEl) => {
         // 1. Grab the specific buttons inside this view
         const refreshBtn = document.getElementById('header-btn-refresh');
-        const toolBtns = containerEl.querySelectorAll('[data-action="open-tool"]');
+        const toolBtns = containerEl.querySelectorAll('[data-action');
         ChckSchedlrsStatus();
         
         // 2. Define the handler functions
@@ -26,8 +26,14 @@ export const svrVldationVw = {
         const handleToolOpen = (e) => {
             e.preventDefault();
             const trigger = e.target.closest('[data-action]');
-            const toolName = trigger.dataset.tool; 
-            API.openTool(toolName);
+            const toolName = trigger.dataset.tool;
+            const action = trigger.dataset.action;
+
+            if (action === 'open-tmsdos') {
+                API.openTMSDOS();
+            } else {
+                API.openTool(toolName);
+            }
         };
 
         // 3. Attach listeners and store them for memory cleanup

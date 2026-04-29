@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         // Best for fire-and-forget tasks (e.g., launching a tool).
         runBatch: (file, data) => ipcRenderer.send('execute-batch', file, data),
         openTool: (toolKey) => ipcRenderer.send('open-sys-tool', toolKey),
+        openTMSDOS: () => ipcRenderer.send('open-tmsdos'),
         instHeidi: (path) => ipcRenderer.send('run-heidi-install', path),
 
         // [INVOKE - Two-Way Promises] 

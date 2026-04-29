@@ -96,6 +96,15 @@ module.exports = (ipcMain, app) => {
         });
     });
 
+    ipcMain.on('open-tmsdos', () => {
+        const settings = SetSvc.get();
+        const driveArg = (settings.targetDrive || `${APP_CNF.defDrv}:`).replace(/\\+$/, '');
+        const scriptPath = path.resolve(app.getAppPath(), 'resources/tms-dos-launch.bat');
+        exec(`start cmd /c ""${scriptPath}" "${driveArg}""`, (error, stdout, stderr) => {
+            if (error) return;
+        });
+    });
+
     /**
      * [IPC: handle] Check if Heidi is installed
      * Bridge between UI and System Service to auto-locate the installer executable.
