@@ -127,6 +127,12 @@ export const Modal = {
         // Only show the "Previous" button if we are not on the first screen
         DOM.show('modal-prev-btn', Modal._currentStep > 0 ? 'block' : 'none');
 
+        if (Modal._modalData.hideCancel) {
+            DOM.hide('modal-cancel-btn');
+        } else {
+            DOM.show('modal-cancel-btn', 'block');
+        }
+
         const isLast = Modal._currentStep === Modal._steps.length - 1;
         
         // Resolve translation fallbacks dynamically

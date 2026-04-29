@@ -53,7 +53,8 @@ export default {
                 importdb: "Import DBs",
                 createdbuser: "Create DB User",
                 instTmsDos: { title: "Install TMS-DOS", desc: "Starts the installation process only." },
-                bulkInstall: { title: "Install Application", desc: "Installation of Required Applications" }
+                bulkInstall: { title: "Install Application", desc: "Installation of Required Applications" },
+                createEnv: { title: "Generate Env", desc: "Generate Env File from Env Example" }
             },
             winEnv: {
                 desc: "This will configure Windows environment variables. A system restart may be required."

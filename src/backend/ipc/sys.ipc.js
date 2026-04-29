@@ -8,9 +8,11 @@
  * * WHY: Keeping this file thin prevents "God Object" anti-patterns.
  */
 
-const { ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc');
+const { SetSvc, ToolSvc, ExecSvc, OsSvc, AppSvc } = require('#svc');
 const path = require('node:path');
+const fs = require('fs');
 const { exec } = require('child_process');
+const { APP_CNF } = require('#cnf');
 
 module.exports = (ipcMain, app) => {
 
@@ -108,6 +110,16 @@ module.exports = (ipcMain, app) => {
                 resolve(!!(stdout && stdout.includes('HeidiSQL')));
             });
         });
+    });
+
+    ipcMain.handle('check-env', () => {
+        const settings = SetSvc.get();
+        const driveArg = (settings.targetDrive || `${APP_CNF.defDrv}:`).replace(/\\+$/, '');
+        const envPath = driveArg+'/tms-dos/resources/resources/www/Default/.env'
+        if (fs.existsSync(envPath)) {
+            return true;
+        }
+        return false;
     });
 
     ipcMain.handle('chck-app-installd', async (_, name) => await AppSvc.chckAppInstalld(_, name));
