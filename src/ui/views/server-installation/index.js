@@ -121,8 +121,10 @@ export const svrInstllVw = {
      * Intercepts the generic prompt call to inject the locally cached state.
      */
     prmptSchedulrSetupWrappr: () => {
-        // Passes the array we fetched in the 'mount' phase directly into the prompt
-        svrInstllVw.prmptSchedulrSetup(svrInstllVw.schedlrs);
+        svrInstllVw.prmptSchedulrSetup(
+            svrInstllVw.schedlrs.installedStateObj, 
+            svrInstllVw.schedlrs.backupState
+        );
     },
 
     prmptInitFoldersWrapper: () => {

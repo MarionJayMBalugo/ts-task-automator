@@ -13,15 +13,24 @@ const APP_SCAN = {
 const TSK_SCHEDLRS = [
     {
         name: 'Clean Expired Bottles',
-        desc: 'Scheduler that will cleanup expired containers in the db.'
+        desc: 'Scheduler that will cleanup expired containers in the db.',
+        checkOnly: false  
     },
     {
         name: 'Clean up Orders',
-        desc: 'Scheduler that will cleanup orders in the db.'
+        desc: 'Scheduler that will cleanup orders in the db.',
+        checkOnly: false  
     },
     {
         name: 'HL7 Transaction Clean Up',
-        desc: 'Scheduler that will HL7 records in the db.'
+        desc: 'Scheduler that will HL7 records in the db.',
+        checkOnly: false  
+
+    },
+    {
+        name: 'Apache Log Rotation',
+        path: 'TMS-DOS',      // Automatically builds "\TMS-DOS\Apache Log Rotation"
+        checkOnly: true       // Prevents it from showing up in the Installer Modal
     }
 ];
 

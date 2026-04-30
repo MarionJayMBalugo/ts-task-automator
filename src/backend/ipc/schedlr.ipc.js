@@ -29,4 +29,12 @@ module.exports = (ipcMain) => {
     ipcMain.handle('instll-schedlrs', async (_, pendingTasks) => {
         return await SchedlrSvc.instllSchedlrs(app, pendingTasks);
     });
+
+    ipcMain.handle('chck-backup-task', async () => {
+        return await SchedlrSvc.checkDbBackupTask();
+    });
+
+    ipcMain.handle('upgrade-backup-task', async () => {
+        return await SchedlrSvc.upgradeDbBackupTask(app);
+    });
 };

@@ -64,7 +64,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
         chckSchedlrsInstlled: (tskNams) => ipcRenderer.invoke('chck-schedlrs-installd', tskNams),
         
         // Triggers the deployment of XML tasks with dynamic drive-path replacement.
-        instllSchedlrs: (pendingTasks) => ipcRenderer.invoke('instll-schedlrs', pendingTasks)
+        instllSchedlrs: (pendingTasks) => ipcRenderer.invoke('instll-schedlrs', pendingTasks),
+
+        checkDbBackupTask: () => ipcRenderer.invoke('chck-backup-task'),
+        upgradeDbBackupTask: () => ipcRenderer.invoke('upgrade-backup-task')
     },
 
     /** --- SETTINGS & PERSISTENCE ---

@@ -11,36 +11,32 @@ import { DOM } from '@jsutils';
 import { API } from '@jsui/core';
 
 export const chckSchedlrsInstalld = async () => {
-    
-    // --- RESOLVE UI TARGET ---
-    // Locate the specific action card using your global DOM helper
     const card = DOM.el('.schedlr-install-card');
-    if (!card) return [];
+    if (!card) return {};
 
-    // --- FETCH SYSTEM STATE ---
-    const installedStateObj = await API.chckSchedlrsInstlled();
-    if (!installedStateObj) return [];
+    const [installedStateObj, backupState] = await Promise.all([
+        API.chckSchedlrsInstlled(),
+        API.checkDbBackupTask()
+    ]);
 
-    // --- EVALUATE INSTALLATION COMPLETENESS ---
-    const hasMissingSchedulers = installedStateObj.some(task => !task.installed);
+    if (!installedStateObj) return {};
 
-    // --- UPDATE UI FEEDBACK ---
-    // Use native querySelector for scoped, child-element lookups
+    // THE FIX: Filter out checkOnly tasks (like Apache) before asking "are any missing?"
+    const hasMissingSchedulers = installedStateObj
+        .filter(task => !task.checkOnly)
+        .some(task => !task.installed);
+        
+    const needsBackupUpgrade = backupState.installed && !backupState.isUpgraded;
+
     const label = card.querySelector('.action-label');
 
-    if (hasMissingSchedulers) {
-        // STATE: Missing Tasks (Ready to Install)
-        // Leveraging DOM.toggleClass with 'false' to force REMOVE the class
+    if (hasMissingSchedulers || needsBackupUpgrade) {
         DOM.toggleClass(card, 'disabled-state', false);
         label.innerHTML = `<span>${__('setuptask')}</span>`;
-        
     } else {
-        // STATE: Fully Installed (Success)
-        // Leveraging DOM.toggleClass with 'true' to force ADD the class
         DOM.toggleClass(card, 'disabled-state', true);
         label.innerHTML = `<span class="text-success fw-bold">${__('setuptask')} (Installed)</span>`;
     }
 
-    // Return the raw state array back to the caller in case other logic needs it
-    return installedStateObj;
+    return { installedStateObj, backupState };
 };
