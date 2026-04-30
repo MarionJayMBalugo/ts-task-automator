@@ -18,3 +18,4 @@ export { chckSchedlrsInstalld } from './chck-schedlrs-installd.js';
 /** --- APPLICATION & SOFTWARE CHECKS ---
  * (Future exports like 'checkMariaDBStatus' or 'checkHeidiVersion' would go here)
  */
+export { chckFoldersInstalld } from './chck-folders-installd.js';

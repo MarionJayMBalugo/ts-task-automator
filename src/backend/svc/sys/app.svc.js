@@ -15,7 +15,7 @@ const { exec } = require('child_process');
 
 const { dialog } = require('electron');
 const { FsUtil } = require('#utils');
-const { DF_DRV, TMS_TOOLS, TMS_DOS } = require('#cnf/const.js');    // System-wide default drv constant (usually 'E')
+const { DF_DRV, TMS_TOOLS, TMS_DOS, INFRA_FOLDERS } = require('#cnf');    // System-wide default drv constant (usually 'E')
 
 // Direct import to avoid circular dependency issues when the app first boots.
 const SetSvc = require('../settings.svc.js'); 
@@ -132,7 +132,23 @@ const AppSvc = {
                 resolve(!!(stdout && stdout.includes(name)));
             });
         });
-    }
+    },
+
+    checkInfraFolders: () => {
+        const settings = SetSvc.get();
+        const baseDrive = settings.targetDrive || `${DF_DRV}:\\`;
+        
+        // Strip trailing slash if it exists, then re-add it cleanly
+        const cleanDrive = baseDrive.replace(/\\+$/, '') + '\\';
+
+        return INFRA_FOLDERS.map(folder => {
+            const fullPath = path.join(cleanDrive, folder);
+            return {
+                name: folder,
+                installed: fs.existsSync(fullPath)
+            };
+        });
+    },
 }
 
 module.exports = AppSvc;

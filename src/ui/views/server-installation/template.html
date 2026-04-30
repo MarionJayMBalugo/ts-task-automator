@@ -1,7 +1,7 @@
 <div class="app-view">
     <div class="mb-4" data-component="widgets/collapse-section/template" data-id="collapsevInstInfra" data-title="{{ __('install.sections.infra') }}">
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-3">
-            <div class="col">
+            <!-- <div class="col">
                 <div class="action-card" 
                      data-description="{{ __('install.btns.init.desc') }}"
                      data-action="open-modal"
@@ -12,6 +12,19 @@
                         <svg width="20" height="20"><use href="#icon-folder"></use></svg>
                     </div>
                     <div class="action-label">{{ __('install.btns.init.title') }}</div>
+                </div>
+            </div> -->
+
+            <div class="col">
+                <div class="action-card folder-init-card disabled-state" 
+                     data-description="{{ __('install.btns.init.desc') }}"
+                     data-action="prmptInitFoldersWrapper">
+                    <div class="action-icon d-flex align-items-center justify-content-center text-primary">
+                        <svg width="20" height="20"><use href="#icon-folder"></use></svg>
+                    </div>
+                    <div class="action-label">
+                        <div data-component="widgets/status-loadr/template" data-text="Checking..." data-color-class="text-primary"></div>
+                    </div>
                 </div>
             </div>
 
@@ -40,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="col">
+            <!-- <div class="col">
                 <div class="action-card heidi-install-card"
                      data-description="{{ __('install.btns.bulkInstall.desc') }}"
                      data-action="prompt-app-installer">
@@ -49,7 +62,7 @@
                     </div>
                     <div class="action-label">{{ __('install.btns.bulkInstall.title') }}</div>
                 </div>
-            </div>
+            </div> -->
             <div class="col">
                 <div class="action-card schedlr-install-card disabled-state" 
                     data-description="Add all necessary task schedulers to the server."

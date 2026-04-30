@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         checkHeidiInstalled: () => ipcRenderer.invoke('check-heidi-installed'),
         chckappInstlled: (name) => ipcRenderer.invoke('chck-app-installd', name),
         checkEnv: () => ipcRenderer.invoke('check-env'),
+        chckFoldersStatus: () => ipcRenderer.invoke('chck-folders-status'),
         
         // [ON - Event Listeners]
         // Intercepts streams of data from the backend.

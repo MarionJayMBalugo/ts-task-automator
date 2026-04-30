@@ -25,5 +25,15 @@ const TSK_SCHEDLRS = [
     }
 ];
 
+const INFRA_FOLDERS = [
+    'tms-dos',
+    'tms-dos-data',
+    'tms-dos-data\\apache-configuration',
+    'tms-dos-data\\mariadb-configuration',
+    'tms-tools',
+    'Archived',
+    'Archived\\code',
+    'Archived\\auto_backups'
+];
 
-module.exports = { APP_SCAN, TSK_SCHEDLRS };
+module.exports = { APP_SCAN, TSK_SCHEDLRS, INFRA_FOLDERS };

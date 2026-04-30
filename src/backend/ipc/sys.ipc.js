@@ -142,4 +142,8 @@ module.exports = (ipcMain, app) => {
      * * @returns {Promise<string|null>} The full system pth selected, or null if the user cancels.
      */
     ipcMain.handle('dialog:openFile', async () => await AppSvc.showOpenDialog('Select a File', ['openFile']));
+
+    ipcMain.handle('chck-folders-status', async () => {
+        return AppSvc.checkInfraFolders();
+    });
 };

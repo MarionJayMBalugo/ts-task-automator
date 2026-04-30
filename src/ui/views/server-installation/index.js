@@ -21,6 +21,7 @@ export const svrInstllVw = {
      */
     _listeners: [],
     schedlrs: [],
+    folders: [],
 
     /** --- LIFECYCLE: MOUNT ---
      * Triggered when the view is injected into the DOM. 
@@ -28,6 +29,9 @@ export const svrInstllVw = {
      */
     mount: (containerEl) => {
 
+        Validate.chckFoldersInstalld().then((results) => {
+            svrInstllVw.folders = results;
+        });
         // BACKGROUND VALIDATION
         // Pre-fetch the task scheduler status immediately upon view load.
         Validate.chckSchedlrsInstalld().then((results) => {
@@ -118,5 +122,9 @@ export const svrInstllVw = {
     prmptSchedulrSetupWrappr: () => {
         // Passes the array we fetched in the 'mount' phase directly into the prompt
         svrInstllVw.prmptSchedulrSetup(svrInstllVw.schedlrs);
+    },
+
+    prmptInitFoldersWrapper: () => {
+        svrInstllVw.prmptInitFolders(svrInstllVw.folders);
     }
 };

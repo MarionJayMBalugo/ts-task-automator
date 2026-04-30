@@ -12,8 +12,18 @@ if "!RAW_DRIVE!"=="" set "RAW_DRIVE=D:"
 set "CLEAN_DRIVE=!RAW_DRIVE:\=!"
 set "CLEAN_DRIVE=!CLEAN_DRIVE::=!"
 set "TARGET_DRIVE=!CLEAN_DRIVE!:\"
-
 set "BASE_PATH=!TARGET_DRIVE!"
+
+:: THE FIX: Get the comma-separated list from the UI (Argument 2)
+set "RAW_FOLDERS=%~2"
+if "!RAW_FOLDERS!"=="" (
+    echo [ERROR] No folders provided by the UI.
+    pause
+    exit /b 1
+)
+
+:: Replace commas with spaces for the FOR loop
+set "FOLDERS_LIST=!RAW_FOLDERS:,= !"
 
 echo.
 echo ===================================================
@@ -22,28 +32,18 @@ echo [TARGET] !BASE_PATH!
 echo ===================================================
 echo.
 
-:: 3. READ FOLDERS FROM .ENV
-if "!TMS_INFRA_FOLDERS!"=="" (
-    echo [ERROR] TMS_INFRA_FOLDERS not found in .env file!
-    pause
-    exit /b 1
-)
-
-:: Replace commas with spaces for the FOR loop
-set "FOLDERS_LIST=!TMS_INFRA_FOLDERS:,= !"
-
-:: 4. EXECUTION LOOP
+:: 3. EXECUTION LOOP
 for %%F in (!FOLDERS_LIST!) do (
-    set "FULL_PATH=!BASE_PATH!\%%~F"
+    set "FULL_PATH=!BASE_PATH!%%~F"
     
     if exist "!FULL_PATH!" (
-        echo [EXIST]  %%~F
+        echo [SKIPPED] %%~F ^(Already Exists^)
     ) else (
         mkdir "!FULL_PATH!" >nul 2>&1
         if !ERRORLEVEL! EQU 0 (
-            echo [NEW]    Created: %%~F
+            echo [NEW]     Created: %%~F
         ) else (
-            echo [ERROR]  Failed: %%~F
+            echo [ERROR]   Failed: %%~F
         )
     )
 )

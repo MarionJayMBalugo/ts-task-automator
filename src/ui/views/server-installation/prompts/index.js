@@ -29,3 +29,5 @@ export { prmptCreateDbUser } from './create-dbusers.js';
  * Task Scheduler using the XML-driven installation service.
  */
 export { prmptSchedulrSetup } from './stup-tskschedlr.js';
+
+export { prmptInitFolders } from './init-folders.js';

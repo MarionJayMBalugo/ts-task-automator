@@ -16,8 +16,8 @@ export default {
         },
         dashboard: {
             title:  "Dashboard",
-            subtitle: "Streamlined Server Setup, Maintenance, and Operational Workflows",
-            quickaccess: "Quick Access Directory"
+            subtitle: "Complete oversight of your server health and software ecosystem.",
+            quickaccess: "Directory Quick Access"
         },
         nav: {
             dashboard: "Dashboard",
@@ -45,7 +45,7 @@ export default {
             },
             btns: {
                 init: { title: "Initialize Directory Tree", desc: "Builds D:\\tms-dos and subfolders" },
-                env: { title: "Setup ENV (WIN)", desc: "Configures Windows environment variables" },
+                env: { title: "Setup Windows SYSVAR", desc: "Configures Windows environment variables" },
                 createDb: { title: "Create DBs", desc: "Generates databases from .env" },
                 createUser: { title: "Create DB User", desc: "Generates credentials from .env" },
                 createdb: "Create DBs",
@@ -139,7 +139,7 @@ export default {
             exportdb: "Export DBs",
             importdb: "Import DBs",
             createdbuser: "Create DB User",
-            setupwinenv: "Setup ENV (WIN)",
+            setupwinenv: "Add Windows SYSTEM/USER VARIABLES",
             registertool: "Register Tool",
         },
         desc: {
