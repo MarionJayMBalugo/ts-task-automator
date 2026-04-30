@@ -74,7 +74,8 @@ export default {
                 driveD: "Drive D:",
                 thisPc: "This PC",
                 aboutPc: "About PC",
-                taskMngr: "Task Manager"
+                taskMngr: "Task Manager",
+                tmsLaunch: "TMS-DOS Launcher"
             },
             hw: "Hardware & OS",
             hostname: "Hostname",
@@ -153,6 +154,7 @@ export default {
             sysDxdiag: "Opens DirectX Diagnostic Tool",
             sysAbout: "Opens Windows About PC settings",
             taskMngr: "Opens Windows Task Manager",
+            tmsLaunch: "Opens TMS-DOS Application",
         },
         opentmsdos: "Open TMS-DOS",
         opencustomer: "Open Customers",
