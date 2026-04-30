@@ -30,4 +30,7 @@ module.exports = (ipcMain) => {
 
     // Sets the target drive letter (e.g., 'E:')
     ipcMain.handle('set-drv', (_, val) => SetSvc.update('targetDrive', val));
+
+    // Add this generic update handler
+    ipcMain.handle('update-setting', (_, args) => SetSvc.update(args.key, args.value));
 };

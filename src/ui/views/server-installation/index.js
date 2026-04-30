@@ -28,7 +28,8 @@ export const svrInstllVw = {
      * Handles pre-flight API checks and establishes the UI event listeners.
      */
     mount: (containerEl) => {
-
+        Validate.chckDbUserInstalld();
+        
         Validate.chckFoldersInstalld().then((results) => {
             svrInstllVw.folders = results;
         });

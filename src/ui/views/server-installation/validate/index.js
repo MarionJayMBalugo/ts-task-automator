@@ -19,3 +19,5 @@ export { chckSchedlrsInstalld } from './chck-schedlrs-installd.js';
  * (Future exports like 'checkMariaDBStatus' or 'checkHeidiVersion' would go here)
  */
 export { chckFoldersInstalld } from './chck-folders-installd.js';
+
+export { chckDbUserInstalld } from './chck-dbuser-installd.js';

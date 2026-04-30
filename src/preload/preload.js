@@ -77,7 +77,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
         toggleAutoClose: (value) => ipcRenderer.invoke('tog-exit', value),
         resetConfig: () => ipcRenderer.invoke('rst-cfg'),
         selectFolder: () => ipcRenderer.invoke('sel-dir'),
-        getConfigPath: () => ipcRenderer.invoke('cfg-path')
+        getConfigPath: () => ipcRenderer.invoke('cfg-path'),
+        updateSetting: (key, value) => ipcRenderer.invoke('update-setting', { key, value }),
     },
 
     /** --- UI COMPONENT NAVIGATION ---
